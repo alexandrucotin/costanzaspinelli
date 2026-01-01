@@ -1,0 +1,312 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Client,
+  ClientSchema,
+  goalLabelsClient,
+  genderLabels,
+} from "@/lib/types-client";
+import { updateClientAction } from "@/app/actions/clients";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
+import { ArrowLeft, Save } from "lucide-react";
+import Link from "next/link";
+
+interface ClientEditFormProps {
+  client: Client;
+}
+
+export function ClientEditForm({ client }: ClientEditFormProps) {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(
+      ClientSchema.omit({
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        measurements: true,
+        assignedPlanIds: true,
+      })
+    ),
+    defaultValues: {
+      ...client,
+      medicalHistory: client.medicalHistory || {
+        currentConditions: "",
+        pastConditions: "",
+        medications: "",
+        allergies: "",
+        surgeries: "",
+        injuries: "",
+        limitations: "",
+        recurringPain: "",
+      },
+      lifestyle: client.lifestyle || {
+        activityLevel: "sedentary" as const,
+        occupation: "",
+        sleepHours: undefined,
+        stressLevel: undefined,
+        smoker: undefined,
+        alcoholConsumption: undefined,
+      },
+    },
+  });
+
+  const primaryGoal = watch("primaryGoal");
+  const gender = watch("gender");
+
+  const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
+    try {
+      await updateClientAction(client.id, data);
+      toast.success("Cliente aggiornato con successo");
+      router.push(`/admin/clienti/${client.id}`);
+    } catch (error) {
+      toast.error("Errore durante l'aggiornamento del cliente");
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="flex items-center gap-4 mb-6">
+        <Link href={`/admin/clienti/${client.id}`}>
+          <Button variant="ghost" size="sm" type="button">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Torna al dettaglio
+          </Button>
+        </Link>
+      </div>
+
+      {/* Anagrafica */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Informazioni Anagrafiche</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="fullName">Nome Completo *</Label>
+              <Input id="fullName" {...register("fullName")} />
+              {errors.fullName && (
+                <p className="text-sm text-destructive mt-1">
+                  {errors.fullName.message as string}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="email">Email *</Label>
+              <Input id="email" type="email" {...register("email")} />
+              {errors.email && (
+                <p className="text-sm text-destructive mt-1">
+                  {errors.email.message as string}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="phone">Telefono</Label>
+              <Input id="phone" type="tel" {...register("phone")} />
+            </div>
+
+            <div>
+              <Label htmlFor="dateOfBirth">Data di Nascita</Label>
+              <Input
+                id="dateOfBirth"
+                type="date"
+                {...register("dateOfBirth")}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="gender">Genere</Label>
+              <Select
+                value={gender}
+                onValueChange={(value) => setValue("gender", value as any)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleziona genere" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(genderLabels).map(([key, label]) => (
+                    <SelectItem key={key} value={key}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="status">Stato Cliente</Label>
+              <Select
+                value={watch("status")}
+                onValueChange={(value) => setValue("status", value as any)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Attivo</SelectItem>
+                  <SelectItem value="paused">In Pausa</SelectItem>
+                  <SelectItem value="completed">Concluso</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Dati Fisici e Obiettivi */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Dati Fisici e Obiettivi</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div>
+              <Label htmlFor="currentWeight">Peso Attuale (kg)</Label>
+              <Input
+                id="currentWeight"
+                type="number"
+                step="0.1"
+                {...register("currentWeight", { valueAsNumber: true })}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="height">Altezza (cm)</Label>
+              <Input
+                id="height"
+                type="number"
+                {...register("height", { valueAsNumber: true })}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="bodyFatPercentage">Massa Grassa (%)</Label>
+              <Input
+                id="bodyFatPercentage"
+                type="number"
+                step="0.1"
+                {...register("bodyFatPercentage", { valueAsNumber: true })}
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="primaryGoal">Obiettivo Primario *</Label>
+            <Select
+              value={primaryGoal}
+              onValueChange={(value) => setValue("primaryGoal", value as any)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(goalLabelsClient).map(([key, label]) => (
+                  <SelectItem key={key} value={key}>
+                    {label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="targetWeight">Peso Target (kg)</Label>
+              <Input
+                id="targetWeight"
+                type="number"
+                step="0.1"
+                {...register("targetWeight", { valueAsNumber: true })}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="targetDate">Data Target</Label>
+              <Input id="targetDate" type="date" {...register("targetDate")} />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="goalNotes">Note Obiettivi</Label>
+            <Textarea
+              id="goalNotes"
+              {...register("goalNotes")}
+              placeholder="Dettagli specifici sugli obiettivi del cliente..."
+              rows={3}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Note */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Note</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="generalNotes">Note Generali</Label>
+            <Textarea
+              id="generalNotes"
+              {...register("generalNotes")}
+              placeholder="Note visibili al cliente..."
+              rows={3}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="privateNotes">Note Private</Label>
+            <Textarea
+              id="privateNotes"
+              {...register("privateNotes")}
+              placeholder="Note riservate, visibili solo a te..."
+              rows={3}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Actions */}
+      <div className="flex justify-end gap-4">
+        <Link href={`/admin/clienti/${client.id}`}>
+          <Button variant="outline" type="button">
+            Annulla
+          </Button>
+        </Link>
+        <Button type="submit" disabled={isSubmitting}>
+          <Save className="h-4 w-4 mr-2" />
+          {isSubmitting ? "Salvataggio..." : "Salva Modifiche"}
+        </Button>
+      </div>
+    </form>
+  );
+}
