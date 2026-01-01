@@ -1,6 +1,7 @@
 "use client";
 
 import { WorkoutPlan, goalLabels, equipmentLabels } from "@/lib/types";
+import { Client } from "@/lib/types-client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,9 +18,15 @@ interface PlanMetaFormProps {
   data: Partial<WorkoutPlan>;
   onChange: (data: Partial<WorkoutPlan>) => void;
   disabled?: boolean;
+  clients?: Client[];
 }
 
-export function PlanMetaForm({ data, onChange, disabled }: PlanMetaFormProps) {
+export function PlanMetaForm({
+  data,
+  onChange,
+  disabled,
+  clients = [],
+}: PlanMetaFormProps) {
   const handleChange = (field: keyof WorkoutPlan, value: string | number) => {
     onChange({ ...data, [field]: value });
   };
@@ -43,14 +50,33 @@ export function PlanMetaForm({ data, onChange, disabled }: PlanMetaFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="clientName">Nome Cliente *</Label>
-            <Input
-              id="clientName"
-              value={data.clientName || ""}
-              onChange={(e) => handleChange("clientName", e.target.value)}
-              disabled={disabled}
-              placeholder="es. Mario Rossi"
-            />
+            <Label htmlFor="clientName">Cliente *</Label>
+            {clients.length > 0 ? (
+              <Select
+                value={data.clientName || ""}
+                onValueChange={(value) => handleChange("clientName", value)}
+                disabled={disabled}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleziona cliente" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clients.map((client) => (
+                    <SelectItem key={client.id} value={client.fullName}>
+                      {client.fullName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Input
+                id="clientName"
+                value={data.clientName || ""}
+                onChange={(e) => handleChange("clientName", e.target.value)}
+                disabled={disabled}
+                placeholder="es. Mario Rossi"
+              />
+            )}
           </div>
 
           <div>

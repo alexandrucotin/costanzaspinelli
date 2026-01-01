@@ -12,6 +12,7 @@ import {
   MuscleGroup,
   Category,
 } from "@/lib/types";
+import { Client } from "@/lib/types-client";
 import { createPlanAction, updatePlanAction } from "@/app/actions/plans";
 import { PlanMetaForm } from "@/components/admin/plan-meta-form";
 import { SessionEditor } from "@/components/admin/session-editor";
@@ -26,6 +27,7 @@ interface PlanBuilderProps {
   tools: Tool[];
   muscleGroups: MuscleGroup[];
   categories: Category[];
+  clients?: Client[];
 }
 
 export function PlanBuilder({
@@ -34,6 +36,7 @@ export function PlanBuilder({
   tools,
   muscleGroups,
   categories,
+  clients = [],
 }: PlanBuilderProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(!plan);

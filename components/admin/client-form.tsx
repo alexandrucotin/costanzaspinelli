@@ -71,6 +71,16 @@ export function ClientForm({ client }: ClientFormProps) {
       firstAssessmentDate: new Date().toISOString().split("T")[0],
       generalNotes: "",
       privateNotes: "",
+      medicalHistory: {
+        currentConditions: "",
+        pastConditions: "",
+        medications: "",
+        allergies: "",
+        surgeries: "",
+        injuries: "",
+        limitations: "",
+        recurringPain: "",
+      },
     },
   });
 
@@ -172,6 +182,110 @@ export function ClientForm({ client }: ClientFormProps) {
                 {...register("firstAssessmentDate")}
               />
             </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Anamnesi Medica */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Anamnesi Medica</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="medicalHistory.currentConditions">
+              Patologie Attuali
+            </Label>
+            <Textarea
+              id="medicalHistory.currentConditions"
+              {...register("medicalHistory.currentConditions")}
+              placeholder="Es: diabete, ipertensione, problemi cardiaci..."
+              rows={2}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="medicalHistory.pastConditions">
+              Patologie Passate
+            </Label>
+            <Textarea
+              id="medicalHistory.pastConditions"
+              {...register("medicalHistory.pastConditions")}
+              placeholder="Malattie o condizioni mediche pregresse..."
+              rows={2}
+            />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="medicalHistory.medications">
+                Farmaci Assunti
+              </Label>
+              <Textarea
+                id="medicalHistory.medications"
+                {...register("medicalHistory.medications")}
+                placeholder="Elenco farmaci e dosaggi..."
+                rows={2}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="medicalHistory.allergies">
+                Allergie/Intolleranze
+              </Label>
+              <Textarea
+                id="medicalHistory.allergies"
+                {...register("medicalHistory.allergies")}
+                placeholder="Allergie alimentari, farmacologiche..."
+                rows={2}
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="medicalHistory.surgeries">
+              Interventi Chirurgici
+            </Label>
+            <Textarea
+              id="medicalHistory.surgeries"
+              {...register("medicalHistory.surgeries")}
+              placeholder="Operazioni subite con date approssimative..."
+              rows={2}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="medicalHistory.injuries">Traumi e Infortuni</Label>
+            <Textarea
+              id="medicalHistory.injuries"
+              {...register("medicalHistory.injuries")}
+              placeholder="Infortuni sportivi, incidenti, fratture con dettagli e date..."
+              rows={3}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="medicalHistory.limitations">
+              Limitazioni Fisiche
+            </Label>
+            <Textarea
+              id="medicalHistory.limitations"
+              {...register("medicalHistory.limitations")}
+              placeholder="Problemi articolari, posturali, mobilità ridotta..."
+              rows={2}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="medicalHistory.recurringPain">
+              Dolori Ricorrenti
+            </Label>
+            <Textarea
+              id="medicalHistory.recurringPain"
+              {...register("medicalHistory.recurringPain")}
+              placeholder="Zone del corpo con dolore cronico, intensità, frequenza..."
+              rows={2}
+            />
           </div>
         </CardContent>
       </Card>

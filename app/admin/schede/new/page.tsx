@@ -3,18 +3,21 @@ import {
   getTools,
   getMuscleGroups,
   getCategories,
+  getClients,
 } from "@/lib/data-blobs";
 import { PlanBuilder } from "@/components/admin/plan-builder";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewPlanPage() {
-  const [exercises, tools, muscleGroups, categories] = await Promise.all([
-    getExercises(),
-    getTools(),
-    getMuscleGroups(),
-    getCategories(),
-  ]);
+  const [exercises, tools, muscleGroups, categories, clients] =
+    await Promise.all([
+      getExercises(),
+      getTools(),
+      getMuscleGroups(),
+      getCategories(),
+      getClients(),
+    ]);
 
   return (
     <div className="container mx-auto py-8">
@@ -23,6 +26,7 @@ export default async function NewPlanPage() {
         tools={tools}
         muscleGroups={muscleGroups}
         categories={categories}
+        clients={clients}
       />
     </div>
   );
