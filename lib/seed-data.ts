@@ -1,6 +1,13 @@
 import { Exercise } from "./types";
 
-export const seedExercises: Exercise[] = [
+// NOTE: This seed data is deprecated and uses the old schema.
+// Use the metadata management system in /admin/impostazioni instead.
+// Keeping this file for reference but commenting out the data.
+
+export const seedExercises: Exercise[] = [];
+
+/* OLD SEED DATA - DEPRECATED
+export const seedExercisesOld: Exercise[] = [
   {
     id: "ex_1",
     name: "Panca Piana Bilanciere",
@@ -182,3 +189,4 @@ export const seedExercises: Exercise[] = [
     updatedAt: new Date().toISOString(),
   },
 ];
+*/

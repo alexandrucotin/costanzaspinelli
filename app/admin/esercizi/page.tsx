@@ -1,6 +1,8 @@
 import { getExercises } from "@/lib/data-blobs";
 import { ExerciseLibrary } from "@/components/admin/exercise-library";
 
+export const dynamic = "force-dynamic";
+
 export default async function ExercisesPage() {
   const exercises = await getExercises();
 

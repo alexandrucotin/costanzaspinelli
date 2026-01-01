@@ -3,6 +3,8 @@ import { getExercises } from "@/lib/data-blobs";
 import { PlanBuilder } from "@/components/admin/plan-builder";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function PlanEditPage({
   params,
 }: {

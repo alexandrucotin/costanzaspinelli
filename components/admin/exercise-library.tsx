@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Exercise, equipmentLabels } from "@/lib/types";
+import { Exercise, environmentLabels } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ExerciseForm } from "./exercise-form";
+import { ExerciseForm } from "@/components/admin/exercise-form";
 import { deleteExerciseAction } from "@/app/actions/exercises";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
@@ -38,8 +38,8 @@ export function ExerciseLibrary({ initialExercises }: ExerciseLibraryProps) {
   const filteredExercises = exercises.filter(
     (ex) =>
       ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ex.muscleGroup.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ex.category.toLowerCase().includes(searchQuery.toLowerCase())
+      ex.muscleGroupId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ex.categoryId.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleDelete = async (id: string) => {
@@ -124,9 +124,11 @@ export function ExerciseLibrary({ initialExercises }: ExerciseLibraryProps) {
               filteredExercises.map((exercise) => (
                 <TableRow key={exercise.id}>
                   <TableCell className="font-medium">{exercise.name}</TableCell>
-                  <TableCell>{exercise.muscleGroup}</TableCell>
-                  <TableCell>{exercise.category}</TableCell>
-                  <TableCell>{equipmentLabels[exercise.equipment]}</TableCell>
+                  <TableCell>{exercise.muscleGroupId}</TableCell>
+                  <TableCell>{exercise.categoryId}</TableCell>
+                  <TableCell>
+                    {environmentLabels[exercise.environment]}
+                  </TableCell>
                   <TableCell>{exercise.defaultRestSeconds || "-"}</TableCell>
                   <TableCell>{exercise.defaultTempo || "-"}</TableCell>
                   <TableCell className="text-right">
