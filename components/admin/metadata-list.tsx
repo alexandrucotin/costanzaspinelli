@@ -38,11 +38,10 @@ export function MetadataList({
 
     setIsAdding(true);
     try {
-      await onAdd(newItemName.trim());
+      const newItem = await onAdd(newItemName.trim());
+      setItems([...items, newItem]);
       setNewItemName("");
       toast.success(`${title} aggiunto`);
-      // Refresh will happen via revalidatePath
-      window.location.reload();
     } catch (error) {
       toast.error("Errore durante l'aggiunta");
       console.error(error);

@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Exercise, environmentLabels } from "@/lib/types";
+import {
+  Exercise,
+  environmentLabels,
+  Tool,
+  MuscleGroup,
+  Category,
+} from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,9 +32,17 @@ import { Plus, Pencil, Trash2, Search } from "lucide-react";
 
 interface ExerciseLibraryProps {
   initialExercises: Exercise[];
+  tools: Tool[];
+  muscleGroups: MuscleGroup[];
+  categories: Category[];
 }
 
-export function ExerciseLibrary({ initialExercises }: ExerciseLibraryProps) {
+export function ExerciseLibrary({
+  initialExercises,
+  tools,
+  muscleGroups,
+  categories,
+}: ExerciseLibraryProps) {
   const [exercises, setExercises] = useState(initialExercises);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
@@ -92,7 +106,12 @@ export function ExerciseLibrary({ initialExercises }: ExerciseLibraryProps) {
             <DialogHeader>
               <DialogTitle>Nuovo Esercizio</DialogTitle>
             </DialogHeader>
-            <ExerciseForm onSuccess={handleExerciseCreated} />
+            <ExerciseForm
+              tools={tools}
+              muscleGroups={muscleGroups}
+              categories={categories}
+              onSuccess={handleExerciseCreated}
+            />
           </DialogContent>
         </Dialog>
       </div>
@@ -167,6 +186,9 @@ export function ExerciseLibrary({ initialExercises }: ExerciseLibraryProps) {
           {editingExercise && (
             <ExerciseForm
               exercise={editingExercise}
+              tools={tools}
+              muscleGroups={muscleGroups}
+              categories={categories}
               onSuccess={handleExerciseUpdated}
             />
           )}

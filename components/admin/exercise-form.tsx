@@ -2,7 +2,13 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Exercise, ExerciseSchema } from "@/lib/types";
+import {
+  Exercise,
+  ExerciseSchema,
+  Tool,
+  MuscleGroup,
+  Category,
+} from "@/lib/types";
 import {
   createExerciseAction,
   updateExerciseAction,
@@ -17,14 +23,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 interface ExerciseFormProps {
   exercise?: Exercise;
+  tools: Tool[];
+  muscleGroups: MuscleGroup[];
+  categories: Category[];
   onSuccess: (exercise: Exercise) => void;
 }
 
-export function ExerciseForm({ exercise, onSuccess }: ExerciseFormProps) {
+export function ExerciseForm({
+  exercise,
+  tools,
+  muscleGroups,
+  categories,
+  onSuccess,
+}: ExerciseFormProps) {
   const {
     register,
     handleSubmit,
@@ -79,19 +95,32 @@ export function ExerciseForm({ exercise, onSuccess }: ExerciseFormProps) {
 
       <div>
         <Label htmlFor="muscleGroupId">Gruppo Muscolare *</Label>
-        <Input
-          id="muscleGroupId"
-          {...register("muscleGroupId")}
-          placeholder="Inserisci ID gruppo muscolare (temporaneo)"
-        />
+        <Select
+          value={watch("muscleGroupId")}
+          onValueChange={(value) => setValue("muscleGroupId", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Seleziona gruppo muscolare" />
+          </SelectTrigger>
+          <SelectContent>
+            {muscleGroups.length === 0 ? (
+              <div className="p-2 text-sm text-muted-foreground">
+                Nessun gruppo muscolare. Vai in Impostazioni per aggiungerli.
+              </div>
+            ) : (
+              muscleGroups.map((group) => (
+                <SelectItem key={group.id} value={group.id}>
+                  {group.name}
+                </SelectItem>
+              ))
+            )}
+          </SelectContent>
+        </Select>
         {errors.muscleGroupId && (
           <p className="text-sm text-destructive mt-1">
             {errors.muscleGroupId.message as string}
           </p>
         )}
-        <p className="text-xs text-muted-foreground mt-1">
-          Nota: Popola prima i metadata in Impostazioni
-        </p>
       </div>
 
       <div>
@@ -120,18 +149,71 @@ export function ExerciseForm({ exercise, onSuccess }: ExerciseFormProps) {
 
       <div>
         <Label htmlFor="categoryId">Categoria *</Label>
-        <Input
-          id="categoryId"
-          {...register("categoryId")}
-          placeholder="Inserisci ID categoria (temporaneo)"
-        />
+        <Select
+          value={watch("categoryId")}
+          onValueChange={(value) => setValue("categoryId", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Seleziona categoria" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.length === 0 ? (
+              <div className="p-2 text-sm text-muted-foreground">
+                Nessuna categoria. Vai in Impostazioni per aggiungerle.
+              </div>
+            ) : (
+              categories.map((category) => (
+                <SelectItem key={category.id} value={category.id}>
+                  {category.name}
+                </SelectItem>
+              ))
+            )}
+          </SelectContent>
+        </Select>
         {errors.categoryId && (
           <p className="text-sm text-destructive mt-1">
             {errors.categoryId.message as string}
           </p>
         )}
+      </div>
+
+      <div>
+        <Label>Attrezzi</Label>
+        <div className="space-y-2 border rounded-lg p-4">
+          {tools.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Nessun attrezzo disponibile. Vai in Impostazioni per aggiungerli.
+            </p>
+          ) : (
+            tools.map((tool) => (
+              <div key={tool.id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`tool-${tool.id}`}
+                  checked={watch("toolIds")?.includes(tool.id)}
+                  onCheckedChange={(checked) => {
+                    const currentTools = watch("toolIds") || [];
+                    if (checked) {
+                      setValue("toolIds", [...currentTools, tool.id]);
+                    } else {
+                      setValue(
+                        "toolIds",
+                        currentTools.filter((id) => id !== tool.id)
+                      );
+                    }
+                  }}
+                />
+                <label
+                  htmlFor={`tool-${tool.id}`}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {tool.name}
+                </label>
+              </div>
+            ))
+          )}
+        </div>
         <p className="text-xs text-muted-foreground mt-1">
-          Nota: Popola prima i metadata in Impostazioni
+          Seleziona gli attrezzi necessari per questo esercizio
         </p>
       </div>
 

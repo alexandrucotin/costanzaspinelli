@@ -1,10 +1,20 @@
-import { getExercises } from "@/lib/data-blobs";
+import {
+  getExercises,
+  getTools,
+  getMuscleGroups,
+  getCategories,
+} from "@/lib/data-blobs";
 import { ExerciseLibrary } from "@/components/admin/exercise-library";
 
 export const dynamic = "force-dynamic";
 
 export default async function ExercisesPage() {
-  const exercises = await getExercises();
+  const [exercises, tools, muscleGroups, categories] = await Promise.all([
+    getExercises(),
+    getTools(),
+    getMuscleGroups(),
+    getCategories(),
+  ]);
 
   return (
     <div className="container mx-auto py-8">
@@ -14,7 +24,12 @@ export default async function ExercisesPage() {
           Gestisci la tua libreria di esercizi
         </p>
       </div>
-      <ExerciseLibrary initialExercises={exercises} />
+      <ExerciseLibrary
+        initialExercises={exercises}
+        tools={tools}
+        muscleGroups={muscleGroups}
+        categories={categories}
+      />
     </div>
   );
 }
