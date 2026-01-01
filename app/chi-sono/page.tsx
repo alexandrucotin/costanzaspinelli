@@ -1,260 +1,407 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Award,
   GraduationCap,
   Heart,
   Target,
   TrendingUp,
-  Users,
   CheckCircle2,
+  ArrowRight,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function ChiSonoPage() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-br from-primary/10 via-background to-primary/5">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-            <div>
-              <h1 className="text-5xl font-bold mb-6">Ciao, sono Costanza</h1>
-              <p className="text-xl text-muted-foreground mb-6">
-                Personal Trainer certificata con background in Fisioterapia,
-                specializzata in ipertrofia muscolare e ricomposizione corporea.
-              </p>
-              <p className="text-lg mb-8">
-                La mia missione è aiutarti a trasformare il tuo corpo attraverso
-                programmi scientifici, personalizzati e sostenibili nel tempo.
-              </p>
-              <Link href="/contatti">
-                <Button size="lg">Inizia il Tuo Percorso</Button>
-              </Link>
+    <div className="min-h-screen mt-[81px]">
+      {/* Hero Section - Personal Story */}
+      <section className="relative py-24 px-4 overflow-hidden">
+        {/* Background with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/10" />
+
+        <div className="container mx-auto relative z-10">
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <div className="inline-block mb-6">
+              <div className="relative w-32 h-32 mx-auto rounded-full overflow-hidden ring-4 ring-primary/20 shadow-xl">
+                <Image
+                  src="/costanza-profile2.DNG"
+                  alt="Costanza Spinelli"
+                  fill
+                  className="object-cover"
+                />
+              </div>
             </div>
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl flex items-center justify-center">
-                <div className="text-center p-8">
-                  <Users className="h-24 w-24 mx-auto mb-4 text-primary" />
-                  <p className="text-lg font-semibold">Foto Professionale</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    [Inserire foto di Costanza]
-                  </p>
-                </div>
+
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              Ciao, sono Costanza
+            </h1>
+
+            <p className="text-2xl md:text-3xl text-muted-foreground mb-8 font-medium">
+              Da fisioterapista a Personal Trainer specializzata
+            </p>
+
+            <div className="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed">
+              <p>
+                Il mio percorso nel mondo del fitness è iniziato con la{" "}
+                <span className="font-semibold text-foreground">
+                  laurea in Fisioterapia
+                </span>{" "}
+                in Venezuela. Lavorare con pazienti in riabilitazione mi ha
+                fatto capire quanto il movimento corretto e la programmazione
+                scientifica possano trasformare non solo il corpo, ma la vita
+                delle persone.
+              </p>
+
+              <p>
+                Questa passione mi ha portato a specializzarmi come{" "}
+                <span className="font-semibold text-foreground">
+                  Personal Trainer certificata EREPs
+                </span>
+                , combinando la mia conoscenza medica con le più avanzate
+                tecniche di allenamento per ipertrofia e ricomposizione
+                corporea.
+              </p>
+
+              <p className="text-xl font-medium text-primary">
+                Oggi aiuto persone come te a raggiungere obiettivi che pensavano
+                impossibili, attraverso programmi basati su scienza,
+                personalizzazione e sostenibilità.
+              </p>
+            </div>
+          </div>
+
+          {/* Stats Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-primary/10">
+              <div className="text-4xl font-bold text-primary mb-2">100+</div>
+              <div className="text-sm text-muted-foreground">
+                Clienti Seguiti
+              </div>
+            </div>
+            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-primary/10">
+              <div className="text-4xl font-bold text-primary mb-2">5+</div>
+              <div className="text-sm text-muted-foreground">
+                Anni Esperienza
+              </div>
+            </div>
+            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-primary/10">
+              <div className="text-4xl font-bold text-primary mb-2">24h</div>
+              <div className="text-sm text-muted-foreground">
+                Tempo Risposta
+              </div>
+            </div>
+            <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-primary/10">
+              <div className="text-4xl font-bold text-primary mb-2">100%</div>
+              <div className="text-sm text-muted-foreground">
+                Personalizzato
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Background & Credentials */}
+      {/* Credentials Timeline */}
       <section className="py-20 px-4 bg-white">
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Il Mio Percorso</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Formazione & Certificazioni
+            </h2>
             <p className="text-xl text-muted-foreground">
-              Formazione accademica e certificazioni professionali
+              Un percorso di studio continuo per offrirti il meglio
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
-            <Card className="border-2">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <GraduationCap className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-2">
-                      Laurea in Fisioterapia
-                    </h3>
-                    <p className="text-muted-foreground mb-4">
-                      Universidad Central de Venezuela
+          {/* Timeline */}
+          <div className="relative">
+            {/* Vertical line */}
+            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary/20" />
+
+            {/* Timeline Items */}
+            <div className="space-y-12">
+              {/* Item 1 */}
+              <div className="relative flex items-start gap-8 md:gap-12">
+                <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full bg-primary ring-4 ring-white shadow-lg -translate-x-1/2 mt-2" />
+
+                <div className="md:w-1/2 md:pr-12 md:text-right ml-20 md:ml-0">
+                  <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-primary/20">
+                    <div className="flex items-center gap-3 mb-3 md:justify-end">
+                      <GraduationCap className="h-8 w-8 text-primary" />
+                      <h3 className="text-2xl font-bold">
+                        Laurea in Fisioterapia
+                      </h3>
+                    </div>
+                    <p className="text-muted-foreground font-medium mb-2">
+                      Universidad Arturo Michelena, Venezuela
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Formazione medico-scientifica in anatomia, biomeccanica e
+                      fisiologia del movimento. La base per comprendere il corpo
+                      umano a 360°.
                     </p>
                   </div>
                 </div>
-                <p className="text-muted-foreground">
-                  La mia formazione in fisioterapia mi ha dato una comprensione
-                  profonda di anatomia, biomeccanica e fisiologia del movimento.
-                  Questo background medico-scientifico è la base di ogni
-                  programma che creo.
-                </p>
-              </CardContent>
-            </Card>
 
-            <Card className="border-2">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Award className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-2">
-                      Certificazione EREPs
-                    </h3>
-                    <p className="text-muted-foreground mb-4">
+                <div className="hidden md:block md:w-1/2" />
+              </div>
+
+              {/* Item 2 */}
+              <div className="relative flex items-start gap-8 md:gap-12">
+                <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full bg-primary ring-4 ring-white shadow-lg -translate-x-1/2 mt-2" />
+
+                <div className="hidden md:block md:w-1/2" />
+
+                <div className="md:w-1/2 md:pl-12 ml-20 md:ml-0">
+                  <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-primary/20">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Award className="h-8 w-8 text-primary" />
+                      <h3 className="text-2xl font-bold">
+                        Certificazione EREPs
+                      </h3>
+                    </div>
+                    <p className="text-muted-foreground font-medium mb-2">
                       European Register of Exercise Professionals
                     </p>
+                    <p className="text-sm text-muted-foreground">
+                      Certificazione europea che garantisce competenze
+                      professionali di alto livello e standard di qualità
+                      riconosciuti internazionalmente.
+                    </p>
                   </div>
                 </div>
-                <p className="text-muted-foreground">
-                  Certificazione riconosciuta a livello europeo che attesta le
-                  mie competenze professionali come Personal Trainer, garantendo
-                  standard elevati di qualità e sicurezza.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
 
-          {/* Specializations */}
-          <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12">
-            <h3 className="text-3xl font-bold mb-8 text-center">
-              Specializzazioni
-            </h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-semibold text-lg mb-1">
-                    Ipertrofia Muscolare
-                  </h4>
-                  <p className="text-muted-foreground">
-                    Programmazione avanzata per massimizzare la crescita
-                    muscolare con tecniche evidence-based
-                  </p>
+              {/* Item 3 */}
+              <div className="relative flex items-start gap-8 md:gap-12">
+                <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full bg-primary ring-4 ring-white shadow-lg -translate-x-1/2 mt-2" />
+
+                <div className="md:w-1/2 md:pr-12 md:text-right ml-20 md:ml-0">
+                  <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-primary/20">
+                    <div className="flex items-center gap-3 mb-3 md:justify-end">
+                      <Target className="h-8 w-8 text-primary" />
+                      <h3 className="text-2xl font-bold">Specializzazioni</h3>
+                    </div>
+                    <p className="text-muted-foreground font-medium mb-2">
+                      Formazione continua
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Corsi avanzati in ipertrofia muscolare, ricomposizione
+                      corporea, programmazione evidence-based e nutrizione
+                      sportiva.
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-semibold text-lg mb-1">
-                    Ricomposizione Corporea
-                  </h4>
-                  <p className="text-muted-foreground">
-                    Strategie integrate per perdere grasso e costruire muscolo
-                    simultaneamente
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-semibold text-lg mb-1">
-                    Allenamento Funzionale
-                  </h4>
-                  <p className="text-muted-foreground">
-                    Movimenti che migliorano la qualità della vita quotidiana e
-                    la performance atletica
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-semibold text-lg mb-1">
-                    Recupero Post-Infortunio
-                  </h4>
-                  <p className="text-muted-foreground">
-                    Background in fisioterapia per gestire limitazioni e
-                    prevenire infortuni
-                  </p>
-                </div>
+
+                <div className="hidden md:block md:w-1/2" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Philosophy */}
-      <section className="py-20 px-4 bg-gradient-to-b from-muted/50 to-background">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">La Mia Filosofia</h2>
+      {/* Why Choose Me - Differentiators */}
+      <section className="py-20 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Perché Scegliere Me
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Cosa mi rende diversa dagli altri personal trainer
+            </p>
           </div>
 
-          <div className="space-y-8">
-            <Card className="border-2">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Target className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3">
-                      Approccio Personalizzato
-                    </h3>
-                    <p className="text-muted-foreground text-lg">
-                      Non esistono programmi universali. Ogni persona è unica e
-                      merita un piano studiato su misura, considerando livello
-                      di partenza, obiettivi, preferenze e stile di vita.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Differentiator 1 */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-primary/10">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mb-6 shadow-lg">
+                <GraduationCap className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4">Background Medico</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Non sono solo una PT, ma una{" "}
+                <span className="font-semibold text-foreground">
+                  fisioterapista laureata
+                </span>
+                . Conosco anatomia, biomeccanica e fisiologia a livello medico.
+                Questo mi permette di creare programmi sicuri ed efficaci,
+                prevenendo infortuni.
+              </p>
+            </div>
 
-            <Card className="border-2">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <TrendingUp className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3">
-                      Scienza e Risultati
-                    </h3>
-                    <p className="text-muted-foreground text-lg">
-                      Ogni decisione è basata su evidenze scientifiche e dati
-                      concreti. Monitoro i progressi costantemente per
-                      ottimizzare il programma e garantire risultati misurabili.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Differentiator 2 */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-primary/10">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mb-6 shadow-lg">
+                <TrendingUp className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4">Approccio Scientifico</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Zero improvvisazione. Ogni decisione è basata su{" "}
+                <span className="font-semibold text-foreground">
+                  evidenze scientifiche
+                </span>{" "}
+                e dati concreti. Monitoro i tuoi progressi costantemente per
+                ottimizzare il programma e garantire risultati misurabili.
+              </p>
+            </div>
 
-            <Card className="border-2">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Heart className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold mb-3">
-                      Sostenibilità nel Tempo
-                    </h3>
-                    <p className="text-muted-foreground text-lg">
-                      Il mio obiettivo non è solo farti raggiungere i risultati,
-                      ma darti gli strumenti per mantenerli. Creo abitudini
-                      sostenibili che durano per tutta la vita.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Differentiator 3 */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-primary/10">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mb-6 shadow-lg">
+                <Heart className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4">Supporto Continuo</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Non ti lascio mai solo.{" "}
+                <span className="font-semibold text-foreground">
+                  Rispondo entro 24h
+                </span>
+                , ti seguo con check-in settimanali e aggiusto il programma in
+                tempo reale. Sei seguito come se fossi il mio unico cliente.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Specializations Grid */}
       <section className="py-20 px-4 bg-white">
-        <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="text-4xl font-bold mb-6">Pronto a Iniziare?</h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            Prenota la tua consulenza gratuita e scopri come posso aiutarti a
-            raggiungere i tuoi obiettivi
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Le Mie Specializzazioni
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Aree in cui posso aiutarti a eccellere
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="group bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 hover:shadow-xl transition-all border-2 border-transparent hover:border-primary/20">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                  <Target className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold">Ipertrofia Muscolare</h3>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Programmazione avanzata per massimizzare la crescita muscolare.
+                Utilizzo tecniche evidence-based, periodizzazione e progressive
+                overload per garantire guadagni costanti e duraturi.
+              </p>
+            </div>
+
+            <div className="group bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 hover:shadow-xl transition-all border-2 border-transparent hover:border-primary/20">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                  <TrendingUp className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold">Ricomposizione Corporea</h3>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Strategie integrate per perdere grasso e costruire muscolo
+                simultaneamente. Combino allenamento mirato, linee guida
+                nutrizionali e monitoraggio costante per trasformare la tua
+                composizione corporea.
+              </p>
+            </div>
+
+            <div className="group bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 hover:shadow-xl transition-all border-2 border-transparent hover:border-primary/20">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                  <Award className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold">Forza & Performance</h3>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Programmazione specifica per aumentare forza massimale e
+                potenza. Ideale per atleti o chi vuole migliorare le proprie
+                performance nei grandi esercizi fondamentali.
+              </p>
+            </div>
+
+            <div className="group bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 hover:shadow-xl transition-all border-2 border-transparent hover:border-primary/20">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                  <Heart className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold">Recupero & Prevenzione</h3>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Grazie al mio background in fisioterapia, posso gestire
+                limitazioni fisiche, recupero post-infortunio e creare programmi
+                che prevengono problematiche mantenendo alta l&apos;efficacia.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA - Compelling */}
+      <section className="relative py-32 px-4 overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0">
+          <Image
+            src="/hero-bg.jpg"
+            alt="CTA background"
+            fill
+            className="object-cover"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/80 to-primary/70" />
+        </div>
+
+        {/* Content */}
+        <div className="container mx-auto max-w-4xl text-center relative z-10 text-white">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            Sei Pronto a Trasformare il Tuo Corpo?
+          </h2>
+          <p className="text-xl md:text-2xl mb-4 leading-relaxed">
+            Prenota ora la tua{" "}
+            <span className="font-bold">consulenza gratuita</span>
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <p className="text-lg mb-12 text-white/90 max-w-2xl mx-auto">
+            Analizzeremo insieme i tuoi obiettivi, valuterò la tua situazione
+            attuale e ti mostrerò esattamente come posso aiutarti a raggiungere
+            i risultati che desideri.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link href="/contatti">
-              <Button size="lg" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="text-lg px-8 py-7 w-full sm:w-auto shadow-2xl hover:scale-105 transition-transform"
+              >
                 Richiedi Consulenza Gratuita
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <Link href="/servizi">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                Scopri i Servizi
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-7 w-full sm:w-auto bg-white/10 hover:bg-white/20 border-white/30 text-white"
+              >
+                Scopri i Programmi
               </Button>
             </Link>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="flex flex-wrap justify-center gap-8 text-sm text-white/80">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5" />
+              <span>Nessun impegno</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5" />
+              <span>Risposta in 24h</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5" />
+              <span>100% personalizzato</span>
+            </div>
           </div>
         </div>
       </section>

@@ -1,166 +1,265 @@
 import { ContactForm } from "@/components/contact-form";
-import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2, Clock, MessageCircle, Shield } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  CheckCircle2,
+  Clock,
+  MessageCircle,
+  Shield,
+  Mail,
+  Instagram,
+  Calendar,
+  Star,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function ContattiPage() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-primary/10 via-background to-primary/5">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h1 className="text-5xl font-bold mb-6">Inizia il Tuo Percorso</h1>
-          <p className="text-xl text-muted-foreground mb-8">
-            Richiedi una consulenza gratuita e scopri come posso aiutarti a
-            raggiungere i tuoi obiettivi
-          </p>
+    <div className="min-h-screen mt-[81px]">
+      {/* Hero Section - Enhanced */}
+      <section className="relative py-20 px-4 overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0">
+          <Image
+            src="/hero-bg.jpg"
+            alt="Contact hero background"
+            fill
+            className="object-cover"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/90 to-primary/85" />
+        </div>
 
-          {/* Trust Indicators */}
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Clock className="h-6 w-6 text-primary" />
-              </div>
-              <p className="font-semibold">Risposta in 24h</p>
+        <div className="container mx-auto max-w-5xl relative z-10 text-white">
+          <div className="text-center mb-12">
+            {/* Urgency Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-6 py-3 mb-6 border border-white/30">
+              <Zap className="h-5 w-5 text-yellow-300" />
+              <span className="font-bold text-sm">
+                Solo 3 posti disponibili questo mese
+              </span>
             </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Shield className="h-6 w-6 text-primary" />
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              Prenota la Tua Consulenza Gratuita
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 leading-relaxed max-w-3xl mx-auto">
+              Videocall di 30-45 minuti dove analizziamo i tuoi obiettivi e creo
+              il piano perfetto per te.{" "}
+              <span className="font-bold">Zero impegno, zero costi.</span>
+            </p>
+
+            {/* Trust Indicators - Enhanced */}
+            <div className="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                  <Clock className="h-7 w-7 text-white" />
+                </div>
+                <p className="font-bold text-sm">Risposta in 24h</p>
               </div>
-              <p className="font-semibold">100% Gratuita</p>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <MessageCircle className="h-6 w-6 text-primary" />
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                  <Shield className="h-7 w-7 text-white" />
+                </div>
+                <p className="font-bold text-sm">100% Gratuita</p>
               </div>
-              <p className="font-semibold">Nessun Impegno</p>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                  <MessageCircle className="h-7 w-7 text-white" />
+                </div>
+                <p className="font-bold text-sm">Nessun Impegno</p>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                  <Calendar className="h-7 w-7 text-white" />
+                </div>
+                <p className="font-bold text-sm">Flessibilità Orari</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Form Section */}
-      <section className="py-16 px-4">
+      <section className="py-20 px-4 bg-white">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Left Column - Form */}
             <div>
-              <h2 className="text-3xl font-bold mb-6">Richiedi Consulenza</h2>
+              <div className="mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                  Compila il Form
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Ti risponderò entro 24 ore per fissare la tua consulenza
+                  gratuita
+                </p>
+              </div>
               <ContactForm />
+
+              {/* What Happens Next */}
+              <div className="mt-8 bg-primary/5 rounded-2xl p-6 border border-primary/10">
+                <h3 className="font-bold mb-4 flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  Cosa Succede Dopo?
+                </h3>
+                <ol className="space-y-3 text-sm">
+                  <li className="flex gap-3">
+                    <span className="font-bold text-primary">1.</span>
+                    <span>Ricevi conferma via email entro 24h</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="font-bold text-primary">2.</span>
+                    <span>Fissiamo insieme data e ora per la videocall</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="font-bold text-primary">3.</span>
+                    <span>
+                      Analizziamo obiettivi e creo il tuo piano personalizzato
+                    </span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="font-bold text-primary">4.</span>
+                    <span>Decidi tu se iniziare - zero pressione!</span>
+                  </li>
+                </ol>
+              </div>
             </div>
 
             {/* Right Column - Info & Benefits */}
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Cosa Aspettarti</h3>
+            <div className="space-y-6">
+              {/* Social Proof */}
+              <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-6 border border-primary/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-5 w-5 fill-primary text-primary"
+                      />
+                    ))}
+                  </div>
+                  <span className="font-bold">5.0/5.0</span>
+                </div>
+                <p className="text-sm italic mb-4">
+                  &ldquo;La consulenza gratuita mi ha convinto subito. Costanza
+                  è professionale, preparata e ti fa sentire a tuo agio. Dopo 3
+                  mesi ho già visto risultati incredibili!&rdquo;
+                </p>
+                <div className="font-bold text-sm">Sara T.</div>
+                <div className="text-xs text-muted-foreground">
+                  Cliente da 3 mesi
+                </div>
+              </div>
+
+              {/* What to Expect */}
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-primary/10">
+                <h3 className="text-xl font-bold mb-4">
+                  Durante la Consulenza
+                </h3>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-sm font-bold text-primary">1</span>
+                    </div>
                     <div>
-                      <p className="font-semibold mb-1">Analisi Obiettivi</p>
+                      <p className="font-semibold mb-1">Analisi Completa</p>
                       <p className="text-muted-foreground text-sm">
-                        Discuteremo i tuoi obiettivi, il tuo livello attuale e
-                        le tue aspettative
+                        Obiettivi, storia clinica, esperienza, disponibilità e
+                        stile di vita
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-sm font-bold text-primary">2</span>
+                    </div>
                     <div>
                       <p className="font-semibold mb-1">
-                        Valutazione Personalizzata
+                        Valutazione Professionale
                       </p>
                       <p className="text-muted-foreground text-sm">
-                        Analizzerò la tua situazione e ti consiglierò il
-                        percorso più adatto
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                    <div>
-                      <p className="font-semibold mb-1">Piano d&apos;Azione</p>
-                      <p className="text-muted-foreground text-sm">
-                        Ti presenterò il programma personalizzato e risponderò a
-                        tutte le tue domande
+                        Ti consiglio il programma più adatto e spiego come
+                        funziona
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-sm font-bold text-primary">3</span>
+                    </div>
                     <div>
-                      <p className="font-semibold mb-1">Zero Pressione</p>
+                      <p className="font-semibold mb-1">Q&A Aperto</p>
                       <p className="text-muted-foreground text-sm">
-                        Nessun impegno richiesto. Deciderai tu se iniziare il
-                        percorso insieme
+                        Rispondo a tutte le tue domande senza fretta
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <Card className="border-2 border-primary/20 bg-primary/5">
-                <CardContent className="pt-6">
-                  <h3 className="text-xl font-bold mb-4">Contatti Diretti</h3>
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Email
-                      </p>
-                      <a
-                        href="mailto:info@costanzaspinelli.com"
-                        className="text-primary hover:underline font-semibold"
-                      >
-                        info@costanzaspinelli.com
-                      </a>
+              {/* Alternative Contact Methods */}
+              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-primary/20">
+                <h3 className="text-xl font-bold mb-4">
+                  Preferisci Contattarmi Direttamente?
+                </h3>
+                <div className="space-y-3">
+                  <a
+                    href="mailto:costanzaspinelli.pt@gmail.com"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 transition-colors group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                      <Mail className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        WhatsApp
+                      <p className="text-sm text-muted-foreground">Email</p>
+                      <p className="font-semibold text-primary">
+                        costanzaspinelli.pt@gmail.com
                       </p>
-                      <a
-                        href="https://wa.me/393123456789"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline font-semibold"
-                      >
-                        +39 312 345 6789
-                      </a>
+                    </div>
+                  </a>
+                  <a
+                    href="https://instagram.com/costanzaspinelli.pt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 transition-colors group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                      <Instagram className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Instagram
+                      <p className="text-sm text-muted-foreground">Instagram</p>
+                      <p className="font-semibold text-primary">
+                        @costanzaspinelli.pt
                       </p>
-                      <a
-                        href="https://instagram.com/costanzaspinelli_pt"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline font-semibold"
-                      >
-                        @costanzaspinelli_pt
-                      </a>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </a>
+                </div>
+                <p className="text-xs text-muted-foreground mt-4 text-center">
+                  Rispondo a tutti i messaggi entro 24 ore
+                </p>
+              </div>
 
-              <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg p-6">
-                <h4 className="font-bold mb-3">Garanzia di Qualità</h4>
+              {/* Availability */}
+              <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-6 border border-primary/10">
+                <div className="flex items-center gap-3 mb-3">
+                  <Calendar className="h-6 w-6 text-primary" />
+                  <h4 className="font-bold">Disponibilità Consulenze</h4>
+                </div>
                 <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span>Certificazione EREPs riconosciuta in Europa</span>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Lun - Ven:</span>
+                    <span className="font-semibold">9:00 - 20:00</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span>Background in Fisioterapia</span>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Sabato:</span>
+                    <span className="font-semibold">10:00 - 16:00</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span>Approccio scientifico evidence-based</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span>Monitoraggio progressi costante</span>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Domenica:</span>
+                    <span className="font-semibold">Chiuso</span>
                   </div>
                 </div>
               </div>
@@ -169,63 +268,116 @@ export default function ContattiPage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-3xl font-bold mb-8 text-center">
-            Domande Frequenti
+      {/* Stats & Social Proof */}
+      <section className="py-20 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Unisciti a Chi Ha Già Iniziato
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Risultati reali da persone che hanno fatto il primo passo
+            </p>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid md:grid-cols-4 gap-6 mb-16">
+            <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
+              <div className="text-4xl font-bold text-primary mb-2">100+</div>
+              <div className="text-sm text-muted-foreground">
+                Clienti Trasformati
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
+              <div className="text-4xl font-bold text-primary mb-2">5.0</div>
+              <div className="text-sm text-muted-foreground">Rating Medio</div>
+            </div>
+            <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
+              <div className="text-4xl font-bold text-primary mb-2">24h</div>
+              <div className="text-sm text-muted-foreground">
+                Tempo Risposta
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl p-6 text-center shadow-lg">
+              <div className="text-4xl font-bold text-primary mb-2">95%</div>
+              <div className="text-sm text-muted-foreground">
+                Clienti Soddisfatti
+              </div>
+            </div>
+          </div>
+
+          {/* Quick FAQ */}
+          <div className="bg-white rounded-2xl p-8 shadow-lg max-w-3xl mx-auto">
+            <h3 className="text-2xl font-bold mb-6 text-center">
+              Hai Ancora Dubbi?
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                <div>
+                  <p className="font-semibold mb-1">
+                    La consulenza è davvero gratuita?
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Sì, al 100%. È il mio modo di conoscerti e capire se posso
+                    aiutarti. Zero costi nascosti.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                <div>
+                  <p className="font-semibold mb-1">
+                    Devo decidere subito dopo la consulenza?
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Assolutamente no. Prenditi tutto il tempo che ti serve. Zero
+                    pressione commerciale.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                <div>
+                  <p className="font-semibold mb-1">
+                    Come si svolge la consulenza?
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Videocall di 30-45 minuti su Zoom/Google Meet. Comoda, da
+                    casa tua, quando vuoi tu.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-20 px-4 bg-white">
+        <div className="container mx-auto max-w-3xl text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Pronto a Fare il Primo Passo?
           </h2>
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="pt-6">
-                <h3 className="font-bold text-lg mb-2">
-                  La consulenza è davvero gratuita?
-                </h3>
-                <p className="text-muted-foreground">
-                  Sì, assolutamente! La prima consulenza è completamente
-                  gratuita e senza impegno. È un&apos;opportunità per conoscerci
-                  e capire se possiamo lavorare insieme.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <h3 className="font-bold text-lg mb-2">
-                  Quanto tempo ci vuole per vedere risultati?
-                </h3>
-                <p className="text-muted-foreground">
-                  I primi risultati visibili arrivano generalmente dopo 4-6
-                  settimane di allenamento costante. Trasformazioni
-                  significative richiedono 8-12 settimane, ma dipende dal punto
-                  di partenza e dagli obiettivi.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <h3 className="font-bold text-lg mb-2">Lavori anche online?</h3>
-                <p className="text-muted-foreground">
-                  Sì! Offro programmi di coaching online completi con videocall,
-                  schede personalizzate, supporto WhatsApp e check-in regolari.
-                  Puoi allenarti da qualsiasi parte del mondo.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <h3 className="font-bold text-lg mb-2">
-                  Serve esperienza in palestra?
-                </h3>
-                <p className="text-muted-foreground">
-                  No, lavoro con persone di tutti i livelli, dai principianti
-                  assoluti agli atleti avanzati. Ogni programma è personalizzato
-                  sul tuo livello attuale.
-                </p>
-              </CardContent>
-            </Card>
+          <p className="text-xl text-muted-foreground mb-8">
+            Compila il form sopra o contattami direttamente. Ti risponderò entro
+            24 ore.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="#form" className="block">
+              <Button size="lg" className="text-lg px-8 py-7 w-full sm:w-auto">
+                Torna al Form
+              </Button>
+            </a>
+            <Link href="/servizi">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-7 w-full sm:w-auto"
+              >
+                Scopri i Programmi
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

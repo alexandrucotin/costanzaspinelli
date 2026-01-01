@@ -5,7 +5,6 @@ import {
   GraduationCap,
   Target,
   TrendingUp,
-  Users,
   CheckCircle2,
   ArrowRight,
   ChevronDown,
@@ -126,7 +125,7 @@ export default function Home() {
             <div className="relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/costanza-profile1.jpg"
+                  src="/costanza-profile2.DNG"
                   alt="Costanza Spinelli Personal Trainer"
                   className="w-full h-full object-cover"
                   width={500}
@@ -137,10 +136,14 @@ export default function Home() {
 
             {/* Content Column */}
             <div>
-              <h2 className="text-4xl font-bold mb-6">Chi Sono</h2>
+              <h2 className="text-4xl font-bold mb-6">Ciao, sono Costanza</h2>
               <p className="text-xl text-muted-foreground mb-6">
-                Costanza Spinelli - Personal Trainer Certificata con background
-                in Fisioterapia
+                Personal Trainer certificata con background in Fisioterapia,
+                specializzata in ipertrofia muscolare e ricomposizione corporea.
+              </p>
+              <p className="text-lg mb-8">
+                La mia missione è aiutarti a trasformare il tuo corpo attraverso
+                programmi scientifici, personalizzati e sostenibili nel tempo.
               </p>
 
               <div className="space-y-6 mb-8">
@@ -215,7 +218,7 @@ export default function Home() {
 
       {/* Il Mio Approccio Section - Clean Timeline Design */}
       <section className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto">
           {/* Header */}
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -228,7 +231,7 @@ export default function Home() {
           </div>
 
           {/* Timeline - 3 Steps */}
-          <div className="relative max-w-4xl mx-auto mb-20">
+          <div className="relative  mb-20">
             {/* Connecting line - only visible on desktop, positioned at number level */}
             <div className="hidden md:block absolute left-[16.666%] right-[16.666%] top-6 h-0.5 bg-primary/20" />
 
@@ -351,49 +354,53 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          {/* Philosophy Section */}
-          <div className="relative overflow-hidden bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-primary/20 max-w-4xl mx-auto">
-            {/* Decorative gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 pointer-events-none" />
-
-            <div className="relative z-10">
-              <h3 className="text-3xl md:text-4xl font-bold mb-2">
-                La mia filosofia
-              </h3>
-
-              <blockquote className="relative mb-6">
-                <p className="text-xl md:text-2xl font-medium text-foreground leading-relaxed italic relative z-10">
-                  Non esistono scorciatoie, ma solo il metodo giusto applicato
-                  con costanza
-                </p>
-              </blockquote>
-
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed mt-8">
-                Credo fermamente che i risultati duraturi si ottengano
-                attraverso un approccio{" "}
-                <span className="font-semibold text-foreground">
-                  scientifico
-                </span>
-                ,{" "}
-                <span className="font-semibold text-foreground">
-                  personalizzato
-                </span>{" "}
-                e{" "}
-                <span className="font-semibold text-foreground">
-                  sostenibile
-                </span>{" "}
-                nel tempo. Il mio obiettivo non è solo farti raggiungere i tuoi
-                traguardi, ma darti gli strumenti per mantenerli per sempre.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
+      {/* Philosophy Banner Section */}
+      <section className="relative py-32 px-4 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/hero-bg.jpg"
+            alt="Philosophy background"
+            fill
+            className="object-cover"
+            priority={false}
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/70 to-black/60" />
+        </div>
+
+        {/* Content */}
+        <div className="container mx-auto relative z-10">
+          <div className="max-w-4xl mx-auto text-white">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
+              La mia filosofia
+            </h2>
+
+            <blockquote className="relative mb-8 pl-6 border-l-4 border-white/50">
+              <p className="text-2xl md:text-3xl lg:text-4xl font-medium  italic">
+                &ldquo;Non esistono scorciatoie, ma solo il metodo giusto
+                applicato con costanza&rdquo;
+              </p>
+            </blockquote>
+
+            <p className="text-lg md:text-xl leading-relaxed text-white/90 max-w-3xl">
+              Credo fermamente che i risultati duraturi si ottengano attraverso
+              un approccio{" "}
+              <span className="font-bold text-white">scientifico</span>,{" "}
+              <span className="font-bold text-white">personalizzato</span> e{" "}
+              <span className="font-bold text-white">sostenibile</span> nel
+              tempo. Il mio obiettivo non è solo farti raggiungere i tuoi
+              traguardi, ma darti gli strumenti per mantenerli per sempre.
+            </p>
+          </div>
+        </div>
+      </section>
       {/* Services Section - Redesigned */}
-      <section className="py-20 px-4 bg-gradient-to-b from-white to-muted/30">
-        <div className="container mx-auto max-w-7xl">
+      <section className="py-20 px-4 bg-muted/30">
+        <div className="container mx-auto">
           {/* Header */}
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -409,13 +416,13 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {/* Service 1 - Ipertrofia */}
             <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-primary/10 hover:border-primary/30 transition-all hover:shadow-xl group">
-              <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center mb-6 gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
                   <Target className="h-7 w-7 text-white" />
                 </div>
+                <h3 className="text-2xl font-bold">Ipertrofia Muscolare</h3>
               </div>
 
-              <h3 className="text-2xl font-bold mb-3">Ipertrofia Muscolare</h3>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Massimizza la crescita muscolare con programmazione scientifica
                 e periodizzazione avanzata
@@ -465,19 +472,17 @@ export default function Home() {
             {/* Service 2 - Ricomposizione (MOST POPULAR) */}
             <div className="relative bg-white rounded-3xl p-8 shadow-xl border-2 border-primary hover:border-primary transition-all hover:shadow-2xl group lg:scale-105">
               {/* Popular Badge */}
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-primary/80 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
                 PIÙ POPOLARE
               </div>
 
-              <div className="flex items-start justify-between mb-6 mt-2">
+              <div className="flex items-center mb-6 gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
                   <TrendingUp className="h-7 w-7 text-white" />
                 </div>
+                <h3 className="text-2xl font-bold">Ricomposizione Corporea</h3>
               </div>
 
-              <h3 className="text-2xl font-bold mb-3">
-                Ricomposizione Corporea
-              </h3>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Perdi grasso e costruisci muscolo simultaneamente con strategie
                 integrate
@@ -525,13 +530,13 @@ export default function Home() {
 
             {/* Service 3 - Forza & Performance */}
             <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-primary/10 hover:border-primary/30 transition-all hover:shadow-xl group">
-              <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center mb-6 gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
                   <Award className="h-7 w-7 text-white" />
                 </div>
+                <h3 className="text-2xl font-bold">Forza & Performance</h3>
               </div>
 
-              <h3 className="text-2xl font-bold mb-3">Forza & Performance</h3>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Migliora forza, potenza e performance atletica con
                 programmazione specifica
@@ -579,7 +584,7 @@ export default function Home() {
           </div>
 
           {/* Comparison Table */}
-          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-primary/10 mb-16">
+          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-primary/10 mb-16 max-w-4xl mx-auto shadow-xl">
             <h3 className="text-3xl font-bold text-center mb-8">
               Confronta i Programmi
             </h3>
@@ -676,55 +681,6 @@ export default function Home() {
               </table>
             </div>
           </div>
-
-          {/* FAQ Section */}
-          <div className="max-w-3xl mx-auto">
-            <h3 className="text-3xl font-bold text-center mb-8">
-              Domande Frequenti
-            </h3>
-            <div className="space-y-4">
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-primary/10">
-                <h4 className="font-bold mb-2 flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-primary">?</span>
-                  </div>
-                  Come funziona il coaching online?
-                </h4>
-                <p className="text-muted-foreground text-sm pl-8">
-                  Ricevi le tue schede tramite app, comunichiamo via WhatsApp
-                  per check-in settimanali, e ti seguo costantemente per
-                  aggiustamenti in tempo reale.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-primary/10">
-                <h4 className="font-bold mb-2 flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-primary">?</span>
-                  </div>
-                  Posso cambiare programma durante il percorso?
-                </h4>
-                <p className="text-muted-foreground text-sm pl-8">
-                  Assolutamente sì. Il programma si adatta ai tuoi progressi e
-                  obiettivi che possono evolvere nel tempo.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-primary/10">
-                <h4 className="font-bold mb-2 flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-primary">?</span>
-                  </div>
-                  Quanto tempo ci vuole per vedere risultati?
-                </h4>
-                <p className="text-muted-foreground text-sm pl-8">
-                  I primi cambiamenti sono visibili dopo 4-6 settimane.
-                  Risultati significativi richiedono 12-16 settimane di
-                  costanza.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -764,6 +720,56 @@ export default function Home() {
               ✓ Nessun impegno richiesto • ✓ Consulenza 100% gratuita • ✓
               Risposta entro 24 ore
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 bg-white">
+        {/* FAQ Section */}
+        <div className="max-w-3xl mx-auto">
+          <h3 className="text-3xl font-bold text-center mb-8">
+            Domande Frequenti
+          </h3>
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl p-6 shadow-md border border-primary/10">
+              <h4 className="font-bold mb-2 flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xs font-bold text-primary">?</span>
+                </div>
+                Come funziona il coaching online?
+              </h4>
+              <p className="text-muted-foreground text-sm pl-8">
+                Ricevi le tue schede tramite app, comunichiamo via WhatsApp per
+                check-in settimanali, e ti seguo costantemente per aggiustamenti
+                in tempo reale.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-md border border-primary/10">
+              <h4 className="font-bold mb-2 flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xs font-bold text-primary">?</span>
+                </div>
+                Posso cambiare programma durante il percorso?
+              </h4>
+              <p className="text-muted-foreground text-sm pl-8">
+                Assolutamente sì. Il programma si adatta ai tuoi progressi e
+                obiettivi che possono evolvere nel tempo.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-md border border-primary/10">
+              <h4 className="font-bold mb-2 flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xs font-bold text-primary">?</span>
+                </div>
+                Quanto tempo ci vuole per vedere risultati?
+              </h4>
+              <p className="text-muted-foreground text-sm pl-8">
+                I primi cambiamenti sono visibili dopo 4-6 settimane. Risultati
+                significativi richiedono 12-16 settimane di costanza.
+              </p>
+            </div>
           </div>
         </div>
       </section>

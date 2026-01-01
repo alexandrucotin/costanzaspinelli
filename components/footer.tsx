@@ -17,7 +17,7 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               <a
-                href="https://instagram.com/costanzaspinelli_pt"
+                href="https://instagram.com/costanzaspinelli.pt"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -26,20 +26,11 @@ export function Footer() {
                 <Instagram className="h-5 w-5" />
               </a>
               <a
-                href="mailto:info@costanzaspinelli.com"
+                href="mailto:costanzaspinelli.pt@gmail.com"
                 className="hover:text-primary transition-colors"
                 aria-label="Email"
               >
                 <Mail className="h-5 w-5" />
-              </a>
-              <a
-                href="https://wa.me/393123456789"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-primary transition-colors"
-                aria-label="WhatsApp"
-              >
-                <Phone className="h-5 w-5" />
               </a>
             </div>
           </div>
@@ -126,32 +117,22 @@ export function Footer() {
               <li className="flex items-start gap-2">
                 <Mail className="h-4 w-4 mt-1 flex-shrink-0" />
                 <a
-                  href="mailto:info@costanzaspinelli.com"
+                  href="mailto:costanzaspinelli.pt@gmail.com"
                   className="hover:text-primary transition-colors"
                 >
-                  info@costanzaspinelli.com
+                  costanzaspinelli.pt@gmail.com
                 </a>
               </li>
-              <li className="flex items-start gap-2">
-                <Phone className="h-4 w-4 mt-1 flex-shrink-0" />
-                <a
-                  href="https://wa.me/393123456789"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
-                >
-                  +39 312 345 6789
-                </a>
-              </li>
+
               <li className="flex items-start gap-2">
                 <Instagram className="h-4 w-4 mt-1 flex-shrink-0" />
                 <a
-                  href="https://instagram.com/costanzaspinelli_pt"
+                  href="https://instagram.com/costanzaspinelli.pt"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-primary transition-colors"
                 >
-                  @costanzaspinelli_pt
+                  @costanzaspinelli.pt
                 </a>
               </li>
             </ul>
