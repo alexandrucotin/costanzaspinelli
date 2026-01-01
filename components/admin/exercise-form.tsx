@@ -37,16 +37,17 @@ export function ExerciseForm({ exercise, onSuccess }: ExerciseFormProps) {
     ),
     defaultValues: exercise || {
       name: "",
-      muscleGroup: "",
-      equipment: "gym",
-      category: "",
+      muscleGroupId: "",
+      environment: "gym",
+      categoryId: "",
+      toolIds: [],
       defaultRestSeconds: undefined,
       defaultTempo: "",
       videoUrl: "",
     },
   });
 
-  const equipment = watch("equipment");
+  const environment = watch("environment");
 
   const onSubmit = async (
     data: Omit<Exercise, "id" | "createdAt" | "updatedAt">
@@ -77,25 +78,28 @@ export function ExerciseForm({ exercise, onSuccess }: ExerciseFormProps) {
       </div>
 
       <div>
-        <Label htmlFor="muscleGroup">Gruppo Muscolare *</Label>
+        <Label htmlFor="muscleGroupId">Gruppo Muscolare *</Label>
         <Input
-          id="muscleGroup"
-          {...register("muscleGroup")}
-          placeholder="es. Petto, Gambe, Schiena"
+          id="muscleGroupId"
+          {...register("muscleGroupId")}
+          placeholder="Inserisci ID gruppo muscolare (temporaneo)"
         />
-        {errors.muscleGroup && (
+        {errors.muscleGroupId && (
           <p className="text-sm text-destructive mt-1">
-            {errors.muscleGroup.message as string}
+            {errors.muscleGroupId.message as string}
           </p>
         )}
+        <p className="text-xs text-muted-foreground mt-1">
+          Nota: Popola prima i metadata in Impostazioni
+        </p>
       </div>
 
       <div>
-        <Label htmlFor="equipment">Attrezzatura *</Label>
+        <Label htmlFor="environment">Ambiente *</Label>
         <Select
-          value={equipment}
+          value={environment}
           onValueChange={(value) =>
-            setValue("equipment", value as Exercise["equipment"])
+            setValue("environment", value as Exercise["environment"])
           }
         >
           <SelectTrigger>
@@ -105,28 +109,30 @@ export function ExerciseForm({ exercise, onSuccess }: ExerciseFormProps) {
             <SelectItem value="gym">Palestra</SelectItem>
             <SelectItem value="home">Casa</SelectItem>
             <SelectItem value="both">Entrambi</SelectItem>
-            <SelectItem value="bodyweight">Corpo libero</SelectItem>
           </SelectContent>
         </Select>
-        {errors.equipment && (
+        {errors.environment && (
           <p className="text-sm text-destructive mt-1">
-            {errors.equipment.message as string}
+            {errors.environment.message as string}
           </p>
         )}
       </div>
 
       <div>
-        <Label htmlFor="category">Categoria *</Label>
+        <Label htmlFor="categoryId">Categoria *</Label>
         <Input
-          id="category"
-          {...register("category")}
-          placeholder="es. Spinta, Tirata, Isolamento"
+          id="categoryId"
+          {...register("categoryId")}
+          placeholder="Inserisci ID categoria (temporaneo)"
         />
-        {errors.category && (
+        {errors.categoryId && (
           <p className="text-sm text-destructive mt-1">
-            {errors.category.message as string}
+            {errors.categoryId.message as string}
           </p>
         )}
+        <p className="text-xs text-muted-foreground mt-1">
+          Nota: Popola prima i metadata in Impostazioni
+        </p>
       </div>
 
       <div>
