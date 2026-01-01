@@ -165,6 +165,7 @@ export function PlanBuilder({
         data={planData}
         onChange={handleMetaUpdate}
         disabled={!isEditing}
+        clients={clients}
       />
 
       <div className="space-y-4">

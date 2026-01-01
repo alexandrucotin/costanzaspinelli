@@ -189,102 +189,255 @@ export function ClientForm({ client }: ClientFormProps) {
       {/* Anamnesi Medica */}
       <Card>
         <CardHeader>
-          <CardTitle>Anamnesi Medica</CardTitle>
+          <CardTitle>Anamnesi Generale</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="medicalHistory.currentConditions">
-              Patologie Attuali
-            </Label>
-            <Textarea
-              id="medicalHistory.currentConditions"
-              {...register("medicalHistory.currentConditions")}
-              placeholder="Es: diabete, ipertensione, problemi cardiaci..."
-              rows={2}
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="medicalHistory.pastConditions">
-              Patologie Passate
-            </Label>
-            <Textarea
-              id="medicalHistory.pastConditions"
-              {...register("medicalHistory.pastConditions")}
-              placeholder="Malattie o condizioni mediche pregresse..."
-              rows={2}
-            />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <Label htmlFor="medicalHistory.medications">
-                Farmaci Assunti
-              </Label>
-              <Textarea
-                id="medicalHistory.medications"
-                {...register("medicalHistory.medications")}
-                placeholder="Elenco farmaci e dosaggi..."
-                rows={2}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="medicalHistory.allergies">
-                Allergie/Intolleranze
-              </Label>
-              <Textarea
-                id="medicalHistory.allergies"
-                {...register("medicalHistory.allergies")}
-                placeholder="Allergie alimentari, farmacologiche..."
-                rows={2}
-              />
+        <CardContent className="space-y-6">
+          {/* Stile di vita */}
+          <div className="space-y-3">
+            <Label className="text-base font-semibold">Stile di Vita</Label>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <Label htmlFor="lifestyle.occupation" className="text-sm">
+                  Lavoro
+                </Label>
+                <Input
+                  id="lifestyle.occupation"
+                  {...register("lifestyle.occupation")}
+                  placeholder="Professione"
+                />
+              </div>
+              <div>
+                <Label htmlFor="lifestyle.activityLevel" className="text-sm">
+                  Livello Attività
+                </Label>
+                <Select
+                  value={watch("lifestyle.activityLevel") || ""}
+                  onValueChange={(value) =>
+                    setValue("lifestyle.activityLevel", value as any)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleziona" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sedentary">Sedentario</SelectItem>
+                    <SelectItem value="lightly_active">
+                      Leggermente Attivo
+                    </SelectItem>
+                    <SelectItem value="moderately_active">
+                      Moderatamente Attivo
+                    </SelectItem>
+                    <SelectItem value="very_active">Molto Attivo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="medicalHistory.surgeries">
-              Interventi Chirurgici
-            </Label>
-            <Textarea
-              id="medicalHistory.surgeries"
-              {...register("medicalHistory.surgeries")}
-              placeholder="Operazioni subite con date approssimative..."
-              rows={2}
-            />
+          {/* Anamnesi Clinica */}
+          <div className="space-y-3">
+            <Label className="text-base font-semibold">Anamnesi Clinica</Label>
+
+            <div className="space-y-2">
+              <Label className="text-sm">Assume farmaci?</Label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    {...register("medicalHistory.medications")}
+                    value="Si"
+                  />
+                  <span className="text-sm">Sì</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    {...register("medicalHistory.medications")}
+                    value="No"
+                  />
+                  <span className="text-sm">No</span>
+                </label>
+              </div>
+              {watch("medicalHistory.medications") === "Si" && (
+                <Input
+                  placeholder="Specificare farmaci..."
+                  {...register("medicalHistory.medications")}
+                />
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm">Fuma?</Label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    {...register("lifestyle.smoker")}
+                    value="yes"
+                  />
+                  <span className="text-sm">Sì</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    {...register("lifestyle.smoker")}
+                    value="no"
+                  />
+                  <span className="text-sm">No</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    {...register("lifestyle.smoker")}
+                    value="ex"
+                  />
+                  <span className="text-sm">Ex fumatore</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm">Alcol?</Label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    {...register("lifestyle.alcoholConsumption")}
+                    value="never"
+                  />
+                  <span className="text-sm">No</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    {...register("lifestyle.alcoholConsumption")}
+                    value="occasional"
+                  />
+                  <span className="text-sm">Occasionale</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm">Disturbi sistema nervoso?</Label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    {...register("medicalHistory.currentConditions")}
+                    value="disturbi_nervosi"
+                  />
+                  <span className="text-sm">Sì</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm">Patologie diagnosticate?</Label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="artrite" />
+                  <span className="text-sm">Artrite</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="osteoporosi" />
+                  <span className="text-sm">Osteoporosi</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="artrosi" />
+                  <span className="text-sm">Artrosi</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="rachitismo" />
+                  <span className="text-sm">Rachitismo</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="frattura" />
+                  <span className="text-sm">Frattura</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="fibromialgia" />
+                  <span className="text-sm">Fibromialgia</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="ipertensione" />
+                  <span className="text-sm">Ipertensione arteriosa</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="asma" />
+                  <span className="text-sm">Asma</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" value="diabete" />
+                  <span className="text-sm">Diabete</span>
+                </label>
+              </div>
+              <Textarea
+                placeholder="Altre patologie..."
+                {...register("medicalHistory.currentConditions")}
+                rows={2}
+                className="mt-2"
+              />
+            </div>
           </div>
 
-          <div>
-            <Label htmlFor="medicalHistory.injuries">Traumi e Infortuni</Label>
+          {/* Lesioni sistema muscolo-scheletrico */}
+          <div className="space-y-3">
+            <Label className="text-base font-semibold">
+              Lesioni del Sistema Muscolo-Scheletrico
+            </Label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" value="frattura" />
+                <span className="text-sm">Frattura</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" value="meniscopatia" />
+                <span className="text-sm">Meniscopatia</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" value="distorsione" />
+                <span className="text-sm">Distorsione</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" value="tendinite" />
+                <span className="text-sm">Tendinite</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" value="dislocazione" />
+                <span className="text-sm">Dislocazione</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" value="capsulite" />
+                <span className="text-sm">Capsulite</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" value="borsite" />
+                <span className="text-sm">Borsite</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" value="ernia" />
+                <span className="text-sm">Ernia discale</span>
+              </label>
+            </div>
             <Textarea
-              id="medicalHistory.injuries"
+              placeholder="Indicare la zona della lesione e dettagli..."
               {...register("medicalHistory.injuries")}
-              placeholder="Infortuni sportivi, incidenti, fratture con dettagli e date..."
-              rows={3}
+              rows={2}
+              className="mt-2"
             />
           </div>
 
+          {/* Note aggiuntive */}
           <div>
             <Label htmlFor="medicalHistory.limitations">
-              Limitazioni Fisiche
+              Note e Limitazioni
             </Label>
             <Textarea
               id="medicalHistory.limitations"
               {...register("medicalHistory.limitations")}
-              placeholder="Problemi articolari, posturali, mobilità ridotta..."
-              rows={2}
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="medicalHistory.recurringPain">
-              Dolori Ricorrenti
-            </Label>
-            <Textarea
-              id="medicalHistory.recurringPain"
-              {...register("medicalHistory.recurringPain")}
-              placeholder="Zone del corpo con dolore cronico, intensità, frequenza..."
-              rows={2}
+              placeholder="Limitazioni fisiche, dolori ricorrenti, altre informazioni rilevanti..."
+              rows={3}
             />
           </div>
         </CardContent>
