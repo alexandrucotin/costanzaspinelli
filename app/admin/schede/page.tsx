@@ -1,4 +1,4 @@
-import { getPlans } from "@/lib/data";
+import { getPlans } from "@/lib/data-blobs";
 import { PlansList } from "@/components/admin/plans-list";
 
 export default async function SchedePage() {

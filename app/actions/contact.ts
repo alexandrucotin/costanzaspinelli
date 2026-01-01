@@ -1,7 +1,7 @@
 "use server";
 
 import { ContactSubmission, ContactSubmissionSchema } from "@/lib/types";
-import { saveContactSubmission } from "@/lib/data";
+import { saveContactSubmission } from "@/lib/data-blobs";
 
 export async function submitContactAction(
   data: Omit<ContactSubmission, "id" | "submittedAt">

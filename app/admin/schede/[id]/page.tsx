@@ -1,5 +1,5 @@
-import { getPlanById } from "@/lib/data";
-import { getExercises } from "@/lib/data";
+import { getPlanById } from "@/lib/data-blobs";
+import { getExercises } from "@/lib/data-blobs";
 import { PlanBuilder } from "@/components/admin/plan-builder";
 import { notFound } from "next/navigation";
 

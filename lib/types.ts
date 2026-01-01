@@ -1,11 +1,37 @@
 import { z } from "zod";
 
+// Metadata schemas
+export const ToolSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Nome attrezzo richiesto"),
+  createdAt: z.string(),
+});
+
+export type Tool = z.infer<typeof ToolSchema>;
+
+export const MuscleGroupSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Nome gruppo muscolare richiesto"),
+  createdAt: z.string(),
+});
+
+export type MuscleGroup = z.infer<typeof MuscleGroupSchema>;
+
+export const CategorySchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Nome categoria richiesto"),
+  createdAt: z.string(),
+});
+
+export type Category = z.infer<typeof CategorySchema>;
+
 export const ExerciseSchema = z.object({
   id: z.string(),
   name: z.string().min(1, "Nome esercizio richiesto"),
-  muscleGroup: z.string().min(1, "Gruppo muscolare richiesto"),
-  equipment: z.enum(["gym", "home", "both", "bodyweight"]),
-  category: z.string().min(1, "Categoria richiesta"),
+  muscleGroupId: z.string().min(1, "Gruppo muscolare richiesto"),
+  environment: z.enum(["gym", "home", "both"]),
+  categoryId: z.string().min(1, "Categoria richiesta"),
+  toolIds: z.array(z.string()).default([]), // Multi-select tools
   defaultRestSeconds: z.number().min(0).optional(),
   defaultTempo: z.string().optional(),
   videoUrl: z.string().url().optional().or(z.literal("")),
@@ -98,14 +124,16 @@ export const goalLabels: Record<WorkoutPlan["goal"], string> = {
   mobility: "Mobilità",
 };
 
-export const equipmentLabels: Record<
-  Exercise["equipment"] | WorkoutPlan["equipment"],
-  string
-> = {
+export const environmentLabels: Record<Exercise["environment"], string> = {
   gym: "Palestra",
   home: "Casa",
   both: "Entrambi",
-  bodyweight: "Corpo libero",
+};
+
+export const equipmentLabels: Record<WorkoutPlan["equipment"], string> = {
+  gym: "Palestra",
+  home: "Casa",
+  both: "Entrambi",
 };
 
 export const sectionLabels: Record<Section["type"], string> = {

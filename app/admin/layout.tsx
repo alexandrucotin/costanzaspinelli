@@ -1,6 +1,6 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { LayoutDashboard, Dumbbell } from "lucide-react";
+import { LayoutDashboard, Dumbbell, Settings } from "lucide-react";
 
 export default function AdminLayout({
   children,
@@ -35,6 +35,13 @@ export default function AdminLayout({
                 >
                   <Dumbbell className="h-4 w-4" />
                   Esercizi
+                </Link>
+                <Link
+                  href="/admin/impostazioni"
+                  className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+                >
+                  <Settings className="h-4 w-4" />
+                  Impostazioni
                 </Link>
               </div>
             </div>

@@ -190,5 +190,17 @@
     "videoUrl": "",
     "createdAt": "2026-01-01T17:58:01.757Z",
     "updatedAt": "2026-01-01T17:58:01.758Z"
+  },
+  {
+    "id": "ex_1767292080806_ddlbjtgvq",
+    "name": "aaaa",
+    "muscleGroup": "aaaaa",
+    "equipment": "gym",
+    "category": "aaaaaa",
+    "defaultRestSeconds": 30,
+    "defaultTempo": "30",
+    "videoUrl": "",
+    "createdAt": "2026-01-01T18:28:00.806Z",
+    "updatedAt": "2026-01-01T18:28:00.806Z"
   }
 ]

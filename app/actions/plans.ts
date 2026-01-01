@@ -8,7 +8,7 @@ import {
   savePlan,
   deletePlan,
   duplicatePlan,
-} from "@/lib/data";
+} from "@/lib/data-blobs";
 
 export async function getPlansAction() {
   return await getPlans();

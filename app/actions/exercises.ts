@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { Exercise, ExerciseSchema } from "@/lib/types";
-import { getExercises, saveExercise, deleteExercise } from "@/lib/data";
+import { getExercises, saveExercise, deleteExercise } from "@/lib/data-blobs";
 
 export async function getExercisesAction() {
   return await getExercises();

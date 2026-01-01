@@ -1,6 +1,6 @@
 "use server";
 
-import { getPlanById } from "@/lib/data";
+import { getPlanById } from "@/lib/data-blobs";
 import { generatePdfBuffer } from "@/lib/pdf-generator";
 
 export async function generatePdfAction(

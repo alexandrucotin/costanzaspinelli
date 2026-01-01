@@ -1,4 +1,4 @@
-import { getExercises } from "@/lib/data";
+import { getExercises } from "@/lib/data-blobs";
 import { ExerciseLibrary } from "@/components/admin/exercise-library";
 
 export default async function ExercisesPage() {
