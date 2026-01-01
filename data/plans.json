@@ -1,5 +1,125 @@
 [
   {
+    "id": "plan_1767280639457_xpbpzpxhl",
+    "title": "titoolo scehda 12",
+    "clientName": "Gaby Spin elli",
+    "goal": "hypertrophy",
+    "durationWeeks": 8,
+    "frequencyDaysPerWeek": 4,
+    "equipment": "home",
+    "notes": "fghjk",
+    "contraindications": "",
+    "sessions": [
+      {
+        "id": "session_1767280585652_g7ognksei",
+        "name": "Back",
+        "sections": [
+          {
+            "id": "section_warmup_1767280585652",
+            "type": "warmup",
+            "exercises": [
+              {
+                "id": "ex_row_1767280598908_8yw8jb3x3",
+                "exerciseId": "ex_1",
+                "exerciseName": "Panca Piana Bilanciere",
+                "sets": 3,
+                "reps": 10,
+                "restSeconds": 180,
+                "tempo": "3010",
+                "notes": ""
+              },
+              {
+                "id": "ex_row_1767280603807_34dzr3dda",
+                "exerciseId": "ex_9",
+                "exerciseName": "French Press",
+                "sets": 3,
+                "reps": 10,
+                "restSeconds": 90,
+                "tempo": "3010",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "id": "section_main_1767280585652",
+            "type": "main",
+            "exercises": [
+              {
+                "id": "ex_row_1767280606331_vnx0072c7",
+                "exerciseId": "ex_12",
+                "exerciseName": "Panca Inclinata Manubri",
+                "sets": 4,
+                "reps": 13,
+                "restSeconds": 120,
+                "tempo": "3010",
+                "notes": ""
+              },
+              {
+                "id": "ex_row_1767280609940_h9zgomi67",
+                "exerciseId": "ex_4",
+                "exerciseName": "Military Press",
+                "sets": 3,
+                "reps": 10,
+                "restSeconds": 120,
+                "tempo": "3010",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "id": "section_cooldown_1767280585652",
+            "type": "cooldown",
+            "exercises": [
+              {
+                "id": "ex_row_1767280617619_kwxie4idq",
+                "exerciseId": "ex_15",
+                "exerciseName": "Hip Thrust",
+                "sets": 3,
+                "reps": 10,
+                "restSeconds": 120,
+                "tempo": "3010",
+                "notes": ""
+              },
+              {
+                "id": "ex_row_1767290628320_nvul07q2q",
+                "exerciseId": "ex_1767290281757_rk5uxbmzs",
+                "exerciseName": "Scopare",
+                "sets": 3,
+                "reps": 10,
+                "restSeconds": 3010,
+                "tempo": "",
+                "notes": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "session_1767280622594_v94v2v9u5",
+        "name": "Upper",
+        "sections": [
+          {
+            "id": "section_warmup_1767280622594",
+            "type": "warmup",
+            "exercises": []
+          },
+          {
+            "id": "section_main_1767280622594",
+            "type": "main",
+            "exercises": []
+          },
+          {
+            "id": "section_cooldown_1767280622594",
+            "type": "cooldown",
+            "exercises": []
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-01-01T15:17:19.457Z",
+    "updatedAt": "2026-01-01T18:03:52.363Z"
+  },
+  {
     "id": "plan_1767270986027_3wzfpw41w",
     "title": "Scheda 1",
     "clientName": "Mario rossi bbb",
@@ -274,115 +394,5 @@
     ],
     "createdAt": "2026-01-01T12:38:32.619Z",
     "updatedAt": "2026-01-01T12:38:32.619Z"
-  },
-  {
-    "id": "plan_1767280639457_xpbpzpxhl",
-    "title": "titoolo scehda 12",
-    "clientName": "Gaby Spin elli",
-    "goal": "hypertrophy",
-    "durationWeeks": 8,
-    "frequencyDaysPerWeek": 4,
-    "equipment": "home",
-    "notes": "fghjk",
-    "contraindications": "",
-    "sessions": [
-      {
-        "id": "session_1767280585652_g7ognksei",
-        "name": "Back",
-        "sections": [
-          {
-            "id": "section_warmup_1767280585652",
-            "type": "warmup",
-            "exercises": [
-              {
-                "id": "ex_row_1767280598908_8yw8jb3x3",
-                "exerciseId": "ex_1",
-                "exerciseName": "Panca Piana Bilanciere",
-                "sets": 3,
-                "reps": 10,
-                "restSeconds": 180,
-                "tempo": "3010",
-                "notes": ""
-              },
-              {
-                "id": "ex_row_1767280603807_34dzr3dda",
-                "exerciseId": "ex_9",
-                "exerciseName": "French Press",
-                "sets": 3,
-                "reps": 10,
-                "restSeconds": 90,
-                "tempo": "3010",
-                "notes": ""
-              }
-            ]
-          },
-          {
-            "id": "section_main_1767280585652",
-            "type": "main",
-            "exercises": [
-              {
-                "id": "ex_row_1767280606331_vnx0072c7",
-                "exerciseId": "ex_12",
-                "exerciseName": "Panca Inclinata Manubri",
-                "sets": 4,
-                "reps": 13,
-                "restSeconds": 120,
-                "tempo": "3010",
-                "notes": ""
-              },
-              {
-                "id": "ex_row_1767280609940_h9zgomi67",
-                "exerciseId": "ex_4",
-                "exerciseName": "Military Press",
-                "sets": 3,
-                "reps": 10,
-                "restSeconds": 120,
-                "tempo": "3010",
-                "notes": ""
-              }
-            ]
-          },
-          {
-            "id": "section_cooldown_1767280585652",
-            "type": "cooldown",
-            "exercises": [
-              {
-                "id": "ex_row_1767280617619_kwxie4idq",
-                "exerciseId": "ex_15",
-                "exerciseName": "Hip Thrust",
-                "sets": 3,
-                "reps": 10,
-                "restSeconds": 120,
-                "tempo": "3010",
-                "notes": ""
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "session_1767280622594_v94v2v9u5",
-        "name": "Upper",
-        "sections": [
-          {
-            "id": "section_warmup_1767280622594",
-            "type": "warmup",
-            "exercises": []
-          },
-          {
-            "id": "section_main_1767280622594",
-            "type": "main",
-            "exercises": []
-          },
-          {
-            "id": "section_cooldown_1767280622594",
-            "type": "cooldown",
-            "exercises": []
-          }
-        ]
-      }
-    ],
-    "createdAt": "2026-01-01T15:17:19.457Z",
-    "updatedAt": "2026-01-01T15:17:19.457Z"
   }
 ]

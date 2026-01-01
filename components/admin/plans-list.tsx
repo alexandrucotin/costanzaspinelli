@@ -104,7 +104,11 @@ export function PlansList({ initialPlans }: PlansListProps) {
                   <div>Durata: {plan.durationWeeks} settimane</div>
                   <div className="text-xs">
                     Aggiornato:{" "}
-                    {new Date(plan.updatedAt).toLocaleDateString("it-IT")}
+                    {new Date(plan.updatedAt).toLocaleDateString("it-IT", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
                   </div>
                 </div>
               </CardHeader>

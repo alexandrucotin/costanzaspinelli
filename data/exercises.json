@@ -178,5 +178,17 @@
     "videoUrl": "",
     "createdAt": "2026-01-01T12:32:39.126Z",
     "updatedAt": "2026-01-01T12:32:39.126Z"
+  },
+  {
+    "id": "ex_1767290281757_rk5uxbmzs",
+    "name": "Scopare",
+    "muscleGroup": "Completo",
+    "equipment": "home",
+    "category": "Spinta",
+    "defaultRestSeconds": 3010,
+    "defaultTempo": "",
+    "videoUrl": "",
+    "createdAt": "2026-01-01T17:58:01.757Z",
+    "updatedAt": "2026-01-01T17:58:01.758Z"
   }
 ]
