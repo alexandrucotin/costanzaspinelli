@@ -23,8 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 interface ExerciseFormProps {
   exercise?: Exercise;
@@ -178,42 +179,62 @@ export function ExerciseForm({
       </div>
 
       <div>
-        <Label>Attrezzi</Label>
-        <div className="space-y-2 border rounded-lg p-4">
-          {tools.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Nessun attrezzo disponibile. Vai in Impostazioni per aggiungerli.
-            </p>
-          ) : (
-            tools.map((tool) => (
-              <div key={tool.id} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`tool-${tool.id}`}
-                  checked={watch("toolIds")?.includes(tool.id)}
-                  onCheckedChange={(checked) => {
-                    const currentTools = watch("toolIds") || [];
-                    if (checked) {
-                      setValue("toolIds", [...currentTools, tool.id]);
-                    } else {
-                      setValue(
-                        "toolIds",
-                        currentTools.filter((id) => id !== tool.id)
-                      );
-                    }
-                  }}
-                />
-                <label
-                  htmlFor={`tool-${tool.id}`}
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {tool.name}
-                </label>
+        <Label htmlFor="toolIds">Attrezzi</Label>
+        {tools.length === 0 ? (
+          <p className="text-sm text-muted-foreground border rounded-lg p-4">
+            Nessun attrezzo disponibile. Vai in Impostazioni per aggiungerli.
+          </p>
+        ) : (
+          <>
+            <Select
+              onValueChange={(value) => {
+                const currentTools = watch("toolIds") || [];
+                if (!currentTools.includes(value)) {
+                  setValue("toolIds", [...currentTools, value]);
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Seleziona attrezzi..." />
+              </SelectTrigger>
+              <SelectContent>
+                {tools.map((tool) => (
+                  <SelectItem key={tool.id} value={tool.id}>
+                    {tool.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {watch("toolIds")?.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {watch("toolIds")?.map((toolId) => {
+                  const tool = tools.find((t) => t.id === toolId);
+                  return tool ? (
+                    <Badge key={toolId} variant="secondary" className="gap-1">
+                      {tool.name}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentTools = watch("toolIds") || [];
+                          setValue(
+                            "toolIds",
+                            currentTools.filter((id) => id !== toolId)
+                          );
+                        }}
+                        className="ml-1 hover:bg-secondary-foreground/20 rounded-full"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ) : null;
+                })}
               </div>
-            ))
-          )}
-        </div>
+            )}
+          </>
+        )}
         <p className="text-xs text-muted-foreground mt-1">
-          Seleziona gli attrezzi necessari per questo esercizio
+          Seleziona uno o più attrezzi dal menu
         </p>
       </div>
 
