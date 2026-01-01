@@ -348,7 +348,7 @@ export default function ChiSonoPage() {
             className="object-cover"
             priority={false}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/80 to-primary/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#161612]/90 via-[#161612]/85 to-[#161612]/80" />
         </div>
 
         {/* Content */}

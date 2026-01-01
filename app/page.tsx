@@ -31,7 +31,7 @@ export default function Home() {
         >
           <source src="/hero_video.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#161612]/80 via-[#161612]/70 to-[#161612]/85 z-10" />
 
         <div className="container mx-auto px-4 relative z-20 text-white">
           {/* Left Column - Main Content */}
@@ -49,8 +49,8 @@ export default function Home() {
             {/* Trust Bar */}
             <div className="flex flex-wrap gap-6 text-sm my-10  justify-center lg:justify-start">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                  <GraduationCap className="h-5 w-5 text-[#f6f5f4]" />
+                <div className="w-10 h-10 rounded-full bg-[#66717E]/30 flex items-center justify-center flex-shrink-0">
+                  <GraduationCap className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <p className="font-semibold">Laurea in Fisioterapia</p>
@@ -60,8 +60,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                  <Award className="h-5 w-5 text-[#f6f5f4]" />
+                <div className="w-10 h-10 rounded-full bg-[#66717E]/30 flex items-center justify-center flex-shrink-0">
+                  <Award className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <p className="font-semibold">Certificazione EREPS</p>
@@ -71,8 +71,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                  <Target className="h-5 w-5 text-[#f6f5f4]" />
+                <div className="w-10 h-10 rounded-full bg-[#66717E]/30 flex items-center justify-center flex-shrink-0">
+                  <Target className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <p className="font-semibold">Allenamenti mirati</p>
@@ -98,7 +98,7 @@ export default function Home() {
               <Link href="/contatti">
                 <Button
                   size="lg"
-                  className="text-lg px-8 py-7 shadow-2xl transition-all hover:scale-105 group bg-[#f6f5f4] text-primary hover:bg-primary hover:text-white"
+                  className="text-lg px-8 py-7 shadow-2xl transition-all hover:scale-105 group"
                 >
                   Consulenza Gratuita
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -368,8 +368,8 @@ export default function Home() {
             className="object-cover"
             priority={false}
           />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/70 to-black/60" />
+          {/* Onyx overlay for text readability and brand consistency */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#161612]/90 via-[#161612]/85 to-[#161612]/80" />
         </div>
 
         {/* Content */}
@@ -379,7 +379,7 @@ export default function Home() {
               La mia filosofia
             </h2>
 
-            <blockquote className="relative mb-8 pl-6 border-l-4 border-white/50">
+            <blockquote className="relative mb-8 pl-6 border-l-4 border-[#A13842]">
               <p className="text-2xl md:text-3xl lg:text-4xl font-medium  italic">
                 &ldquo;Non esistono scorciatoie, ma solo il metodo giusto
                 applicato con costanza&rdquo;

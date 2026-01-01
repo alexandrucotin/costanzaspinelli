@@ -29,14 +29,14 @@ export default function ContattiPage() {
             className="object-cover"
             priority={false}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/90 to-primary/85" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#161612]/95 via-[#161612]/90 to-[#161612]/85" />
         </div>
 
         <div className="container mx-auto max-w-5xl relative z-10 text-white">
           <div className="text-center mb-12">
             {/* Urgency Badge */}
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-6 py-3 mb-6 border border-white/30">
-              <Zap className="h-5 w-5 text-yellow-300" />
+              <Zap className="h-5 w-5 text-[#A13842]" />
               <span className="font-bold text-sm">
                 Solo 3 posti disponibili questo mese
               </span>
