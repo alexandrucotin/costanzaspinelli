@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Exercise, equipmentLabels } from "@/lib/types";
+import { Exercise, environmentLabels } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,18 +25,19 @@ export function ExerciseLibraryPanel({
     null
   );
 
+  // Note: This will show IDs until we populate metadata and update to show names
   const muscleGroups = Array.from(
-    new Set(exercises.map((ex) => ex.muscleGroup))
+    new Set(exercises.map((ex) => ex.muscleGroupId))
   );
 
   const filteredExercises = exercises.filter((ex) => {
     const matchesSearch =
       ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ex.muscleGroup.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ex.category.toLowerCase().includes(searchQuery.toLowerCase());
+      ex.muscleGroupId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ex.categoryId.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesMuscleGroup =
-      !selectedMuscleGroup || ex.muscleGroup === selectedMuscleGroup;
+      !selectedMuscleGroup || ex.muscleGroupId === selectedMuscleGroup;
 
     return matchesSearch && matchesMuscleGroup;
   });
@@ -100,8 +101,8 @@ export function ExerciseLibraryPanel({
                 <div className="flex-1">
                   <div className="font-medium">{exercise.name}</div>
                   <div className="text-xs text-muted-foreground">
-                    {exercise.muscleGroup} • {exercise.category} •{" "}
-                    {equipmentLabels[exercise.equipment]}
+                    {exercise.muscleGroupId} • {exercise.categoryId} •{" "}
+                    {environmentLabels[exercise.environment]}
                   </div>
                 </div>
               </Button>
