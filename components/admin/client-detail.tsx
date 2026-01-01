@@ -6,6 +6,7 @@ import {
   goalLabelsClient,
   statusLabels,
   genderLabels,
+  activityLevelLabels,
 } from "@/lib/types-client";
 import { WorkoutPlan, goalLabels } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ import {
   FileText,
   Activity,
   Edit,
+  Plus,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -336,96 +338,281 @@ export function ClientDetail({
 
         {/* Anamnesi Tab */}
         <TabsContent value="anamnesi" className="space-y-4">
-          {client.medicalHistory && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Anamnesi Medica</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {client.medicalHistory.currentConditions && (
-                  <div>
-                    <Label className="text-sm font-semibold">
-                      Patologie Attuali
-                    </Label>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {client.medicalHistory.currentConditions}
-                    </p>
-                  </div>
-                )}
-                {client.medicalHistory.medications && (
-                  <div>
-                    <Label className="text-sm font-semibold">Farmaci</Label>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {client.medicalHistory.medications}
-                    </p>
-                  </div>
-                )}
-                {client.medicalHistory.allergies && (
-                  <div>
-                    <Label className="text-sm font-semibold">Allergie</Label>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {client.medicalHistory.allergies}
-                    </p>
-                  </div>
-                )}
-                {client.medicalHistory.injuries && (
-                  <div>
-                    <Label className="text-sm font-semibold">
-                      Traumi e Infortuni
-                    </Label>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {client.medicalHistory.injuries}
-                    </p>
-                  </div>
-                )}
-                {client.medicalHistory.limitations && (
-                  <div>
-                    <Label className="text-sm font-semibold">
-                      Limitazioni Fisiche
-                    </Label>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {client.medicalHistory.limitations}
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
-
-          {client.lifestyle && (
+          <div className="grid gap-4 md:grid-cols-2">
+            {/* Stile di Vita */}
             <Card>
               <CardHeader>
                 <CardTitle>Stile di Vita</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                {client.lifestyle.occupation && (
-                  <div className="flex justify-between">
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
                     <span className="text-muted-foreground">Professione:</span>
-                    <span className="font-medium">
-                      {client.lifestyle.occupation}
-                    </span>
+                    <p className="font-medium mt-1">
+                      {client.lifestyle?.occupation || "Non specificato"}
+                    </p>
                   </div>
-                )}
-                {client.lifestyle.activityLevel && (
-                  <div className="flex justify-between">
+                  <div>
                     <span className="text-muted-foreground">
                       Livello Attività:
                     </span>
-                    <span className="font-medium">
-                      {client.lifestyle.activityLevel}
-                    </span>
+                    <p className="font-medium mt-1">
+                      {client.lifestyle?.activityLevel
+                        ? activityLevelLabels[client.lifestyle.activityLevel]
+                        : "Non specificato"}
+                    </p>
                   </div>
-                )}
-                {client.lifestyle.smoker && (
-                  <div className="flex justify-between">
+                  <div>
                     <span className="text-muted-foreground">Fumo:</span>
-                    <span className="font-medium">
-                      {client.lifestyle.smoker === "yes"
+                    <p className="font-medium mt-1">
+                      {client.lifestyle?.smoker === "yes"
                         ? "Sì"
-                        : client.lifestyle.smoker === "no"
+                        : client.lifestyle?.smoker === "no"
                         ? "No"
-                        : "Ex fumatore"}
+                        : client.lifestyle?.smoker === "ex"
+                        ? "Ex fumatore"
+                        : "Non specificato"}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Alcol:</span>
+                    <p className="font-medium mt-1">
+                      {client.lifestyle?.alcoholConsumption === "never"
+                        ? "No"
+                        : client.lifestyle?.alcoholConsumption === "occasional"
+                        ? "Occasionale"
+                        : client.lifestyle?.alcoholConsumption === "moderate"
+                        ? "Moderato"
+                        : client.lifestyle?.alcoholConsumption === "frequent"
+                        ? "Frequente"
+                        : "Non specificato"}
+                    </p>
+                  </div>
+                  {client.lifestyle?.sleepHours && (
+                    <div>
+                      <span className="text-muted-foreground">Ore Sonno:</span>
+                      <p className="font-medium mt-1">
+                        {client.lifestyle.sleepHours}h
+                      </p>
+                    </div>
+                  )}
+                  {client.lifestyle?.stressLevel && (
+                    <div>
+                      <span className="text-muted-foreground">
+                        Livello Stress:
+                      </span>
+                      <p className="font-medium mt-1">
+                        {client.lifestyle.stressLevel}/10
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Esperienza Fitness */}
+            {client.fitnessExperience && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Esperienza Fitness</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    {client.fitnessExperience.yearsTraining && (
+                      <div>
+                        <span className="text-muted-foreground">
+                          Anni Allenamento:
+                        </span>
+                        <p className="font-medium mt-1">
+                          {client.fitnessExperience.yearsTraining} anni
+                        </p>
+                      </div>
+                    )}
+                    {client.fitnessExperience.currentFrequency && (
+                      <div>
+                        <span className="text-muted-foreground">
+                          Frequenza:
+                        </span>
+                        <p className="font-medium mt-1">
+                          {client.fitnessExperience.currentFrequency}x/settimana
+                        </p>
+                      </div>
+                    )}
+                    {client.fitnessExperience.trainingPreference && (
+                      <div>
+                        <span className="text-muted-foreground">
+                          Preferenza:
+                        </span>
+                        <p className="font-medium mt-1">
+                          {client.fitnessExperience.trainingPreference === "gym"
+                            ? "Palestra"
+                            : client.fitnessExperience.trainingPreference ===
+                              "home"
+                            ? "Casa"
+                            : client.fitnessExperience.trainingPreference ===
+                              "outdoor"
+                            ? "Outdoor"
+                            : "Misto"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  {client.fitnessExperience.sportsPlayed && (
+                    <div className="pt-2 border-t">
+                      <span className="text-sm text-muted-foreground">
+                        Sport Praticati:
+                      </span>
+                      <p className="text-sm mt-1">
+                        {client.fitnessExperience.sportsPlayed}
+                      </p>
+                    </div>
+                  )}
+                  {client.fitnessExperience.previousExperience && (
+                    <div className="pt-2 border-t">
+                      <span className="text-sm text-muted-foreground">
+                        Esperienza Pregressa:
+                      </span>
+                      <p className="text-sm mt-1">
+                        {client.fitnessExperience.previousExperience}
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Anamnesi Medica */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Anamnesi Medica</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <Label className="text-sm font-semibold">
+                    Patologie Attuali
+                  </Label>
+                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                    {client.medicalHistory?.currentConditions || "Nessuna"}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">
+                    Patologie Passate
+                  </Label>
+                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                    {client.medicalHistory?.pastConditions || "Nessuna"}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">Farmaci</Label>
+                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                    {client.medicalHistory?.medications || "Nessuno"}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">Allergie</Label>
+                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                    {client.medicalHistory?.allergies || "Nessuna"}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">
+                    Interventi Chirurgici
+                  </Label>
+                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                    {client.medicalHistory?.surgeries || "Nessuno"}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">
+                    Traumi e Infortuni
+                  </Label>
+                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                    {client.medicalHistory?.injuries || "Nessuno"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t">
+                <Label className="text-sm font-semibold">
+                  Limitazioni Fisiche e Dolori Ricorrenti
+                </Label>
+                <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">
+                  {client.medicalHistory?.limitations || "Nessuna limitazione"}
+                </p>
+                {client.medicalHistory?.recurringPain && (
+                  <p className="text-sm text-muted-foreground mt-2 whitespace-pre-wrap">
+                    <span className="font-medium">Dolori ricorrenti:</span>{" "}
+                    {client.medicalHistory.recurringPain}
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Nutrizione */}
+          {client.nutrition && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Informazioni Nutrizionali</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                  {client.nutrition.dietType && (
+                    <div>
+                      <span className="text-muted-foreground">Regime:</span>
+                      <p className="font-medium mt-1">
+                        {client.nutrition.dietType === "omnivore"
+                          ? "Onnivoro"
+                          : client.nutrition.dietType === "vegetarian"
+                          ? "Vegetariano"
+                          : client.nutrition.dietType === "vegan"
+                          ? "Vegano"
+                          : client.nutrition.dietType === "pescatarian"
+                          ? "Pescetariano"
+                          : "Altro"}
+                      </p>
+                    </div>
+                  )}
+                  {client.nutrition.dailyCalories && (
+                    <div>
+                      <span className="text-muted-foreground">
+                        Calorie/giorno:
+                      </span>
+                      <p className="font-medium mt-1">
+                        {client.nutrition.dailyCalories} kcal
+                      </p>
+                    </div>
+                  )}
+                  {client.nutrition.proteinGrams && (
+                    <div>
+                      <span className="text-muted-foreground">Proteine:</span>
+                      <p className="font-medium mt-1">
+                        {client.nutrition.proteinGrams}g
+                      </p>
+                    </div>
+                  )}
+                  {client.nutrition.mealsPerDay && (
+                    <div>
+                      <span className="text-muted-foreground">
+                        Pasti/giorno:
+                      </span>
+                      <p className="font-medium mt-1">
+                        {client.nutrition.mealsPerDay}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                {client.nutrition.supplements && (
+                  <div className="pt-2 border-t">
+                    <span className="text-sm text-muted-foreground">
+                      Integratori:
                     </span>
+                    <p className="text-sm mt-1">
+                      {client.nutrition.supplements}
+                    </p>
                   </div>
                 )}
               </CardContent>
