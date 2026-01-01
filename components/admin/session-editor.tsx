@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Session, Exercise, ExerciseRow, sectionLabels } from "@/lib/types";
+import {
+  Session,
+  Exercise,
+  ExerciseRow,
+  sectionLabels,
+  Tool,
+  MuscleGroup,
+  Category,
+} from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +20,9 @@ import { Trash2, GripVertical } from "lucide-react";
 interface SessionEditorProps {
   session: Session;
   exercises: Exercise[];
+  tools: Tool[];
+  muscleGroups: MuscleGroup[];
+  categories: Category[];
   disabled?: boolean;
   onUpdate: (session: Session) => void;
   onDelete: () => void;
@@ -20,6 +31,9 @@ interface SessionEditorProps {
 export function SessionEditor({
   session,
   exercises,
+  tools,
+  muscleGroups,
+  categories,
   disabled,
   onUpdate,
   onDelete,
@@ -182,6 +196,9 @@ export function SessionEditor({
           <div className="lg:sticky lg:top-4 lg:h-fit">
             <ExerciseLibraryPanel
               exercises={exercises}
+              tools={tools}
+              muscleGroups={muscleGroups}
+              categories={categories}
               onSelect={(exercise) =>
                 handleAddExercise(exercise, activeSection)
               }

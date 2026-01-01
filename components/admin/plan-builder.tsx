@@ -8,6 +8,9 @@ import {
   Session,
   Section,
   ExerciseRow,
+  Tool,
+  MuscleGroup,
+  Category,
 } from "@/lib/types";
 import { createPlanAction, updatePlanAction } from "@/app/actions/plans";
 import { PlanMetaForm } from "./plan-meta-form";
@@ -20,9 +23,18 @@ import { Plus, Save } from "lucide-react";
 interface PlanBuilderProps {
   plan?: WorkoutPlan;
   exercises: Exercise[];
+  tools: Tool[];
+  muscleGroups: MuscleGroup[];
+  categories: Category[];
 }
 
-export function PlanBuilder({ plan, exercises }: PlanBuilderProps) {
+export function PlanBuilder({
+  plan,
+  exercises,
+  tools,
+  muscleGroups,
+  categories,
+}: PlanBuilderProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(!plan);
   const [isSaving, setIsSaving] = useState(false);
@@ -182,6 +194,9 @@ export function PlanBuilder({ plan, exercises }: PlanBuilderProps) {
                 <SessionEditor
                   session={session}
                   exercises={exercises}
+                  tools={tools}
+                  muscleGroups={muscleGroups}
+                  categories={categories}
                   disabled={!isEditing}
                   onUpdate={(updated) =>
                     handleSessionUpdate(session.id, updated)
