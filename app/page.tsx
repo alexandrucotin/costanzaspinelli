@@ -37,17 +37,17 @@ export default function Home() {
           {/* Left Column - Main Content */}
           <div className="text-center lg:text-left">
             {/* Main Headline */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-2 text-white max-w-4xl">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-4 text-white max-w-4xl">
               Trasforma il tuo corpo con un metodo scientifico
             </h1>
 
             {/* Subheadline */}
-            <p className="text-xl md:text-3xl text-white leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-3xl text-white leading-relaxed mb-2">
               Programmi personalizzati di ipertrofia e ricomposizione corporea.
             </p>
 
             {/* Trust Bar */}
-            <div className="flex flex-wrap gap-6 text-sm my-10  justify-center lg:justify-start">
+            <div className="flex flex-wrap gap-4 md:gap-6 text-sm my-8 md:my-10 justify-center lg:justify-start">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#66717E]/30 flex items-center justify-center flex-shrink-0">
                   <GraduationCap className="h-5 w-5 text-white" />
@@ -55,7 +55,7 @@ export default function Home() {
                 <div>
                   <p className="font-semibold">Laurea in Fisioterapia</p>
                   <p className="text-sm text-gray-300">
-                    Universidad Arturo Michelena
+                    Background medico-scientifico
                   </p>
                 </div>
               </div>
@@ -64,37 +64,20 @@ export default function Home() {
                   <Award className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-semibold">Certificazione EREPS</p>
+                  <p className="font-semibold">Certificazione EREPs</p>
                   <p className="text-sm text-gray-300">
-                    Personal trainer europeo certificato EREPS
+                    Personal Trainer certificata
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#66717E]/30 flex items-center justify-center flex-shrink-0">
-                  <Target className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-semibold">Allenamenti mirati</p>
-                  <p className="text-sm text-gray-300">
-                    Programmi personalizzati di ipertrofia e ricomposizione
-                    corporea.
-                  </p>
-                </div>
+              <div className="inline-flex items-center gap-2 bg-[#A13842]/20 backdrop-blur-md rounded-full px-4 py-2 border border-[#A13842]/30">
+                <CheckCircle2 className="h-5 w-5 text-white" />
+                <span className="font-semibold">20+ Clienti Attivi</span>
               </div>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Link href="/servizi">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-lg px-8 py-7 bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:text-white"
-                >
-                  Scopri i Servizi
-                </Button>
-              </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-20 md:mb-0">
               <Link href="/contatti">
                 <Button
                   size="lg"
@@ -104,12 +87,21 @@ export default function Home() {
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
+              <Link href="/servizi">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-lg px-8 py-7 bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:text-white"
+                >
+                  Scopri i Servizi
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+        <div className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
           <div className="flex flex-col items-center gap-2 text-white/80">
             <span className="text-sm font-medium">Scopri di più</span>
             <ChevronDown className="h-6 w-6" />
@@ -307,7 +299,7 @@ export default function Home() {
                     <li className="flex items-center gap-3">
                       <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
                       <span className="text-foreground/80">
-                        Linee guida nutrizionali
+                        Adattamento continuo al tuo progresso
                       </span>
                     </li>
                   </ul>
@@ -428,6 +420,14 @@ export default function Home() {
                 e periodizzazione avanzata
               </p>
 
+              {/* Pricing */}
+              <div className="mb-6 pb-6 border-b border-border">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-primary">€85</span>
+                  <span className="text-muted-foreground">/mese</span>
+                </div>
+              </div>
+
               {/* What's Included */}
               <div className="space-y-3 mb-6 pb-6 border-b border-border">
                 <div className="flex items-start gap-3">
@@ -488,6 +488,14 @@ export default function Home() {
                 integrate
               </p>
 
+              {/* Pricing */}
+              <div className="mb-6 pb-6 border-b border-border">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-primary">€100</span>
+                  <span className="text-muted-foreground">/mese</span>
+                </div>
+              </div>
+
               {/* What's Included */}
               <div className="space-y-3 mb-6 pb-6 border-b border-border">
                 <div className="flex items-start gap-3">
@@ -497,7 +505,7 @@ export default function Home() {
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <span className="text-sm">
-                    Linee guida nutrizionali personalizzate
+                    Supporto motivazionale continuo
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
@@ -541,6 +549,14 @@ export default function Home() {
                 Migliora forza, potenza e performance atletica con
                 programmazione specifica
               </p>
+
+              {/* Pricing */}
+              <div className="mb-6 pb-6 border-b border-border">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-primary">€90</span>
+                  <span className="text-muted-foreground">/mese</span>
+                </div>
+              </div>
 
               {/* What's Included */}
               <div className="space-y-3 mb-6 pb-6 border-b border-border">
@@ -618,15 +634,15 @@ export default function Home() {
                     </td>
                   </tr>
                   <tr className="border-b border-border">
-                    <td className="py-4 px-4">Linee guida nutrizionali</td>
-                    <td className="text-center py-4 px-4 text-muted-foreground">
-                      Base
+                    <td className="py-4 px-4">Video tutorial esercizi</td>
+                    <td className="text-center py-4 px-4">
+                      <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
                     </td>
                     <td className="text-center py-4 px-4 bg-primary/5">
                       <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
                     </td>
-                    <td className="text-center py-4 px-4 text-muted-foreground">
-                      Base
+                    <td className="text-center py-4 px-4">
+                      <CheckCircle2 className="h-5 w-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr className="border-b border-border">
@@ -685,12 +701,25 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 px-4 bg-gradient-to-br from-primary to-primary/80 text-white">
-        <div className="container mx-auto text-center">
+      <section className="relative py-32 px-4 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/sven-mieke-Lx_GDv7VA9M-unsplash.jpg"
+            alt="Final CTA background"
+            fill
+            className="object-cover"
+            priority={false}
+          />
+          {/* Onyx overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#161612]/90 via-[#161612]/85 to-[#161612]/80" />
+        </div>
+
+        <div className="container mx-auto text-center relative z-10 text-white">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Pronto a Trasformare il Tuo Corpo?
           </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
             Prenota ora la tua consulenza gratuita. Analizzeremo insieme i tuoi
             obiettivi e creeremo il piano perfetto per te.
           </p>
@@ -698,8 +727,7 @@ export default function Home() {
             <Link href="/contatti">
               <Button
                 size="lg"
-                variant="secondary"
-                className="text-lg px-8 py-6 w-full sm:w-auto"
+                className="text-lg px-8 py-6 w-full sm:w-auto shadow-2xl hover:scale-105 transition-transform"
               >
                 Richiedi Consulenza Gratuita
               </Button>
@@ -708,14 +736,14 @@ export default function Home() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto bg-white/10 hover:bg-white/20 border-white/30"
+                className="text-lg px-8 py-6 w-full sm:w-auto bg-white/10 hover:bg-white/20 border-white/30 text-white"
               >
                 Scopri di Più
               </Button>
             </Link>
           </div>
 
-          <div className="mt-12 text-sm opacity-75">
+          <div className="mt-12 text-sm text-white/80">
             <p>
               ✓ Nessun impegno richiesto • ✓ Consulenza 100% gratuita • ✓
               Risposta entro 24 ore

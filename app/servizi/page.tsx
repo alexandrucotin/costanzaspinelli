@@ -63,7 +63,7 @@ export default function ServiziPage() {
               {/* Pricing */}
               <div className="mb-6 pb-6 border-b border-border">
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-4xl font-bold text-primary">€120</span>
+                  <span className="text-4xl font-bold text-primary">€85</span>
                   <span className="text-muted-foreground">/mese</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -98,7 +98,7 @@ export default function ServiziPage() {
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-sm">Linee guida nutrizionali base</span>
+                  <span className="text-sm">Video tutorial esercizi</span>
                 </div>
               </div>
 
@@ -127,11 +127,11 @@ export default function ServiziPage() {
               {/* Pricing */}
               <div className="mb-6 pb-6 border-b border-border">
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-4xl font-bold text-primary">€150</span>
+                  <span className="text-4xl font-bold text-primary">€100</span>
                   <span className="text-muted-foreground">/mese</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Durata minima: 4 mesi
+                  Durata minima: 3 mesi
                 </p>
               </div>
 
@@ -151,7 +151,7 @@ export default function ServiziPage() {
                 <div className="flex items-start gap-3">
                   <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <span className="text-sm">
-                    Piano nutrizionale dettagliato
+                    Analisi tecnica degli esercizi
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
@@ -166,9 +166,7 @@ export default function ServiziPage() {
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-sm">
-                    Aggiustamenti nutrizionali continui
-                  </span>
+                  <span className="text-sm">Correzioni tecniche continue</span>
                 </div>
               </div>
 
@@ -192,7 +190,7 @@ export default function ServiziPage() {
               {/* Pricing */}
               <div className="mb-6 pb-6 border-b border-border">
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-4xl font-bold text-primary">€130</span>
+                  <span className="text-4xl font-bold text-primary">€90</span>
                   <span className="text-muted-foreground">/mese</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -308,8 +306,8 @@ export default function ServiziPage() {
                     Creazione Programma
                   </h3>
                   <p className="text-muted-foreground">
-                    Creo la tua scheda personalizzata e il piano nutrizionale
-                    (se incluso). Ricevi tutto in formato digitale
+                    Creo la tua scheda personalizzata con video tutorial per
+                    ogni esercizio. Ricevi tutto in formato digitale
                     professionale.
                   </p>
                 </div>
@@ -425,6 +423,60 @@ export default function ServiziPage() {
         </div>
       </section>
 
+      {/* Final CTA */}
+      <section className="relative py-32 px-4 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/hero-bg.jpg"
+            alt="CTA background"
+            fill
+            className="object-cover"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#161612]/90 via-[#161612]/85 to-[#161612]/80" />
+        </div>
+
+        <div className="container mx-auto max-w-4xl text-center relative z-10 text-white">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            Pronto a Iniziare la Tua Trasformazione?
+          </h2>
+          <p className="text-xl md:text-2xl mb-4 leading-relaxed">
+            Prenota ora la tua{" "}
+            <span className="font-bold">consulenza gratuita</span> senza impegno
+          </p>
+          <p className="text-lg mb-12 text-white/90 max-w-2xl mx-auto">
+            Ti risponderò entro 24 ore e fisseremo una call per capire insieme
+            quale programma è perfetto per te.
+          </p>
+
+          <Link href="/contatti">
+            <Button
+              size="lg"
+              variant="secondary"
+              className="text-lg px-8 py-7 shadow-2xl hover:scale-105 transition-transform"
+            >
+              Richiedi Consulenza Gratuita
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
+
+          <div className="flex flex-wrap justify-center gap-8 text-sm text-white/80 mt-8">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5" />
+              <span>Nessun impegno</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5" />
+              <span>Risposta in 24h</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5" />
+              <span>100% personalizzato</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
@@ -491,60 +543,6 @@ export default function ServiziPage() {
               <div className="text-sm text-muted-foreground">
                 Forza & Performance
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="relative py-32 px-4 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/hero-bg.jpg"
-            alt="CTA background"
-            fill
-            className="object-cover"
-            priority={false}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/80 to-primary/70" />
-        </div>
-
-        <div className="container mx-auto max-w-4xl text-center relative z-10 text-white">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            Pronto a Iniziare la Tua Trasformazione?
-          </h2>
-          <p className="text-xl md:text-2xl mb-4 leading-relaxed">
-            Prenota ora la tua{" "}
-            <span className="font-bold">consulenza gratuita</span> senza impegno
-          </p>
-          <p className="text-lg mb-12 text-white/90 max-w-2xl mx-auto">
-            Ti risponderò entro 24 ore e fisseremo una call per capire insieme
-            quale programma è perfetto per te.
-          </p>
-
-          <Link href="/contatti">
-            <Button
-              size="lg"
-              variant="secondary"
-              className="text-lg px-8 py-7 shadow-2xl hover:scale-105 transition-transform"
-            >
-              Richiedi Consulenza Gratuita
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-
-          <div className="flex flex-wrap justify-center gap-8 text-sm text-white/80 mt-8">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5" />
-              <span>Nessun impegno</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5" />
-              <span>Risposta in 24h</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5" />
-              <span>100% personalizzato</span>
             </div>
           </div>
         </div>

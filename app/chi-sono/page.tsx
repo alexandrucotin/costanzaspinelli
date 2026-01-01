@@ -186,8 +186,8 @@ export default function ChiSonoPage() {
                     </p>
                     <p className="text-sm text-muted-foreground">
                       Corsi avanzati in ipertrofia muscolare, ricomposizione
-                      corporea, programmazione evidence-based e nutrizione
-                      sportiva.
+                      corporea, programmazione evidence-based e biomeccanica
+                      dell&apos;allenamento.
                     </p>
                   </div>
                 </div>
@@ -300,8 +300,8 @@ export default function ChiSonoPage() {
               </div>
               <p className="text-muted-foreground leading-relaxed">
                 Strategie integrate per perdere grasso e costruire muscolo
-                simultaneamente. Combino allenamento mirato, linee guida
-                nutrizionali e monitoraggio costante per trasformare la tua
+                simultaneamente. Combino allenamento mirato, periodizzazione
+                avanzata e monitoraggio costante per trasformare la tua
                 composizione corporea.
               </p>
             </div>

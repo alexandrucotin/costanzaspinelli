@@ -34,14 +34,6 @@ export default function ContattiPage() {
 
         <div className="container mx-auto max-w-5xl relative z-10 text-white">
           <div className="text-center mb-12">
-            {/* Urgency Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-6 py-3 mb-6 border border-white/30">
-              <Zap className="h-5 w-5 text-[#A13842]" />
-              <span className="font-bold text-sm">
-                Solo 3 posti disponibili questo mese
-              </span>
-            </div>
-
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Prenota la Tua Consulenza Gratuita
             </h1>
