@@ -206,7 +206,7 @@ export function ExerciseForm({
               </SelectContent>
             </Select>
 
-            {watch("toolIds")?.length > 0 && (
+            {(watch("toolIds")?.length ?? 0) > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {watch("toolIds")?.map((toolId) => {
                   const tool = tools.find((t) => t.id === toolId);
