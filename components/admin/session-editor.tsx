@@ -13,9 +13,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Trash2 } from "lucide-react";
 import { ExerciseTable } from "./exercise-table";
 import { ExerciseLibraryPanel } from "./exercise-library-panel";
-import { Trash2, GripVertical } from "lucide-react";
 
 interface SessionEditorProps {
   session: Session;
@@ -47,12 +47,15 @@ export function SessionEditor({
     onUpdate({ ...session, name });
   };
 
+  const generateExerciseRowId = () =>
+    `ex_row_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
   const handleAddExercise = (
     exercise: Exercise,
     sectionType: "warmup" | "main" | "cooldown"
   ) => {
     const newExerciseRow: ExerciseRow = {
-      id: `ex_row_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: generateExerciseRowId(),
       exerciseId: exercise.id,
       exerciseName: exercise.name,
       sets: 3,
@@ -124,7 +127,7 @@ export function SessionEditor({
 
     const duplicated: ExerciseRow = {
       ...exercise,
-      id: `ex_row_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: generateExerciseRowId(),
     };
 
     const updatedSections = session.sections.map((s) => {

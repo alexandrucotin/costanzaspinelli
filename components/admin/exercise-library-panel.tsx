@@ -41,9 +41,8 @@ export function ExerciseLibraryPanel({
   onClose,
 }: ExerciseLibraryPanelProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedEnvironment, setSelectedEnvironment] = useState<string>("");
+  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   // Helper functions to get names from IDs
   const getMuscleGroupName = (id: string) =>
@@ -65,20 +64,16 @@ export function ExerciseLibraryPanel({
       categoryName.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesMuscleGroup =
-      !selectedMuscleGroup || ex.muscleGroupId === selectedMuscleGroup;
+      !selectedMuscleGroup ||
+      selectedMuscleGroup === "all" ||
+      ex.muscleGroupId === selectedMuscleGroup;
 
     const matchesCategory =
-      !selectedCategory || ex.categoryId === selectedCategory;
+      !selectedCategory ||
+      selectedCategory === "all" ||
+      ex.categoryId === selectedCategory;
 
-    const matchesEnvironment =
-      !selectedEnvironment || ex.environment === selectedEnvironment;
-
-    return (
-      matchesSearch &&
-      matchesMuscleGroup &&
-      matchesCategory &&
-      matchesEnvironment
-    );
+    return matchesSearch && matchesMuscleGroup && matchesCategory;
   });
 
   if (!show) return null;
@@ -153,43 +148,21 @@ export function ExerciseLibraryPanel({
               </SelectContent>
             </Select>
           </div>
-
-          <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              Ambiente
-            </label>
-            <Select
-              value={selectedEnvironment}
-              onValueChange={setSelectedEnvironment}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Tutti gli ambienti" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tutti gli ambienti</SelectItem>
-                <SelectItem value="gym">Palestra</SelectItem>
-                <SelectItem value="home">Casa</SelectItem>
-                <SelectItem value="both">Entrambi</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
 
         {/* Results count */}
         <div className="flex items-center justify-between text-sm text-muted-foreground border-t pt-3">
           <span>{filteredExercises.length} esercizi trovati</span>
-          {(selectedMuscleGroup ||
-            selectedCategory ||
-            selectedEnvironment ||
+          {(selectedMuscleGroup !== "all" ||
+            selectedCategory !== "all" ||
             searchQuery) && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => {
                 setSearchQuery("");
-                setSelectedMuscleGroup("");
-                setSelectedCategory("");
-                setSelectedEnvironment("");
+                setSelectedMuscleGroup("all");
+                setSelectedCategory("all");
               }}
             >
               Reset filtri

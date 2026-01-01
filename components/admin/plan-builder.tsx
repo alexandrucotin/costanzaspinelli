@@ -13,8 +13,8 @@ import {
   Category,
 } from "@/lib/types";
 import { createPlanAction, updatePlanAction } from "@/app/actions/plans";
-import { PlanMetaForm } from "./plan-meta-form";
-import { SessionEditor } from "./session-editor";
+import { PlanMetaForm } from "@/components/admin/plan-meta-form";
+import { SessionEditor } from "@/components/admin/session-editor";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";

@@ -1,12 +1,6 @@
 import { getStore } from "@netlify/blobs";
-import {
-  Exercise,
-  WorkoutPlan,
-  ContactSubmission,
-  Tool,
-  MuscleGroup,
-  Category,
-} from "./types";
+import { Exercise, WorkoutPlan, Tool, MuscleGroup, Category } from "./types";
+import { Client } from "./types-client";
 
 // Netlify Blobs stores
 const getExercisesStore = () => getStore("exercises");
@@ -15,6 +9,7 @@ const getLeadsStore = () => getStore("leads");
 const getToolsStore = () => getStore("tools");
 const getMuscleGroupsStore = () => getStore("muscle-groups");
 const getCategoriesStore = () => getStore("categories");
+const getClientsStore = () => getStore("clients");
 
 // Exercises
 export async function getExercises(): Promise<Exercise[]> {
@@ -102,12 +97,10 @@ export async function duplicatePlan(id: string): Promise<WorkoutPlan | null> {
 }
 
 // Contact Submissions
-export async function saveContactSubmission(
-  submission: ContactSubmission
-): Promise<void> {
+export async function saveContactSubmission(submission: any): Promise<void> {
   const store = getLeadsStore();
   const data = await store.get("all", { type: "json" });
-  const submissions = (data as ContactSubmission[]) || [];
+  const submissions = (data as any[]) || [];
   submissions.push(submission);
   await store.setJSON("all", submissions);
 }
@@ -210,6 +203,41 @@ export async function saveCategory(category: Category): Promise<void> {
 export async function deleteCategory(id: string): Promise<void> {
   const categories = await getCategories();
   const filtered = categories.filter((c) => c.id !== id);
-  const store = getCategoriesStore();
+  await getCategoriesStore().setJSON("all", filtered);
+}
+
+// ============================================
+// CLIENTS CRUD
+// ============================================
+
+export async function getClients(): Promise<Client[]> {
+  const store = getClientsStore();
+  const clients = await store.get("all", { type: "json" });
+  return (clients as Client[]) || [];
+}
+
+export async function getClientById(id: string): Promise<Client | null> {
+  const clients = await getClients();
+  return clients.find((c) => c.id === id) || null;
+}
+
+export async function saveClient(client: Client): Promise<void> {
+  const clients = await getClients();
+  const index = clients.findIndex((c) => c.id === client.id);
+
+  if (index >= 0) {
+    clients[index] = client;
+  } else {
+    clients.push(client);
+  }
+
+  const store = getClientsStore();
+  await store.setJSON("all", clients);
+}
+
+export async function deleteClient(id: string): Promise<void> {
+  const clients = await getClients();
+  const filtered = clients.filter((c) => c.id !== id);
+  const store = getClientsStore();
   await store.setJSON("all", filtered);
 }

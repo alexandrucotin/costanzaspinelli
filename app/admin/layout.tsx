@@ -1,6 +1,6 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { LayoutDashboard, Dumbbell, Settings } from "lucide-react";
+import { LayoutDashboard, Dumbbell, Settings, Users } from "lucide-react";
 
 export default function AdminLayout({
   children,
@@ -28,6 +28,13 @@ export default function AdminLayout({
                 >
                   <LayoutDashboard className="h-4 w-4" />
                   Schede
+                </Link>
+                <Link
+                  href="/admin/clienti"
+                  className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+                >
+                  <Users className="h-4 w-4" />
+                  Clienti
                 </Link>
                 <Link
                   href="/admin/esercizi"
