@@ -107,6 +107,14 @@ export function Footer() {
                   Area Admin
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/cliente/login"
+                  className="hover:text-primary transition-colors"
+                >
+                  Area Clienti
+                </Link>
+              </li>
             </ul>
           </div>
 

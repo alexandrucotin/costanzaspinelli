@@ -13,9 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { deletePlanAction, duplicatePlanAction } from "@/app/actions/plans";
-import { generatePdfAction } from "@/app/actions/pdf";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Copy, FileDown, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Copy, Search, FileDown } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -55,33 +54,63 @@ export function PlansList({ initialPlans }: PlansListProps) {
 
   const handleExportPdf = async (plan: WorkoutPlan) => {
     try {
-      toast.loading("Generazione PDF...");
-      const result = await generatePdfAction(plan.id);
+      const { generateWorkoutPlanPDF } = await import("@/lib/pdf-generator");
 
-      if (result.success && result.data) {
-        const blob = new Blob([result.data as BlobPart], {
-          type: "application/pdf",
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${plan.title.replace(
+      // Map plan goal to client goal
+      const goalMap: Record<string, string> = {
+        hypertrophy: "hypertrophy",
+        strength: "strength",
+        endurance: "endurance",
+        general: "general_fitness",
+        weight_loss: "weight_loss",
+        mobility: "mobility",
+      };
+
+      // Create a mock client object with plan's client name
+      const mockClient = {
+        fullName: plan.clientName,
+        id: "",
+        email: "",
+        phone: "",
+        dateOfBirth: "",
+        gender: undefined,
+        profilePhoto: "",
+        currentWeight: undefined,
+        height: undefined,
+        bodyFatPercentage: undefined,
+        leanMass: undefined,
+        primaryGoal: (goalMap[plan.goal] || "general_fitness") as
+          | "hypertrophy"
+          | "strength"
+          | "endurance"
+          | "weight_loss"
+          | "mobility"
+          | "recomposition"
+          | "general_fitness",
+        targetWeight: undefined,
+        targetDate: "",
+        goalNotes: "",
+        status: "active" as const,
+        firstAssessmentDate: "",
+        generalNotes: "",
+        privateNotes: "",
+        measurements: [],
+        assignedPlanIds: [],
+        createdAt: "",
+        updatedAt: "",
+      };
+
+      const pdf = generateWorkoutPlanPDF(plan, mockClient);
+      pdf.save(
+        `${plan.title.replace(/\s+/g, "_")}_${plan.clientName.replace(
           /\s+/g,
           "_"
-        )}_${plan.clientName.replace(/\s+/g, "_")}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        toast.dismiss();
-        toast.success("PDF scaricato");
-      } else {
-        toast.dismiss();
-        toast.error(result.error || "Errore nella generazione del PDF");
-      }
-    } catch {
-      toast.dismiss();
-      toast.error("Errore nella generazione del PDF");
+        )}.pdf`
+      );
+      toast.success("PDF scaricato con successo!");
+    } catch (error) {
+      console.error("PDF export error:", error);
+      toast.error("Errore durante l'esportazione del PDF");
     }
   };
 

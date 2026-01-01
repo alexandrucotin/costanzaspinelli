@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, User, Mail, Phone, Calendar, Target } from "lucide-react";
 import Link from "next/link";
+import { ClientNavbar } from "./client-navbar";
 
 interface ClientProfileProps {
   client: Client;
@@ -39,19 +40,17 @@ export function ClientProfile({ client }: ClientProfileProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/cliente/dashboard">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Torna alla Dashboard
-            </Button>
-          </Link>
-        </div>
-      </header>
+      <ClientNavbar clientName={client.fullName} />
 
       <div className="container mx-auto px-4 py-8 max-w-3xl space-y-6">
+        {/* Back Button */}
+        <Link href="/cliente/dashboard">
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Torna alla Dashboard
+          </Button>
+        </Link>
+
         {/* Profile Header */}
         <Card>
           <CardContent className="pt-6">

@@ -5,57 +5,76 @@ import { Client } from "@/lib/types-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, Target, Dumbbell } from "lucide-react";
+import { ArrowLeft, Calendar, Target, Dumbbell, Download } from "lucide-react";
 import Link from "next/link";
+import { generateWorkoutPlanPDF } from "@/lib/pdf-generator";
+import { toast } from "sonner";
+import { ClientNavbar } from "./client-navbar";
 
 interface ClientPlanViewProps {
   plan: WorkoutPlan;
   client: Client;
 }
 
-export function ClientPlanView({ plan }: ClientPlanViewProps) {
+export function ClientPlanView({ plan, client }: ClientPlanViewProps) {
+  const handleDownloadPDF = () => {
+    try {
+      const pdf = generateWorkoutPlanPDF(plan, client);
+      pdf.save(
+        `${plan.title.replace(/\s+/g, "_")}_${client.fullName.replace(
+          /\s+/g,
+          "_"
+        )}.pdf`
+      );
+      toast.success("PDF scaricato con successo!");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Errore durante la generazione del PDF");
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/cliente/dashboard">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Torna alla Dashboard
-            </Button>
-          </Link>
-        </div>
-      </header>
+      <ClientNavbar clientName={client.fullName} />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl space-y-6">
+        {/* Back Button */}
+        <Link href="/cliente/dashboard">
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Torna alla Dashboard
+          </Button>
+        </Link>
+
         {/* Plan Header */}
         <Card>
           <CardHeader>
             <div className="space-y-4">
-              <div>
+              <div className="flex items-start justify-between">
                 <h1 className="text-3xl font-bold">{plan.title}</h1>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  <Badge variant="outline">
-                    <Target className="h-3 w-3 mr-1" />
-                    {goalLabels[plan.goal]}
-                  </Badge>
-                  <Badge variant="outline">
-                    <Calendar className="h-3 w-3 mr-1" />
-                    {plan.durationWeeks} settimane
-                  </Badge>
-                  <Badge variant="outline">
-                    <Dumbbell className="h-3 w-3 mr-1" />
-                    {plan.frequencyDaysPerWeek}x/settimana
-                  </Badge>
-                  {plan.equipment && (
-                    <Badge variant="outline">
-                      {equipmentLabels[plan.equipment]}
-                    </Badge>
-                  )}
-                </div>
+                <Button onClick={handleDownloadPDF} variant="outline">
+                  <Download className="h-4 w-4 mr-2" />
+                  Scarica PDF
+                </Button>
               </div>
-
+              <div className="flex flex-wrap gap-2 mt-3">
+                <Badge variant="outline">
+                  <Target className="h-3 w-3 mr-1" />
+                  {goalLabels[plan.goal]}
+                </Badge>
+                <Badge variant="outline">
+                  <Calendar className="h-3 w-3 mr-1" />
+                  {plan.durationWeeks} settimane
+                </Badge>
+                <Badge variant="outline">
+                  <Dumbbell className="h-3 w-3 mr-1" />
+                  {plan.frequencyDaysPerWeek}x/settimana
+                </Badge>
+                {plan.equipment && (
+                  <Badge variant="outline">
+                    {equipmentLabels[plan.equipment]}
+                  </Badge>
+                )}
+              </div>
               {plan.notes && (
                 <div className="pt-4 border-t">
                   <p className="text-sm text-muted-foreground">{plan.notes}</p>

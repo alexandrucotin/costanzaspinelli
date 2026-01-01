@@ -1,15 +1,13 @@
 "use client";
 
-import { Client } from "@/lib/types-client";
+import { Client, goalLabelsClient } from "@/lib/types-client";
 import { WorkoutPlan, goalLabels } from "@/lib/types";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { logoutClientAction } from "@/app/actions/client-auth";
-import { User, Target, Calendar, LogOut, Dumbbell } from "lucide-react";
+import { Dumbbell, Target, Calendar, Weight, User } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { ClientNavbar } from "./client-navbar";
 
 interface ClientDashboardProps {
   client: Client;
@@ -17,37 +15,9 @@ interface ClientDashboardProps {
 }
 
 export function ClientDashboard({ client, plans }: ClientDashboardProps) {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await logoutClientAction();
-      toast.success("Logout effettuato");
-      router.push("/cliente/login");
-    } catch {
-      toast.error("Errore durante il logout");
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">
-                Benvenuto, {client.fullName.split(" ")[0]}!
-              </h1>
-              <p className="text-sm text-muted-foreground">{client.email}</p>
-            </div>
-            <Button variant="outline" onClick={handleLogout}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Esci
-            </Button>
-          </div>
-        </div>
-      </header>
+      <ClientNavbar clientName={client.fullName} />
 
       <div className="container mx-auto px-4 py-8 space-y-6">
         {/* Client Info Summary */}
@@ -60,7 +30,9 @@ export function ClientDashboard({ client, plans }: ClientDashboardProps) {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Obiettivo</p>
-                  <p className="font-semibold">{client.primaryGoal}</p>
+                  <p className="font-semibold">
+                    {goalLabelsClient[client.primaryGoal]}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -70,7 +42,7 @@ export function ClientDashboard({ client, plans }: ClientDashboardProps) {
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-lg">
-                  <User className="h-5 w-5 text-primary" />
+                  <Weight className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Peso Attuale</p>
