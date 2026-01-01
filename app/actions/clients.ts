@@ -20,10 +20,22 @@ export async function getClientByIdAction(id: string) {
 export async function createClientAction(
   data: Omit<Client, "id" | "createdAt" | "updatedAt">
 ) {
+  // Generate activation token
+  const activationToken = `${Date.now()}_${Math.random()
+    .toString(36)
+    .substr(2, 16)}`;
+  const activationTokenExpiry = new Date();
+  activationTokenExpiry.setDate(activationTokenExpiry.getDate() + 30); // 30 days expiry
+
   const client: Client = {
     ...data,
     id: `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     firstAssessmentDate: data.firstAssessmentDate || new Date().toISOString(),
+    auth: {
+      activationToken,
+      activationTokenExpiry: activationTokenExpiry.toISOString(),
+      isActivated: false,
+    },
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };

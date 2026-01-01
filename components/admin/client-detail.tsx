@@ -30,6 +30,7 @@ import {
   Edit,
   Plus,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { updateClientAction } from "@/app/actions/clients";
@@ -119,6 +120,85 @@ export function ClientDetail({
           </Button>
         </Link>
       </div>
+
+      {/* Activation Link (Admin Only) */}
+      {client.auth &&
+        !client.auth.isActivated &&
+        client.auth.activationToken && (
+          <Card className="border-blue-200 bg-blue-50">
+            <CardContent className="pt-6">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className="bg-blue-100 text-blue-700"
+                  >
+                    Account Non Attivato
+                  </Badge>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Invia questo link al cliente per permettergli di attivare
+                  l'account:
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    readOnly
+                    value={`${
+                      typeof window !== "undefined"
+                        ? window.location.origin
+                        : ""
+                    }/cliente/attiva-account?token=${
+                      client.auth?.activationToken || ""
+                    }`}
+                    className="font-mono text-sm"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `${
+                          typeof window !== "undefined"
+                            ? window.location.origin
+                            : ""
+                        }/cliente/attiva-account?token=${
+                          client.auth?.activationToken || ""
+                        }`
+                      );
+                      toast.success("Link copiato!");
+                    }}
+                  >
+                    Copia
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Scadenza:{" "}
+                  {new Date(
+                    client.auth.activationTokenExpiry!
+                  ).toLocaleDateString("it-IT")}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+      {client.auth?.isActivated && (
+        <Card className="border-green-200 bg-green-50">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="bg-green-100 text-green-700">
+                Account Attivato
+              </Badge>
+              {client.auth.lastLogin && (
+                <span className="text-sm text-muted-foreground">
+                  Ultimo accesso:{" "}
+                  {new Date(client.auth.lastLogin).toLocaleDateString("it-IT")}
+                </span>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Client Header Card */}
       <Card>

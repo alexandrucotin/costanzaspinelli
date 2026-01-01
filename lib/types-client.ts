@@ -141,6 +141,17 @@ export const ClientSchema = z.object({
   generalNotes: z.string().optional(),
   privateNotes: z.string().optional(),
 
+  // Auth (for client portal access)
+  auth: z
+    .object({
+      activationToken: z.string().optional(),
+      activationTokenExpiry: z.string().optional(),
+      passwordHash: z.string().optional(),
+      isActivated: z.boolean().default(false),
+      lastLogin: z.string().optional(),
+    })
+    .optional(),
+
   // Metadata
   createdAt: z.string(),
   updatedAt: z.string(),
