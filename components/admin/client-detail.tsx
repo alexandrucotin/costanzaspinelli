@@ -29,11 +29,13 @@ import {
   Activity,
   Edit,
   Plus,
+  Mail,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { updateClientAction } from "@/app/actions/clients";
+import { resendClientInvite } from "@/app/actions/clerk-invites";
 import { toast } from "sonner";
 
 interface ClientDetailProps {
@@ -48,6 +50,8 @@ export function ClientDetail({
   const router = useRouter();
   const [client, setClient] = useState(initialClient);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [isResendingInvite, setIsResendingInvite] = useState(false);
+  const [inviteLink, setInviteLink] = useState<string | null>(null);
 
   const calculateAge = (dateOfBirth?: string) => {
     if (!dateOfBirth) return null;
@@ -87,6 +91,24 @@ export function ClientDetail({
     }
   };
 
+  const handleResendInvite = async () => {
+    setIsResendingInvite(true);
+    try {
+      const result = await resendClientInvite(client.email, client.fullName);
+      console.log("result:", result);
+      if (result.success && result.inviteUrl) {
+        setInviteLink(result.inviteUrl);
+        toast.success("Link di invito generato!");
+      } else {
+        toast.error(`Errore: ${result.error}`);
+      }
+    } catch {
+      toast.error("Errore nel reinvio dell'invito");
+    } finally {
+      setIsResendingInvite(false);
+    }
+  };
+
   const age = calculateAge(client.dateOfBirth);
   const bmi = calculateBMI();
 
@@ -113,13 +135,59 @@ export function ClientDetail({
             </Button>
           </Link>
         </div>
-        <Link href={`/admin/clienti/${client.id}/modifica`}>
-          <Button variant="outline">
-            <Edit className="h-4 w-4 mr-2" />
-            Modifica
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={handleResendInvite}
+            disabled={isResendingInvite}
+          >
+            <Mail className="h-4 w-4 mr-2" />
+            {isResendingInvite ? "Invio..." : "Reinvia Invito"}
           </Button>
-        </Link>
+          <Link href={`/admin/clienti/${client.id}/modifica`}>
+            <Button variant="outline">
+              <Edit className="h-4 w-4 mr-2" />
+              Modifica
+            </Button>
+          </Link>
+        </div>
       </div>
+
+      {/* Invite Link (Clerk Organization Invitation) */}
+      {inviteLink && (
+        <Card className="border-blue-200 bg-blue-50">
+          <CardContent className="pt-6">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                  Link di Invito Generato
+                </Badge>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Invia questo link al cliente per invitarlo
+                all&apos;organizzazione:
+              </p>
+              <div className="flex gap-2">
+                <Input
+                  readOnly
+                  value={inviteLink}
+                  className="font-mono text-sm"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    navigator.clipboard.writeText(inviteLink);
+                    toast.success("Link copiato!");
+                  }}
+                >
+                  Copia
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Activation Link (Admin Only) */}
       {client.auth &&
@@ -138,7 +206,7 @@ export function ClientDetail({
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Invia questo link al cliente per permettergli di attivare
-                  l'account:
+                  l&apos;account:
                 </p>
                 <div className="flex gap-2">
                   <Input

@@ -26,41 +26,44 @@ async function getOrganizationId() {
 export async function createClientInvite(email: string, clientName: string) {
   try {
     const organizationId = await getOrganizationId();
+    console.log("orgid: ", organizationId);
     if (!organizationId) {
       throw new Error("Organization ID not found");
     }
 
     const client = await clerkClient();
 
-    // Create organization invitation
+    // Create organization invitation with org:member role
     const invitation = await client.organizations.createOrganizationInvitation({
       organizationId: organizationId,
       emailAddress: email,
-      role: "org:member", // Client role
-      publicMetadata: {
-        clientName: clientName,
-        isClient: true,
-      },
+      role: "org:member",
     });
 
-    // Generate the invitation URL
-    const inviteUrl =
-      invitation.publicMetadata?.invite_url ||
-      `${process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}?__clerk_ticket=${invitation.id}`;
+    // Build the invitation URL with the ticket parameter
+    const baseUrl =
+      process.env.NEXT_PUBLIC_APP_URL || "https://www.costanzaspinelli.com";
+    const inviteUrl = `${baseUrl}/sign-up?__clerk_ticket=${invitation.id}`;
 
     return {
       success: true,
       invitationId: invitation.id,
       inviteUrl: inviteUrl,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating Clerk invitation:", error);
+    console.error("Error creating Clerk invitation error:", error.errors);
     return {
       success: false,
       error:
         error instanceof Error ? error.message : "Failed to create invitation",
     };
   }
+}
+
+export async function resendClientInvite(email: string, clientName: string) {
+  // Simply call createClientInvite again - Clerk will handle existing invitations
+  return createClientInvite(email, clientName);
 }
 
 export async function revokeClientInvite(invitationId: string) {
