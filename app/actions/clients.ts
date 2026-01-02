@@ -20,42 +20,62 @@ export async function getClientByIdAction(id: string) {
 export async function createClientAction(
   data: Omit<Client, "id" | "createdAt" | "updatedAt">
 ) {
-  const client: Client = {
-    ...data,
-    id: `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-    firstAssessmentDate: data.firstAssessmentDate || new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+  try {
+    const client: Client = {
+      ...data,
+      id: `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      firstAssessmentDate: data.firstAssessmentDate || new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
 
-  const validated = ClientSchema.parse(client);
-  await saveClient(validated);
-  revalidatePath("/admin/clienti");
-
-  // Generate Clerk invitation
-  const { createClientInvite } = await import("./clerk-invites");
-  const inviteResult = await createClientInvite(
-    validated.email,
-    validated.fullName
-  );
-
-  if (inviteResult.success) {
-    // Store invitation ID in client metadata for tracking
-    validated.privateNotes = validated.privateNotes
-      ? `${validated.privateNotes}\n\nClerk Invitation ID: ${inviteResult.invitationId}\nInvite URL: ${inviteResult.inviteUrl}`
-      : `Clerk Invitation ID: ${inviteResult.invitationId}\nInvite URL: ${inviteResult.inviteUrl}`;
+    const validated = ClientSchema.parse(client);
     await saveClient(validated);
-  }
+    revalidatePath("/admin/clienti");
 
-  return {
-    client: validated,
-    inviteUrl: inviteResult.success ? (inviteResult.inviteUrl as string) : null,
-    inviteError: inviteResult.success ? null : inviteResult.error,
-  } as {
-    client: Client;
-    inviteUrl: string | null;
-    inviteError: string | null | undefined;
-  };
+    // Generate Clerk invitation - wrapped in try/catch to not block client creation
+    let inviteUrl: string | null = null;
+    let inviteError: string | null = "Invitation not attempted";
+
+    try {
+      const { createClientInvite } = await import("./clerk-invites");
+      const inviteResult = await createClientInvite(
+        validated.email,
+        validated.fullName
+      );
+
+      if (inviteResult.success) {
+        inviteUrl = inviteResult.inviteUrl as string;
+        inviteError = null;
+
+        // Store invitation ID in client metadata for tracking
+        validated.privateNotes = validated.privateNotes
+          ? `${validated.privateNotes}\n\nClerk Invitation ID: ${inviteResult.invitationId}\nInvite URL: ${inviteResult.inviteUrl}`
+          : `Clerk Invitation ID: ${inviteResult.invitationId}\nInvite URL: ${inviteResult.inviteUrl}`;
+        await saveClient(validated);
+      } else {
+        inviteError = inviteResult.error || "Unknown error";
+      }
+    } catch (inviteErr) {
+      console.error("Error creating Clerk invitation:", inviteErr);
+      // Continue anyway - client is created, just invitation failed
+      inviteError =
+        inviteErr instanceof Error
+          ? inviteErr.message
+          : "Failed to create invitation";
+    }
+
+    return {
+      client: validated,
+      inviteUrl,
+      inviteError,
+    };
+  } catch (error) {
+    console.error("Error creating client:", error);
+    throw new Error(
+      error instanceof Error ? error.message : "Failed to create client"
+    );
+  }
 }
 
 export async function updateClientAction(id: string, data: Partial<Client>) {
