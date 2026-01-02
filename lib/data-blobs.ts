@@ -1,15 +1,47 @@
 import { getStore } from "@netlify/blobs";
 import { Exercise, WorkoutPlan, Tool, MuscleGroup, Category } from "./types";
 import { Client } from "./types-client";
+import { getLocalData, setLocalData } from "./local-storage";
 
-// Netlify Blobs stores
-const getExercisesStore = () => getStore("exercises");
-const getPlansStore = () => getStore("plans");
-const getLeadsStore = () => getStore("leads");
-const getToolsStore = () => getStore("tools");
-const getMuscleGroupsStore = () => getStore("muscle-groups");
-const getCategoriesStore = () => getStore("categories");
-const getClientsStore = () => getStore("clients");
+// Check if we're in Netlify environment
+const isNetlifyEnvironment = () => {
+  return process.env.NETLIFY === "true" || process.env.CONTEXT !== undefined;
+};
+
+// Storage wrapper that uses local storage in dev, Netlify Blobs in production
+const getStorageWrapper = (storeName: string) => {
+  if (isNetlifyEnvironment()) {
+    return getStore(storeName);
+  }
+  // Return a mock store for local development
+  return {
+    get: async (key: string, options?: { type: "json" }) => {
+      if (options?.type === "json") {
+        return await getLocalData(storeName, key);
+      }
+      return await getLocalData(storeName, key);
+    },
+    setJSON: async (key: string, data: any) => {
+      await setLocalData(storeName, key, data);
+    },
+    set: async (key: string, data: any) => {
+      await setLocalData(storeName, key, data);
+    },
+    delete: async (key: string) => {
+      const { deleteLocalData } = await import("./local-storage");
+      await deleteLocalData(storeName, key);
+    },
+  };
+};
+
+// Netlify Blobs stores with local fallback
+const getExercisesStore = () => getStorageWrapper("exercises");
+const getPlansStore = () => getStorageWrapper("plans");
+const getLeadsStore = () => getStorageWrapper("leads");
+const getToolsStore = () => getStorageWrapper("tools");
+const getMuscleGroupsStore = () => getStorageWrapper("muscle-groups");
+const getCategoriesStore = () => getStorageWrapper("categories");
+const getClientsStore = () => getStorageWrapper("clients");
 
 // Exercises
 export async function getExercises(): Promise<Exercise[]> {

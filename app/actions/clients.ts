@@ -20,22 +20,10 @@ export async function getClientByIdAction(id: string) {
 export async function createClientAction(
   data: Omit<Client, "id" | "createdAt" | "updatedAt">
 ) {
-  // Generate activation token
-  const activationToken = `${Date.now()}_${Math.random()
-    .toString(36)
-    .substr(2, 16)}`;
-  const activationTokenExpiry = new Date();
-  activationTokenExpiry.setDate(activationTokenExpiry.getDate() + 30); // 30 days expiry
-
   const client: Client = {
     ...data,
     id: `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     firstAssessmentDate: data.firstAssessmentDate || new Date().toISOString(),
-    auth: {
-      activationToken,
-      activationTokenExpiry: activationTokenExpiry.toISOString(),
-      isActivated: false,
-    },
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -43,7 +31,31 @@ export async function createClientAction(
   const validated = ClientSchema.parse(client);
   await saveClient(validated);
   revalidatePath("/admin/clienti");
-  return validated;
+
+  // Generate Clerk invitation
+  const { createClientInvite } = await import("./clerk-invites");
+  const inviteResult = await createClientInvite(
+    validated.email,
+    validated.fullName
+  );
+
+  if (inviteResult.success) {
+    // Store invitation ID in client metadata for tracking
+    validated.privateNotes = validated.privateNotes
+      ? `${validated.privateNotes}\n\nClerk Invitation ID: ${inviteResult.invitationId}\nInvite URL: ${inviteResult.inviteUrl}`
+      : `Clerk Invitation ID: ${inviteResult.invitationId}\nInvite URL: ${inviteResult.inviteUrl}`;
+    await saveClient(validated);
+  }
+
+  return {
+    client: validated,
+    inviteUrl: inviteResult.success ? (inviteResult.inviteUrl as string) : null,
+    inviteError: inviteResult.success ? null : inviteResult.error,
+  } as {
+    client: Client;
+    inviteUrl: string | null;
+    inviteError: string | null | undefined;
+  };
 }
 
 export async function updateClientAction(id: string, data: Partial<Client>) {
@@ -69,8 +81,50 @@ export async function updateClientAction(id: string, data: Partial<Client>) {
 }
 
 export async function deleteClientAction(id: string) {
+  const client = await getClientById(id);
+
+  if (!client) {
+    throw new Error("Cliente non trovato");
+  }
+
+  // Try to delete user from Clerk if they exist
+  try {
+    const { clerkClient } = await import("@clerk/nextjs/server");
+    const clerk = await clerkClient();
+
+    // Find user by email
+    const users = await clerk.users.getUserList({
+      emailAddress: [client.email],
+    });
+
+    if (users.data.length > 0) {
+      // Delete the user from Clerk
+      await clerk.users.deleteUser(users.data[0].id);
+    }
+  } catch (error) {
+    console.error("Error deleting user from Clerk:", error);
+    // Continue with client deletion even if Clerk deletion fails
+  }
+
+  // Delete client from database
   await deleteClient(id);
   revalidatePath("/admin/clienti");
+  revalidatePath("/admin/clienti/" + id);
+}
+
+export async function deleteOwnAccountAction(email: string) {
+  // Find client by email
+  const clients = await getClients();
+  const client = clients.find((c) => c.email === email);
+
+  if (!client) {
+    throw new Error("Cliente non trovato");
+  }
+
+  // Delete using the main delete action
+  await deleteClientAction(client.id);
+
+  return { success: true };
 }
 
 export async function addMeasurementAction(

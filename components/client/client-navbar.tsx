@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Dumbbell, User, LogOut, Home } from "lucide-react";
-import { logoutClientAction } from "@/app/actions/client-auth";
 import { toast } from "sonner";
 
 interface ClientNavbarProps {
@@ -13,12 +13,14 @@ interface ClientNavbarProps {
 
 export function ClientNavbar({ clientName }: ClientNavbarProps) {
   const pathname = usePathname();
+  const { signOut } = useClerk();
 
   const handleLogout = async () => {
-    const result = await logoutClientAction();
-    if (result.success) {
+    try {
+      await signOut();
       toast.success("Logout effettuato");
-      window.location.href = "/cliente/login";
+    } catch (error) {
+      toast.error("Errore durante il logout");
     }
   };
 

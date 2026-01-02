@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -92,7 +93,7 @@ export function ClientForm({ client }: ClientFormProps) {
     try {
       const created = await createClientAction(data);
       toast.success("Cliente creato con successo");
-      router.push(`/admin/clienti/${created.id}`);
+      router.push(`/admin/clienti/${created.client.id}`);
     } catch (error) {
       toast.error("Errore durante la creazione del cliente");
       console.error(error);
