@@ -45,9 +45,14 @@ const getClientsStore = () => getStorageWrapper("clients");
 
 // Exercises
 export async function getExercises(): Promise<Exercise[]> {
-  const store = getExercisesStore();
-  const data = await store.get("all", { type: "json" });
-  return (data as Exercise[]) || [];
+  try {
+    const store = getExercisesStore();
+    const data = await store.get("all", { type: "json" });
+    return (data as Exercise[]) || [];
+  } catch (error) {
+    console.error("Error loading exercises:", error);
+    return [];
+  }
 }
 
 export async function getExerciseById(id: string): Promise<Exercise | null> {
@@ -78,12 +83,18 @@ export async function deleteExercise(id: string): Promise<void> {
 
 // Plans
 export async function getPlans(): Promise<WorkoutPlan[]> {
-  const store = getPlansStore();
-  const data = await store.get("all", { type: "json" });
-  const plans = (data as WorkoutPlan[]) || [];
-  return plans.sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-  );
+  try {
+    const store = getPlansStore();
+    const data = await store.get("all", { type: "json" });
+    const plans = (data as WorkoutPlan[]) || [];
+    return plans.sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
+  } catch (error) {
+    console.error("Error loading plans:", error);
+    return [];
+  }
 }
 
 export async function getPlanById(id: string): Promise<WorkoutPlan | null> {
@@ -157,9 +168,14 @@ export async function getPdfExport(filename: string): Promise<Buffer | null> {
 
 // Tools
 export async function getTools(): Promise<Tool[]> {
-  const store = getToolsStore();
-  const data = await store.get("all", { type: "json" });
-  return (data as Tool[]) || [];
+  try {
+    const store = getToolsStore();
+    const data = await store.get("all", { type: "json" });
+    return (data as Tool[]) || [];
+  } catch (error) {
+    console.error("Error loading tools:", error);
+    return [];
+  }
 }
 
 export async function saveTool(tool: Tool): Promise<void> {
@@ -185,9 +201,14 @@ export async function deleteTool(id: string): Promise<void> {
 
 // Muscle Groups
 export async function getMuscleGroups(): Promise<MuscleGroup[]> {
-  const store = getMuscleGroupsStore();
-  const data = await store.get("all", { type: "json" });
-  return (data as MuscleGroup[]) || [];
+  try {
+    const store = getMuscleGroupsStore();
+    const data = await store.get("all", { type: "json" });
+    return (data as MuscleGroup[]) || [];
+  } catch (error) {
+    console.error("Error loading muscle groups:", error);
+    return [];
+  }
 }
 
 export async function saveMuscleGroup(group: MuscleGroup): Promise<void> {
@@ -213,9 +234,14 @@ export async function deleteMuscleGroup(id: string): Promise<void> {
 
 // Categories
 export async function getCategories(): Promise<Category[]> {
-  const store = getCategoriesStore();
-  const data = await store.get("all", { type: "json" });
-  return (data as Category[]) || [];
+  try {
+    const store = getCategoriesStore();
+    const data = await store.get("all", { type: "json" });
+    return (data as Category[]) || [];
+  } catch (error) {
+    console.error("Error loading categories:", error);
+    return [];
+  }
 }
 
 export async function saveCategory(category: Category): Promise<void> {
@@ -243,9 +269,14 @@ export async function deleteCategory(id: string): Promise<void> {
 // ============================================
 
 export async function getClients(): Promise<Client[]> {
-  const store = getClientsStore();
-  const clients = await store.get("all", { type: "json" });
-  return (clients as Client[]) || [];
+  try {
+    const store = getClientsStore();
+    const clients = await store.get("all", { type: "json" });
+    return (clients as Client[]) || [];
+  } catch (error) {
+    console.error("Error loading clients:", error);
+    return [];
+  }
 }
 
 export async function getClientById(id: string): Promise<Client | null> {

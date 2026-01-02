@@ -42,6 +42,8 @@ export default function AdminLoginPage() {
                 footerActionLink: "text-primary hover:text-primary/80",
               },
             }}
+            routing="path"
+            path="/admin-login"
           />
         </div>
       </div>

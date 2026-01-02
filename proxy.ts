@@ -20,7 +20,12 @@ const isClientRoute = createRouteMatcher(["/cliente(.*)"]);
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
 export default clerkMiddleware(async (auth, request) => {
-  const { userId } = await auth();
+  // Allow public routes without checking auth
+  if (isPublicRoute(request)) {
+    return NextResponse.next();
+  }
+
+  const { userId, orgId } = await auth();
 
   // Protect client routes - redirect to sign-in if not authenticated
   if (isClientRoute(request) && !userId) {
@@ -30,7 +35,7 @@ export default clerkMiddleware(async (auth, request) => {
   }
 
   // Protect admin routes - redirect to admin login if not authenticated
-  if (isAdminRoute(request) && !isPublicRoute(request) && !userId) {
+  if (isAdminRoute(request) && !userId) {
     return NextResponse.redirect(new URL("/admin-login", request.url));
   }
 
