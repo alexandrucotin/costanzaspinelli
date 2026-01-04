@@ -28,7 +28,9 @@ export type Category = z.infer<typeof CategorySchema>;
 export const ExerciseSchema = z.object({
   id: z.string(),
   name: z.string().min(1, "Nome esercizio richiesto"),
-  muscleGroupId: z.string().min(1, "Gruppo muscolare richiesto"),
+  muscleGroupIds: z
+    .array(z.string())
+    .min(1, "Almeno un gruppo muscolare richiesto"), // Multi-select muscle groups
   categoryIds: z.array(z.string()).min(1, "Almeno una categoria richiesta"), // Multi-select categories
   defaultRestSeconds: z.number().min(0).optional(),
   defaultTempo: z.string().optional(),

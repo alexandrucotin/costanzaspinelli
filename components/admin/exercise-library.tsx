@@ -43,12 +43,15 @@ export function ExerciseLibrary({
 
   const filteredExercises = exercises.filter((ex) => {
     const query = searchQuery.toLowerCase();
+    const muscleGroupNames = ex.muscleGroupIds
+      .map((id) => muscleGroups.find((g) => g.id === id)?.name || "")
+      .join(" ");
     const categoryNames = ex.categoryIds
       .map((id) => categories.find((c) => c.id === id)?.name || "")
       .join(" ");
     return (
       ex.name.toLowerCase().includes(query) ||
-      ex.muscleGroupId.toLowerCase().includes(query) ||
+      muscleGroupNames.toLowerCase().includes(query) ||
       categoryNames.toLowerCase().includes(query)
     );
   });
@@ -139,8 +142,21 @@ export function ExerciseLibrary({
                 <TableRow key={exercise.id}>
                   <TableCell className="font-medium">{exercise.name}</TableCell>
                   <TableCell>
-                    {muscleGroups.find((g) => g.id === exercise.muscleGroupId)
-                      ?.name || exercise.muscleGroupId}
+                    <div className="flex flex-wrap gap-1">
+                      {exercise.muscleGroupIds.map((mgId) => {
+                        const muscleGroup = muscleGroups.find(
+                          (g) => g.id === mgId
+                        );
+                        return muscleGroup ? (
+                          <span
+                            key={mgId}
+                            className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10"
+                          >
+                            {muscleGroup.name}
+                          </span>
+                        ) : null;
+                      })}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">

@@ -46,7 +46,7 @@ export function ExerciseForm({
     ),
     defaultValues: exercise || {
       name: "",
-      muscleGroupId: "",
+      muscleGroupIds: [],
       categoryIds: [],
       defaultRestSeconds: undefined,
       defaultTempo: "",
@@ -83,33 +83,69 @@ export function ExerciseForm({
       </div>
 
       <div>
-        <Label htmlFor="muscleGroupId">Gruppo Muscolare *</Label>
-        <Select
-          value={watch("muscleGroupId")}
-          onValueChange={(value) => setValue("muscleGroupId", value)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Seleziona gruppo muscolare" />
-          </SelectTrigger>
-          <SelectContent>
-            {muscleGroups.length === 0 ? (
-              <div className="p-2 text-sm text-muted-foreground">
-                Nessun gruppo muscolare. Vai in Impostazioni per aggiungerli.
+        <Label htmlFor="muscleGroupIds">Gruppi Muscolari *</Label>
+        {muscleGroups.length === 0 ? (
+          <p className="text-sm text-muted-foreground border rounded-lg p-4">
+            Nessun gruppo muscolare disponibile. Vai in Impostazioni per
+            aggiungerli.
+          </p>
+        ) : (
+          <>
+            <Select
+              onValueChange={(value) => {
+                const currentGroups = watch("muscleGroupIds") || [];
+                if (!currentGroups.includes(value)) {
+                  setValue("muscleGroupIds", [...currentGroups, value]);
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Seleziona gruppi muscolari..." />
+              </SelectTrigger>
+              <SelectContent>
+                {muscleGroups.map((group) => (
+                  <SelectItem key={group.id} value={group.id}>
+                    {group.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {(watch("muscleGroupIds")?.length ?? 0) > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {watch("muscleGroupIds")?.map((groupId) => {
+                  const group = muscleGroups.find((g) => g.id === groupId);
+                  return group ? (
+                    <Badge key={groupId} variant="secondary" className="gap-1">
+                      {group.name}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentGroups = watch("muscleGroupIds") || [];
+                          setValue(
+                            "muscleGroupIds",
+                            currentGroups.filter((id) => id !== groupId)
+                          );
+                        }}
+                        className="ml-1 hover:bg-secondary-foreground/20 rounded-full"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ) : null;
+                })}
               </div>
-            ) : (
-              muscleGroups.map((group) => (
-                <SelectItem key={group.id} value={group.id}>
-                  {group.name}
-                </SelectItem>
-              ))
             )}
-          </SelectContent>
-        </Select>
-        {errors.muscleGroupId && (
+          </>
+        )}
+        {errors.muscleGroupIds && (
           <p className="text-sm text-destructive mt-1">
-            {errors.muscleGroupId.message as string}
+            {errors.muscleGroupIds.message as string}
           </p>
         )}
+        <p className="text-xs text-muted-foreground mt-1">
+          Seleziona uno o più gruppi muscolari dal menu
+        </p>
       </div>
 
       <div>

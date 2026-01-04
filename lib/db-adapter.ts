@@ -129,13 +129,14 @@ export async function getExercises(): Promise<Exercise[]> {
   const exercises = await prisma.exercise.findMany({
     include: {
       categories: true,
+      muscleGroups: true,
     },
     orderBy: { name: "asc" },
   });
   return exercises.map((e) => ({
     id: e.id,
     name: e.name,
-    muscleGroupId: e.muscleGroupId,
+    muscleGroupIds: e.muscleGroups.map((mg) => mg.id),
     categoryIds: e.categories.map((c) => c.id),
     defaultRestSeconds: e.defaultRestSeconds ?? undefined,
     defaultTempo: e.defaultTempo ?? undefined,
@@ -150,10 +151,12 @@ export async function saveExercise(exercise: Exercise): Promise<Exercise> {
     where: { id: exercise.id },
     update: {
       name: exercise.name,
-      muscleGroupId: exercise.muscleGroupId,
       defaultRestSeconds: exercise.defaultRestSeconds,
       defaultTempo: exercise.defaultTempo,
       videoUrl: exercise.videoUrl,
+      muscleGroups: {
+        set: exercise.muscleGroupIds.map((id) => ({ id })),
+      },
       categories: {
         set: exercise.categoryIds.map((id) => ({ id })),
       },
@@ -161,22 +164,25 @@ export async function saveExercise(exercise: Exercise): Promise<Exercise> {
     create: {
       id: exercise.id,
       name: exercise.name,
-      muscleGroupId: exercise.muscleGroupId,
       defaultRestSeconds: exercise.defaultRestSeconds,
       defaultTempo: exercise.defaultTempo,
       videoUrl: exercise.videoUrl,
+      muscleGroups: {
+        connect: exercise.muscleGroupIds.map((id) => ({ id })),
+      },
       categories: {
         connect: exercise.categoryIds.map((id) => ({ id })),
       },
     },
     include: {
       categories: true,
+      muscleGroups: true,
     },
   });
   return {
     id: saved.id,
     name: saved.name,
-    muscleGroupId: saved.muscleGroupId,
+    muscleGroupIds: saved.muscleGroups.map((mg) => mg.id),
     categoryIds: saved.categories.map((c) => c.id),
     defaultRestSeconds: saved.defaultRestSeconds ?? undefined,
     defaultTempo: saved.defaultTempo ?? undefined,

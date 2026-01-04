@@ -45,7 +45,9 @@ export function ExerciseLibraryPanel({
 
   const filteredExercises = exercises
     .filter((ex) => {
-      const muscleGroupName = getMuscleGroupName(ex.muscleGroupId);
+      const muscleGroupNames = ex.muscleGroupIds
+        .map((id) => getMuscleGroupName(id))
+        .join(" ");
       const categoryNames = ex.categoryIds
         .map((id) => getCategoryName(id))
         .join(" ");
@@ -54,13 +56,13 @@ export function ExerciseLibraryPanel({
       const matchesSearch =
         !searchQuery ||
         ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        muscleGroupName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        muscleGroupNames.toLowerCase().includes(searchQuery.toLowerCase()) ||
         categoryNames.toLowerCase().includes(searchQuery.toLowerCase());
 
-      // Filtro gruppo muscolare
+      // Filtro gruppo muscolare (supporta gruppi muscolari multipli)
       const matchesMuscleGroup =
         selectedMuscleGroup === "all" ||
-        ex.muscleGroupId === selectedMuscleGroup;
+        ex.muscleGroupIds.includes(selectedMuscleGroup);
 
       // Filtro categoria (supporta categorie multiple)
       const matchesCategory =
@@ -245,9 +247,11 @@ export function ExerciseLibraryPanel({
                 <div className="flex-1 space-y-2">
                   <div className="font-semibold text-base">{exercise.name}</div>
                   <div className="flex flex-wrap gap-1.5">
-                    <Badge variant="secondary" className="text-xs">
-                      {getMuscleGroupName(exercise.muscleGroupId)}
-                    </Badge>
+                    {exercise.muscleGroupIds.map((mgId) => (
+                      <Badge key={mgId} variant="secondary" className="text-xs">
+                        {getMuscleGroupName(mgId)}
+                      </Badge>
+                    ))}
                     {exercise.categoryIds.map((catId) => (
                       <Badge key={catId} variant="outline" className="text-xs">
                         {getCategoryName(catId)}

@@ -47,7 +47,6 @@ model Category {
 model Exercise {
   id                 String      @id @default(cuid())
   name               String
-  muscleGroupId      String
   defaultRestSeconds Int?
   defaultTempo       String?
   videoUrl           String?
@@ -55,13 +54,11 @@ model Exercise {
   updatedAt          DateTime    @updatedAt
   
   // Relations
-  muscleGroup MuscleGroup @relation(fields: [muscleGroupId], references: [id], onDelete: Cascade)
-  categories  Category[]
+  muscleGroups MuscleGroup[]
+  categories   Category[]
   
   // Exercise rows that reference this exercise
   exerciseRows ExerciseRow[]
-  
-  @@index([muscleGroupId])
 }
 
 enum Environment {
