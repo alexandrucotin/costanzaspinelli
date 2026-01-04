@@ -643,7 +643,9 @@ export async function saveClient(client: Client): Promise<Client> {
       fullName: client.fullName,
       email: client.email,
       phone: client.phone,
-      dateOfBirth: client.dateOfBirth,
+      dateOfBirth: client.dateOfBirth
+        ? new Date(client.dateOfBirth)
+        : undefined,
       gender: client.gender,
       profilePhoto: client.profilePhoto,
       currentWeight: client.currentWeight,
@@ -652,7 +654,7 @@ export async function saveClient(client: Client): Promise<Client> {
       leanMass: client.leanMass,
       primaryGoal: client.primaryGoal,
       targetWeight: client.targetWeight,
-      targetDate: client.targetDate,
+      targetDate: client.targetDate ? new Date(client.targetDate) : undefined,
       goalNotes: client.goalNotes,
       medicalHistory: client.medicalHistory,
       lifestyle: client.lifestyle,
@@ -660,8 +662,10 @@ export async function saveClient(client: Client): Promise<Client> {
       nutrition: client.nutrition,
       assignedPlanIds: client.assignedPlanIds,
       status: client.status,
-      firstAssessmentDate: client.firstAssessmentDate,
-      lastAssessmentDate: client.lastAssessmentDate,
+      firstAssessmentDate: new Date(client.firstAssessmentDate),
+      lastAssessmentDate: client.lastAssessmentDate
+        ? new Date(client.lastAssessmentDate)
+        : undefined,
       generalNotes: client.generalNotes,
       privateNotes: client.privateNotes,
       activationToken: client.auth?.activationToken,
@@ -696,7 +700,9 @@ export async function saveClient(client: Client): Promise<Client> {
       fullName: client.fullName,
       email: client.email,
       phone: client.phone,
-      dateOfBirth: client.dateOfBirth,
+      dateOfBirth: client.dateOfBirth
+        ? new Date(client.dateOfBirth)
+        : undefined,
       gender: client.gender,
       profilePhoto: client.profilePhoto,
       currentWeight: client.currentWeight,
@@ -705,7 +711,7 @@ export async function saveClient(client: Client): Promise<Client> {
       leanMass: client.leanMass,
       primaryGoal: client.primaryGoal,
       targetWeight: client.targetWeight,
-      targetDate: client.targetDate,
+      targetDate: client.targetDate ? new Date(client.targetDate) : undefined,
       goalNotes: client.goalNotes,
       medicalHistory: client.medicalHistory,
       lifestyle: client.lifestyle,
@@ -713,8 +719,10 @@ export async function saveClient(client: Client): Promise<Client> {
       nutrition: client.nutrition,
       assignedPlanIds: client.assignedPlanIds,
       status: client.status,
-      firstAssessmentDate: client.firstAssessmentDate,
-      lastAssessmentDate: client.lastAssessmentDate,
+      firstAssessmentDate: new Date(client.firstAssessmentDate),
+      lastAssessmentDate: client.lastAssessmentDate
+        ? new Date(client.lastAssessmentDate)
+        : undefined,
       generalNotes: client.generalNotes,
       privateNotes: client.privateNotes,
       activationToken: client.auth?.activationToken,
