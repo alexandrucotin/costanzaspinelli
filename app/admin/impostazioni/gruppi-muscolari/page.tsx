@@ -1,4 +1,4 @@
-import { getMuscleGroups } from "@/lib/data-blobs";
+import { getMuscleGroups } from "@/lib/db-adapter";
 import { MetadataList } from "@/components/admin/metadata-list";
 import {
   createMuscleGroupAction,

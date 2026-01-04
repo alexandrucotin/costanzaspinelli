@@ -19,7 +19,7 @@ import {
   getCategories,
   saveCategory,
   deleteCategory,
-} from "@/lib/data-blobs";
+} from "@/lib/db-adapter";
 
 // Tools
 export async function getToolsAction() {

@@ -1,13 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Exercise,
-  environmentLabels,
-  Tool,
-  MuscleGroup,
-  Category,
-} from "@/lib/types";
+import { Exercise, MuscleGroup, Category } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +17,6 @@ import {
 
 interface ExerciseLibraryPanelProps {
   exercises: Exercise[];
-  tools: Tool[];
   muscleGroups: MuscleGroup[];
   categories: Category[];
   onSelect: (exercise: Exercise) => void;
@@ -33,7 +26,6 @@ interface ExerciseLibraryPanelProps {
 
 export function ExerciseLibraryPanel({
   exercises,
-  tools,
   muscleGroups,
   categories,
   onSelect,
@@ -51,30 +43,54 @@ export function ExerciseLibraryPanel({
   const getCategoryName = (id: string) =>
     categories.find((c) => c.id === id)?.name || id;
 
-  const getToolNames = (toolIds: string[]) =>
-    toolIds.map((id) => tools.find((t) => t.id === id)?.name || id);
+  const filteredExercises = exercises
+    .filter((ex) => {
+      const muscleGroupName = getMuscleGroupName(ex.muscleGroupId);
+      const categoryNames = ex.categoryIds
+        .map((id) => getCategoryName(id))
+        .join(" ");
 
-  const filteredExercises = exercises.filter((ex) => {
-    const muscleGroupName = getMuscleGroupName(ex.muscleGroupId);
-    const categoryName = getCategoryName(ex.categoryId);
+      // Search: nome, gruppo muscolare, categoria
+      const matchesSearch =
+        !searchQuery ||
+        ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        muscleGroupName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        categoryNames.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesSearch =
-      ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      muscleGroupName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      categoryName.toLowerCase().includes(searchQuery.toLowerCase());
+      // Filtro gruppo muscolare
+      const matchesMuscleGroup =
+        selectedMuscleGroup === "all" ||
+        ex.muscleGroupId === selectedMuscleGroup;
 
-    const matchesMuscleGroup =
-      !selectedMuscleGroup ||
-      selectedMuscleGroup === "all" ||
-      ex.muscleGroupId === selectedMuscleGroup;
+      // Filtro categoria (supporta categorie multiple)
+      const matchesCategory =
+        selectedCategory === "all" || ex.categoryIds.includes(selectedCategory);
 
-    const matchesCategory =
-      !selectedCategory ||
-      selectedCategory === "all" ||
-      ex.categoryId === selectedCategory;
+      return matchesSearch && matchesMuscleGroup && matchesCategory;
+    })
+    .sort((a, b) => {
+      // Se c'è una ricerca, ordina per rilevanza
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
 
-    return matchesSearch && matchesMuscleGroup && matchesCategory;
-  });
+        // Priorità 1: Match esatto all'inizio del nome
+        const aStartsWith = aName.startsWith(query);
+        const bStartsWith = bName.startsWith(query);
+        if (aStartsWith && !bStartsWith) return -1;
+        if (!aStartsWith && bStartsWith) return 1;
+
+        // Priorità 2: Match nel nome
+        const aIncludes = aName.includes(query);
+        const bIncludes = bName.includes(query);
+        if (aIncludes && !bIncludes) return -1;
+        if (!aIncludes && bIncludes) return 1;
+      }
+
+      // Default: ordine alfabetico
+      return a.name.localeCompare(b.name);
+    });
 
   if (!show) return null;
 
@@ -105,54 +121,94 @@ export function ExerciseLibraryPanel({
 
         {/* Filters */}
         <div className="grid gap-3">
-          <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              Gruppo Muscolare
-            </label>
-            <Select
-              value={selectedMuscleGroup}
-              onValueChange={setSelectedMuscleGroup}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Tutti i gruppi" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tutti i gruppi</SelectItem>
-                {muscleGroups.map((group) => (
-                  <SelectItem key={group.id} value={group.id}>
-                    {group.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                Gruppo Muscolare
+              </label>
+              <Select
+                value={selectedMuscleGroup}
+                onValueChange={setSelectedMuscleGroup}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Tutti" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tutti i gruppi</SelectItem>
+                  {muscleGroups.map((group) => (
+                    <SelectItem key={group.id} value={group.id}>
+                      {group.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">
-              Categoria
-            </label>
-            <Select
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Tutte le categorie" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tutte le categorie</SelectItem>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                Categoria
+              </label>
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Tutte" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tutte le categorie</SelectItem>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 
+        {/* Active Filters */}
+        {(selectedMuscleGroup !== "all" || selectedCategory !== "all") && (
+          <div className="flex flex-wrap gap-2">
+            {selectedMuscleGroup !== "all" && (
+              <Badge variant="secondary" className="gap-1">
+                {getMuscleGroupName(selectedMuscleGroup)}
+                <X
+                  className="h-3 w-3 cursor-pointer hover:text-destructive"
+                  onClick={() => setSelectedMuscleGroup("all")}
+                />
+              </Badge>
+            )}
+            {selectedCategory !== "all" && (
+              <Badge variant="secondary" className="gap-1">
+                {getCategoryName(selectedCategory)}
+                <X
+                  className="h-3 w-3 cursor-pointer hover:text-destructive"
+                  onClick={() => setSelectedCategory("all")}
+                />
+              </Badge>
+            )}
+          </div>
+        )}
+
         {/* Results count */}
-        <div className="flex items-center justify-between text-sm text-muted-foreground border-t pt-3">
-          <span>{filteredExercises.length} esercizi trovati</span>
+        <div className="flex items-center justify-between text-sm border-t pt-3">
+          <div className="flex items-center gap-2">
+            <span className="font-medium text-foreground">
+              {filteredExercises.length}
+            </span>
+            <span className="text-muted-foreground">
+              {filteredExercises.length === 1
+                ? "esercizio trovato"
+                : "esercizi trovati"}
+            </span>
+            {filteredExercises.length < exercises.length && (
+              <span className="text-xs text-muted-foreground">
+                su {exercises.length} totali
+              </span>
+            )}
+          </div>
           {(selectedMuscleGroup !== "all" ||
             selectedCategory !== "all" ||
             searchQuery) && (
@@ -165,7 +221,8 @@ export function ExerciseLibraryPanel({
                 setSelectedCategory("all");
               }}
             >
-              Reset filtri
+              <X className="h-3 w-3 mr-1" />
+              Reset
             </Button>
           )}
         </div>
@@ -191,23 +248,12 @@ export function ExerciseLibraryPanel({
                     <Badge variant="secondary" className="text-xs">
                       {getMuscleGroupName(exercise.muscleGroupId)}
                     </Badge>
-                    <Badge variant="outline" className="text-xs">
-                      {getCategoryName(exercise.categoryId)}
-                    </Badge>
-                    <Badge variant="outline" className="text-xs">
-                      {environmentLabels[exercise.environment]}
-                    </Badge>
+                    {exercise.categoryIds.map((catId) => (
+                      <Badge key={catId} variant="outline" className="text-xs">
+                        {getCategoryName(catId)}
+                      </Badge>
+                    ))}
                   </div>
-                  {exercise.toolIds.length > 0 && (
-                    <div className="flex flex-wrap gap-1 text-xs text-muted-foreground">
-                      {getToolNames(exercise.toolIds).map((tool, idx) => (
-                        <span key={idx}>
-                          {tool}
-                          {idx < exercise.toolIds.length - 1 && ", "}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </Button>
             ))

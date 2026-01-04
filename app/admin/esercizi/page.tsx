@@ -1,17 +1,11 @@
-import {
-  getExercises,
-  getTools,
-  getMuscleGroups,
-  getCategories,
-} from "@/lib/data-blobs";
+import { getExercises, getMuscleGroups, getCategories } from "@/lib/db-adapter";
 import { ExerciseLibrary } from "@/components/admin/exercise-library";
 
 export const dynamic = "force-dynamic";
 
 export default async function ExercisesPage() {
-  const [exercises, tools, muscleGroups, categories] = await Promise.all([
+  const [exercises, muscleGroups, categories] = await Promise.all([
     getExercises(),
-    getTools(),
     getMuscleGroups(),
     getCategories(),
   ]);
@@ -26,7 +20,6 @@ export default async function ExercisesPage() {
       </div>
       <ExerciseLibrary
         initialExercises={exercises}
-        tools={tools}
         muscleGroups={muscleGroups}
         categories={categories}
       />

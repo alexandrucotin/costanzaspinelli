@@ -1,4 +1,4 @@
-import { getCategories } from "@/lib/data-blobs";
+import { getCategories } from "@/lib/db-adapter";
 import { MetadataList } from "@/components/admin/metadata-list";
 import {
   createCategoryAction,

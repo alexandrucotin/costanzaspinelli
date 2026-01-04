@@ -1,4 +1,4 @@
-import { getTools } from "@/lib/data-blobs";
+import { getTools } from "@/lib/db-adapter";
 import { MetadataList } from "@/components/admin/metadata-list";
 import { createToolAction, deleteToolAction } from "@/app/actions/metadata";
 import Link from "next/link";

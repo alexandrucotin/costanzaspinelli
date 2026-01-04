@@ -2,13 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Exercise,
-  ExerciseSchema,
-  Tool,
-  MuscleGroup,
-  Category,
-} from "@/lib/types";
+import { Exercise, ExerciseSchema, MuscleGroup, Category } from "@/lib/types";
 import {
   createExerciseAction,
   updateExerciseAction,
@@ -29,7 +23,6 @@ import { X } from "lucide-react";
 
 interface ExerciseFormProps {
   exercise?: Exercise;
-  tools: Tool[];
   muscleGroups: MuscleGroup[];
   categories: Category[];
   onSuccess: (exercise: Exercise) => void;
@@ -37,7 +30,6 @@ interface ExerciseFormProps {
 
 export function ExerciseForm({
   exercise,
-  tools,
   muscleGroups,
   categories,
   onSuccess,
@@ -55,16 +47,12 @@ export function ExerciseForm({
     defaultValues: exercise || {
       name: "",
       muscleGroupId: "",
-      environment: "gym",
-      categoryId: "",
-      toolIds: [],
+      categoryIds: [],
       defaultRestSeconds: undefined,
       defaultTempo: "",
       videoUrl: "",
     },
   });
-
-  const environment = watch("environment");
 
   const onSubmit = async (
     data: Omit<Exercise, "id" | "createdAt" | "updatedAt">
@@ -125,101 +113,51 @@ export function ExerciseForm({
       </div>
 
       <div>
-        <Label htmlFor="environment">Ambiente *</Label>
-        <Select
-          value={environment}
-          onValueChange={(value) =>
-            setValue("environment", value as Exercise["environment"])
-          }
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="gym">Palestra</SelectItem>
-            <SelectItem value="home">Casa</SelectItem>
-            <SelectItem value="both">Entrambi</SelectItem>
-          </SelectContent>
-        </Select>
-        {errors.environment && (
-          <p className="text-sm text-destructive mt-1">
-            {errors.environment.message as string}
-          </p>
-        )}
-      </div>
-
-      <div>
-        <Label htmlFor="categoryId">Categoria *</Label>
-        <Select
-          value={watch("categoryId")}
-          onValueChange={(value) => setValue("categoryId", value)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Seleziona categoria" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories.length === 0 ? (
-              <div className="p-2 text-sm text-muted-foreground">
-                Nessuna categoria. Vai in Impostazioni per aggiungerle.
-              </div>
-            ) : (
-              categories.map((category) => (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.name}
-                </SelectItem>
-              ))
-            )}
-          </SelectContent>
-        </Select>
-        {errors.categoryId && (
-          <p className="text-sm text-destructive mt-1">
-            {errors.categoryId.message as string}
-          </p>
-        )}
-      </div>
-
-      <div>
-        <Label htmlFor="toolIds">Attrezzi</Label>
-        {tools.length === 0 ? (
+        <Label htmlFor="categoryIds">Categorie *</Label>
+        {categories.length === 0 ? (
           <p className="text-sm text-muted-foreground border rounded-lg p-4">
-            Nessun attrezzo disponibile. Vai in Impostazioni per aggiungerli.
+            Nessuna categoria disponibile. Vai in Impostazioni per aggiungerle.
           </p>
         ) : (
           <>
             <Select
               onValueChange={(value) => {
-                const currentTools = watch("toolIds") || [];
-                if (!currentTools.includes(value)) {
-                  setValue("toolIds", [...currentTools, value]);
+                const currentCategories = watch("categoryIds") || [];
+                if (!currentCategories.includes(value)) {
+                  setValue("categoryIds", [...currentCategories, value]);
                 }
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Seleziona attrezzi..." />
+                <SelectValue placeholder="Seleziona categorie..." />
               </SelectTrigger>
               <SelectContent>
-                {tools.map((tool) => (
-                  <SelectItem key={tool.id} value={tool.id}>
-                    {tool.name}
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
-            {(watch("toolIds")?.length ?? 0) > 0 && (
+            {(watch("categoryIds")?.length ?? 0) > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
-                {watch("toolIds")?.map((toolId) => {
-                  const tool = tools.find((t) => t.id === toolId);
-                  return tool ? (
-                    <Badge key={toolId} variant="secondary" className="gap-1">
-                      {tool.name}
+                {watch("categoryIds")?.map((categoryId) => {
+                  const category = categories.find((c) => c.id === categoryId);
+                  return category ? (
+                    <Badge
+                      key={categoryId}
+                      variant="secondary"
+                      className="gap-1"
+                    >
+                      {category.name}
                       <button
                         type="button"
                         onClick={() => {
-                          const currentTools = watch("toolIds") || [];
+                          const currentCategories = watch("categoryIds") || [];
                           setValue(
-                            "toolIds",
-                            currentTools.filter((id) => id !== toolId)
+                            "categoryIds",
+                            currentCategories.filter((id) => id !== categoryId)
                           );
                         }}
                         className="ml-1 hover:bg-secondary-foreground/20 rounded-full"
@@ -233,8 +171,13 @@ export function ExerciseForm({
             )}
           </>
         )}
+        {errors.categoryIds && (
+          <p className="text-sm text-destructive mt-1">
+            {errors.categoryIds.message as string}
+          </p>
+        )}
         <p className="text-xs text-muted-foreground mt-1">
-          Seleziona uno o più attrezzi dal menu
+          Seleziona una o più categorie dal menu
         </p>
       </div>
 

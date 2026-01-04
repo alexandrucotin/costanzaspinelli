@@ -13,7 +13,7 @@ export function generateWorkoutPlanPDF(plan: WorkoutPlan, client: Client) {
 
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Personal Trainer Certificata", 105, 21, { align: "center" });
+  doc.text("Personal Trainer", 105, 21, { align: "center" });
 
   // Plan Title
   doc.setFontSize(16);

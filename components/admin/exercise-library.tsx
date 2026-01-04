@@ -1,13 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Exercise,
-  environmentLabels,
-  Tool,
-  MuscleGroup,
-  Category,
-} from "@/lib/types";
+import { Exercise, MuscleGroup, Category } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -32,14 +26,12 @@ import { Plus, Pencil, Trash2, Search } from "lucide-react";
 
 interface ExerciseLibraryProps {
   initialExercises: Exercise[];
-  tools: Tool[];
   muscleGroups: MuscleGroup[];
   categories: Category[];
 }
 
 export function ExerciseLibrary({
   initialExercises,
-  tools,
   muscleGroups,
   categories,
 }: ExerciseLibraryProps) {
@@ -49,12 +41,17 @@ export function ExerciseLibrary({
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const filteredExercises = exercises.filter(
-    (ex) =>
-      ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ex.muscleGroupId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ex.categoryId.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredExercises = exercises.filter((ex) => {
+    const query = searchQuery.toLowerCase();
+    const categoryNames = ex.categoryIds
+      .map((id) => categories.find((c) => c.id === id)?.name || "")
+      .join(" ");
+    return (
+      ex.name.toLowerCase().includes(query) ||
+      ex.muscleGroupId.toLowerCase().includes(query) ||
+      categoryNames.toLowerCase().includes(query)
+    );
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm("Sei sicuro di voler eliminare questo esercizio?")) return;
@@ -107,7 +104,6 @@ export function ExerciseLibrary({
               <DialogTitle>Nuovo Esercizio</DialogTitle>
             </DialogHeader>
             <ExerciseForm
-              tools={tools}
               muscleGroups={muscleGroups}
               categories={categories}
               onSuccess={handleExerciseCreated}
@@ -123,7 +119,6 @@ export function ExerciseLibrary({
               <TableHead>Nome</TableHead>
               <TableHead>Gruppo Muscolare</TableHead>
               <TableHead>Categoria</TableHead>
-              <TableHead>Attrezzatura</TableHead>
               <TableHead>Riposo (s)</TableHead>
               <TableHead>Tempo</TableHead>
               <TableHead className="text-right">Azioni</TableHead>
@@ -133,7 +128,7 @@ export function ExerciseLibrary({
             {filteredExercises.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={6}
                   className="text-center text-muted-foreground py-8"
                 >
                   Nessun esercizio trovato
@@ -143,10 +138,24 @@ export function ExerciseLibrary({
               filteredExercises.map((exercise) => (
                 <TableRow key={exercise.id}>
                   <TableCell className="font-medium">{exercise.name}</TableCell>
-                  <TableCell>{exercise.muscleGroupId}</TableCell>
-                  <TableCell>{exercise.categoryId}</TableCell>
                   <TableCell>
-                    {environmentLabels[exercise.environment]}
+                    {muscleGroups.find((g) => g.id === exercise.muscleGroupId)
+                      ?.name || exercise.muscleGroupId}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {exercise.categoryIds.map((catId) => {
+                        const category = categories.find((c) => c.id === catId);
+                        return category ? (
+                          <span
+                            key={catId}
+                            className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
+                          >
+                            {category.name}
+                          </span>
+                        ) : null;
+                      })}
+                    </div>
                   </TableCell>
                   <TableCell>{exercise.defaultRestSeconds || "-"}</TableCell>
                   <TableCell>{exercise.defaultTempo || "-"}</TableCell>
@@ -186,7 +195,6 @@ export function ExerciseLibrary({
           {editingExercise && (
             <ExerciseForm
               exercise={editingExercise}
-              tools={tools}
               muscleGroups={muscleGroups}
               categories={categories}
               onSuccess={handleExerciseUpdated}

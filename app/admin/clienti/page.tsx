@@ -1,4 +1,4 @@
-import { getClients } from "@/lib/data-blobs";
+import { getClients } from "@/lib/db-adapter";
 import { ClientsList } from "@/components/admin/clients-list";
 
 export const dynamic = "force-dynamic";

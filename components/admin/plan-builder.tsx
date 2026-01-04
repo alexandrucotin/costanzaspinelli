@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -6,8 +7,6 @@ import {
   WorkoutPlan,
   Exercise,
   Session,
-  Section,
-  ExerciseRow,
   Tool,
   MuscleGroup,
   Category,
@@ -181,7 +180,7 @@ export function PlanBuilder({
 
         {!planData.sessions || planData.sessions.length === 0 ? (
           <div className="border rounded-lg p-12 text-center text-muted-foreground">
-            Nessuna sessione. Clicca "Aggiungi Sessione" per iniziare.
+            Nessuna sessione. Clicca &quot;Aggiungi Sessione&quot; per iniziare.
           </div>
         ) : (
           <Tabs defaultValue={planData.sessions[0]?.id} className="w-full">
@@ -202,6 +201,7 @@ export function PlanBuilder({
                   muscleGroups={muscleGroups}
                   categories={categories}
                   disabled={!isEditing}
+                  totalWeeks={planData.durationWeeks || 4}
                   onUpdate={(updated) =>
                     handleSessionUpdate(session.id, updated)
                   }

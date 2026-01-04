@@ -54,7 +54,13 @@ export function PlansList({ initialPlans }: PlansListProps) {
 
   const handleExportPdf = async (plan: WorkoutPlan) => {
     try {
-      const { generateWorkoutPlanPDF } = await import("@/lib/pdf-generator");
+      const { generateWorkoutPlanPDF } = await import(
+        "@/lib/pdf-generator-landscape"
+      );
+
+      // Load tools from server action
+      const response = await fetch("/api/tools");
+      const tools = await response.json();
 
       // Map plan goal to client goal
       const goalMap: Record<string, string> = {
@@ -100,7 +106,7 @@ export function PlansList({ initialPlans }: PlansListProps) {
         updatedAt: "",
       };
 
-      const pdf = generateWorkoutPlanPDF(plan, mockClient);
+      const pdf = await generateWorkoutPlanPDF(plan, mockClient, tools);
       pdf.save(
         `${plan.title.replace(/\s+/g, "_")}_${plan.clientName.replace(
           /\s+/g,
@@ -229,7 +235,7 @@ export function PlansList({ initialPlans }: PlansListProps) {
                     onClick={() => router.push(`/admin/schede/${plan.id}`)}
                   >
                     <Pencil className="h-4 w-4 mr-1" />
-                    Modifica
+                    Visualizza
                   </Button>
                   <Button
                     variant="outline"

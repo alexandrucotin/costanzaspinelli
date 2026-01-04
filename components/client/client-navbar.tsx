@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useClerk } from "@clerk/nextjs";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Dumbbell, User, LogOut, Home } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface ClientNavbarProps {
   clientName: string;
@@ -13,14 +13,28 @@ interface ClientNavbarProps {
 
 export function ClientNavbar({ clientName }: ClientNavbarProps) {
   const pathname = usePathname();
-  const { signOut } = useClerk();
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     try {
-      await signOut();
-      toast.success("Logout effettuato");
+      const response = await fetch("/api/client/logout", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+
+      toast.success("Logout effettuato con successo");
+      router.push("/sign-in");
+      router.refresh();
     } catch (error) {
+      console.error("Logout error:", error);
       toast.error("Errore durante il logout");
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -70,9 +84,14 @@ export function ClientNavbar({ clientName }: ClientNavbarProps) {
               <p className="text-sm font-medium">{clientName}</p>
               <p className="text-xs text-muted-foreground">Cliente</p>
             </div>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+            >
               <LogOut className="h-4 w-4 mr-2" />
-              Esci
+              {isLoggingOut ? "Uscita..." : "Esci"}
             </Button>
           </div>
         </div>

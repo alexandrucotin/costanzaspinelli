@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, Target, Dumbbell, Download } from "lucide-react";
 import Link from "next/link";
-import { generateWorkoutPlanPDF } from "@/lib/pdf-generator";
+import { generateWorkoutPlanPDF } from "@/lib/pdf-generator-landscape";
 import { toast } from "sonner";
 import { ClientNavbar } from "./client-navbar";
 
@@ -17,9 +17,12 @@ interface ClientPlanViewProps {
 }
 
 export function ClientPlanView({ plan, client }: ClientPlanViewProps) {
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     try {
-      const pdf = generateWorkoutPlanPDF(plan, client);
+      // Load tools from API route
+      const response = await fetch("/api/tools");
+      const tools = await response.json();
+      const pdf = await generateWorkoutPlanPDF(plan, client, tools);
       pdf.save(
         `${plan.title.replace(/\s+/g, "_")}_${client.fullName.replace(
           /\s+/g,
@@ -111,76 +114,225 @@ export function ClientPlanView({ plan, client }: ClientPlanViewProps) {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {allExercises.map((exercise, exIndex) => (
-                        <div
-                          key={exercise.id}
-                          className="p-4 bg-gray-50 rounded-lg border"
-                        >
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2">
-                                <span className="font-mono text-sm text-muted-foreground">
-                                  {exIndex + 1}.
-                                </span>
-                                <h4 className="font-semibold">
-                                  {exercise.exerciseName}
-                                </h4>
+                      {allExercises.map((exercise, exIndex) => {
+                        const hasProgression =
+                          exercise.weeklyProgression &&
+                          exercise.weeklyProgression.length > 0;
+                        const groupingColor =
+                          exercise.grouping?.type === "superset"
+                            ? "bg-blue-50 border-blue-200"
+                            : exercise.grouping?.type === "triset"
+                            ? "bg-purple-50 border-purple-200"
+                            : exercise.grouping?.type === "circuit"
+                            ? "bg-green-50 border-green-200"
+                            : exercise.grouping?.type === "dropset"
+                            ? "bg-orange-50 border-orange-200"
+                            : "bg-gray-50";
+
+                        return (
+                          <div
+                            key={exercise.id}
+                            className={`p-4 rounded-lg border ${groupingColor}`}
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  {exercise.grouping &&
+                                    exercise.grouping.type !== "single" && (
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {exercise.grouping.type === "superset"
+                                          ? "🔵 Superset"
+                                          : exercise.grouping.type === "triset"
+                                          ? "🟣 Triset"
+                                          : exercise.grouping.type === "circuit"
+                                          ? "🟢 Circuit"
+                                          : exercise.grouping.type === "dropset"
+                                          ? "🟠 Dropset"
+                                          : ""}{" "}
+                                        {exercise.grouping.groupId}
+                                        {exercise.grouping.order}
+                                      </Badge>
+                                    )}
+                                  <span className="font-mono text-sm text-muted-foreground">
+                                    {exIndex + 1}.
+                                  </span>
+                                  <h4 className="font-semibold">
+                                    {exercise.exerciseName}
+                                  </h4>
+                                  {hasProgression && (
+                                    <Badge
+                                      variant="secondary"
+                                      className="text-xs"
+                                    >
+                                      📈 {exercise.weeklyProgression!.length}{" "}
+                                      settimane
+                                    </Badge>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm mt-3">
-                            {exercise.sets && (
-                              <div>
-                                <span className="text-muted-foreground">
-                                  Serie:
-                                </span>
-                                <span className="font-medium ml-1">
-                                  {exercise.sets}
-                                </span>
+                            {/* Base Parameters */}
+                            {!hasProgression && (
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm mt-3">
+                                {exercise.sets && (
+                                  <div>
+                                    <span className="text-muted-foreground">
+                                      Serie:
+                                    </span>
+                                    <span className="font-medium ml-1">
+                                      {exercise.sets}
+                                    </span>
+                                  </div>
+                                )}
+                                {exercise.reps && (
+                                  <div>
+                                    <span className="text-muted-foreground">
+                                      Reps:
+                                    </span>
+                                    <span className="font-medium ml-1">
+                                      {exercise.reps}
+                                    </span>
+                                  </div>
+                                )}
+                                {exercise.loadKg && (
+                                  <div>
+                                    <span className="text-muted-foreground">
+                                      Carico:
+                                    </span>
+                                    <span className="font-medium ml-1">
+                                      {exercise.loadKg} kg
+                                    </span>
+                                  </div>
+                                )}
+                                {exercise.restSeconds && (
+                                  <div>
+                                    <span className="text-muted-foreground">
+                                      Recupero:
+                                    </span>
+                                    <span className="font-medium ml-1">
+                                      {exercise.restSeconds}s
+                                    </span>
+                                  </div>
+                                )}
+                                {exercise.rpe && (
+                                  <div>
+                                    <span className="text-muted-foreground">
+                                      RPE:
+                                    </span>
+                                    <span className="font-medium ml-1">
+                                      {exercise.rpe}/10
+                                    </span>
+                                  </div>
+                                )}
+                                {exercise.tempo && (
+                                  <div>
+                                    <span className="text-muted-foreground">
+                                      Tempo:
+                                    </span>
+                                    <span className="font-medium ml-1">
+                                      {exercise.tempo}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                             )}
-                            {exercise.reps && (
-                              <div>
-                                <span className="text-muted-foreground">
-                                  Ripetizioni:
-                                </span>
-                                <span className="font-medium ml-1">
-                                  {exercise.reps}
-                                </span>
+
+                            {/* Weekly Progression */}
+                            {hasProgression && (
+                              <div className="mt-3 space-y-2">
+                                <div className="text-xs font-semibold text-muted-foreground mb-2">
+                                  📅 PROGRESSIONE SETTIMANALE:
+                                </div>
+                                <div className="space-y-2">
+                                  {exercise.weeklyProgression!.map((week) => (
+                                    <div
+                                      key={week.week}
+                                      className="bg-white p-3 rounded border"
+                                    >
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <Badge
+                                          variant="outline"
+                                          className="text-xs font-bold"
+                                        >
+                                          Settimana {week.week}
+                                        </Badge>
+                                      </div>
+                                      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-sm">
+                                        <div>
+                                          <span className="text-muted-foreground">
+                                            Serie:
+                                          </span>
+                                          <span className="font-medium ml-1">
+                                            {week.sets || exercise.sets}
+                                          </span>
+                                        </div>
+                                        <div>
+                                          <span className="text-muted-foreground">
+                                            Reps:
+                                          </span>
+                                          <span className="font-medium ml-1">
+                                            {week.reps || exercise.reps || "-"}
+                                          </span>
+                                        </div>
+                                        {(week.loadKg || exercise.loadKg) && (
+                                          <div>
+                                            <span className="text-muted-foreground">
+                                              Carico:
+                                            </span>
+                                            <span className="font-medium ml-1">
+                                              {week.loadKg || exercise.loadKg}{" "}
+                                              kg
+                                            </span>
+                                          </div>
+                                        )}
+                                        {exercise.restSeconds && (
+                                          <div>
+                                            <span className="text-muted-foreground">
+                                              Recupero:
+                                            </span>
+                                            <span className="font-medium ml-1">
+                                              {exercise.restSeconds}s
+                                            </span>
+                                          </div>
+                                        )}
+                                        {(week.rpe || exercise.rpe) && (
+                                          <div>
+                                            <span className="text-muted-foreground">
+                                              RPE:
+                                            </span>
+                                            <span className="font-medium ml-1">
+                                              {week.rpe || exercise.rpe}/10
+                                            </span>
+                                          </div>
+                                        )}
+                                      </div>
+                                      {week.notes && (
+                                        <div className="mt-2 pt-2 border-t">
+                                          <p className="text-xs text-muted-foreground italic">
+                                            💡 {week.notes}
+                                          </p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
                             )}
-                            {exercise.restSeconds && (
-                              <div>
-                                <span className="text-muted-foreground">
-                                  Recupero:
-                                </span>
-                                <span className="font-medium ml-1">
-                                  {exercise.restSeconds}s
-                                </span>
-                              </div>
-                            )}
-                            {exercise.tempo && (
-                              <div>
-                                <span className="text-muted-foreground">
-                                  Tempo:
-                                </span>
-                                <span className="font-medium ml-1">
-                                  {exercise.tempo}
-                                </span>
+
+                            {exercise.notes && !hasProgression && (
+                              <div className="mt-3 pt-3 border-t">
+                                <p className="text-sm text-muted-foreground">
+                                  💡 {exercise.notes}
+                                </p>
                               </div>
                             )}
                           </div>
-
-                          {exercise.notes && (
-                            <div className="mt-3 pt-3 border-t">
-                              <p className="text-sm text-muted-foreground">
-                                {exercise.notes}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </CardContent>
                 </Card>

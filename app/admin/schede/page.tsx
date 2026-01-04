@@ -1,4 +1,4 @@
-import { getPlans } from "@/lib/data-blobs";
+import { getPlans } from "@/lib/db-adapter";
 import { PlansList } from "@/components/admin/plans-list";
 
 export const dynamic = "force-dynamic";

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getAuthenticatedClient } from "@/lib/auth-utils";
-import { getClients, getPlanById } from "@/lib/data-blobs";
+import { getClients, getPlanById } from "@/lib/db-adapter";
 import { ClientPlanView } from "@/components/client/client-plan-view";
 import { notFound } from "next/navigation";
 

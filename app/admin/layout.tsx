@@ -1,12 +1,21 @@
-import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { LayoutDashboard, Dumbbell, Settings, Users } from "lucide-react";
+import { AdminUserButton } from "@/components/admin/admin-user-button";
+import { getSession } from "@/lib/auth-admin";
+import { redirect } from "next/navigation";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Check if user is authenticated
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/admin/login");
+  }
+
   return (
     <div className="min-h-screen bg-muted/30">
       {/* Admin Navigation */}
@@ -60,14 +69,7 @@ export default function AdminLayout({
               >
                 Torna al sito
               </Link>
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    avatarBox: "w-8 h-8",
-                  },
-                }}
-              />
+              <AdminUserButton session={session} />
             </div>
           </div>
         </div>

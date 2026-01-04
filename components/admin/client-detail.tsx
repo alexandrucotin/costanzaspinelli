@@ -23,20 +23,17 @@ import {
 import {
   ArrowLeft,
   User,
-  Calendar,
   Target,
   FileText,
   Activity,
   Edit,
-  Plus,
-  Mail,
+  Trash2,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { updateClientAction } from "@/app/actions/clients";
-import { resendClientInvite } from "@/app/actions/clerk-invites";
+import { updateClientAction, deleteClientAction } from "@/app/actions/clients";
 import { toast } from "sonner";
+import { ClientInvitationCard } from "./client-invitation-card";
 
 interface ClientDetailProps {
   client: Client;
@@ -50,8 +47,7 @@ export function ClientDetail({
   const router = useRouter();
   const [client, setClient] = useState(initialClient);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
-  const [isResendingInvite, setIsResendingInvite] = useState(false);
-  const [inviteLink, setInviteLink] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const calculateAge = (dateOfBirth?: string) => {
     if (!dateOfBirth) return null;
@@ -91,21 +87,25 @@ export function ClientDetail({
     }
   };
 
-  const handleResendInvite = async () => {
-    setIsResendingInvite(true);
+  const handleDelete = async () => {
+    if (
+      !confirm(
+        `Sei sicuro di voler eliminare il cliente "${client.fullName}"? Questa azione è irreversibile.`
+      )
+    ) {
+      return;
+    }
+
+    setIsDeleting(true);
     try {
-      const result = await resendClientInvite(client.email, client.fullName);
-      console.log("result:", result);
-      if (result.success && result.inviteUrl) {
-        setInviteLink(result.inviteUrl);
-        toast.success("Link di invito generato!");
-      } else {
-        toast.error(`Errore: ${result.error}`);
-      }
-    } catch {
-      toast.error("Errore nel reinvio dell'invito");
+      await deleteClientAction(client.id);
+      toast.success("Cliente eliminato con successo");
+      router.push("/admin/clienti");
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Errore durante l'eliminazione del cliente");
     } finally {
-      setIsResendingInvite(false);
+      setIsDeleting(false);
     }
   };
 
@@ -138,11 +138,12 @@ export function ClientDetail({
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            onClick={handleResendInvite}
-            disabled={isResendingInvite}
+            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+            onClick={handleDelete}
+            disabled={isDeleting}
           >
-            <Mail className="h-4 w-4 mr-2" />
-            {isResendingInvite ? "Invio..." : "Reinvia Invito"}
+            <Trash2 className="h-4 w-4 mr-2" />
+            {isDeleting ? "Eliminazione..." : "Elimina"}
           </Button>
           <Link href={`/admin/clienti/${client.id}/modifica`}>
             <Button variant="outline">
@@ -153,120 +154,12 @@ export function ClientDetail({
         </div>
       </div>
 
-      {/* Invite Link (Clerk Organization Invitation) */}
-      {inviteLink && (
-        <Card className="border-blue-200 bg-blue-50">
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                  Link di Invito Generato
-                </Badge>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Invia questo link al cliente per invitarlo
-                all&apos;organizzazione:
-              </p>
-              <div className="flex gap-2">
-                <Input
-                  readOnly
-                  value={inviteLink}
-                  className="font-mono text-sm"
-                />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    navigator.clipboard.writeText(inviteLink);
-                    toast.success("Link copiato!");
-                  }}
-                >
-                  Copia
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Activation Link (Admin Only) */}
-      {client.auth &&
-        !client.auth.isActivated &&
-        client.auth.activationToken && (
-          <Card className="border-blue-200 bg-blue-50">
-            <CardContent className="pt-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className="bg-blue-100 text-blue-700"
-                  >
-                    Account Non Attivato
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Invia questo link al cliente per permettergli di attivare
-                  l&apos;account:
-                </p>
-                <div className="flex gap-2">
-                  <Input
-                    readOnly
-                    value={`${
-                      typeof window !== "undefined"
-                        ? window.location.origin
-                        : ""
-                    }/cliente/attiva-account?token=${
-                      client.auth?.activationToken || ""
-                    }`}
-                    className="font-mono text-sm"
-                  />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        `${
-                          typeof window !== "undefined"
-                            ? window.location.origin
-                            : ""
-                        }/cliente/attiva-account?token=${
-                          client.auth?.activationToken || ""
-                        }`
-                      );
-                      toast.success("Link copiato!");
-                    }}
-                  >
-                    Copia
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Scadenza:{" "}
-                  {new Date(
-                    client.auth.activationTokenExpiry!
-                  ).toLocaleDateString("it-IT")}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-      {client.auth?.isActivated && (
-        <Card className="border-green-200 bg-green-50">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-green-100 text-green-700">
-                Account Attivato
-              </Badge>
-              {client.auth.lastLogin && (
-                <span className="text-sm text-muted-foreground">
-                  Ultimo accesso:{" "}
-                  {new Date(client.auth.lastLogin).toLocaleDateString("it-IT")}
-                </span>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Client Invitation Card */}
+      <ClientInvitationCard
+        clientId={client.id}
+        clientEmail={client.email}
+        isActivated={client.auth?.isActivated || false}
+      />
 
       {/* Client Header Card */}
       <Card>

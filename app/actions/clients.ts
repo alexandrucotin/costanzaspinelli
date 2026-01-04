@@ -4,10 +4,10 @@ import { revalidatePath } from "next/cache";
 import { Client, ClientSchema } from "@/lib/types-client";
 import {
   getClients,
+  getClientById,
   saveClient,
   deleteClient,
-  getClientById,
-} from "@/lib/data-blobs";
+} from "@/lib/db-adapter";
 
 export async function getClientsAction() {
   return await getClients();
@@ -21,6 +21,18 @@ export async function createClientAction(
   data: Omit<Client, "id" | "createdAt" | "updatedAt">
 ) {
   try {
+    // Check if email already exists
+    const existingClients = await getClients();
+    const emailExists = existingClients.some(
+      (c) => c.email.toLowerCase() === data.email.toLowerCase()
+    );
+
+    if (emailExists) {
+      throw new Error(
+        `Un cliente con l'email ${data.email} esiste già nel sistema`
+      );
+    }
+
     const client: Client = {
       ...data,
       id: `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -33,32 +45,31 @@ export async function createClientAction(
     await saveClient(validated);
     revalidatePath("/admin/clienti");
 
-    // Generate Clerk invitation - wrapped in try/catch to not block client creation
+    // Generate custom invitation token
     let inviteUrl: string | null = null;
-    let inviteError: string | null = "Invitation not attempted";
+    let inviteError: string | null = null;
 
     try {
-      const { createClientInvite } = await import("./clerk-invites");
-      const inviteResult = await createClientInvite(
+      const { generateInvitationToken, generateInvitationUrl } = await import(
+        "@/lib/client-invitations"
+      );
+      const { getSession } = await import("@/lib/auth-admin");
+
+      // Get current admin session
+      const session = await getSession();
+      const createdBy = session?.email || "admin";
+
+      // Generate invitation token
+      const { token } = await generateInvitationToken(
         validated.email,
-        validated.fullName
+        validated.id,
+        createdBy
       );
 
-      if (inviteResult.success) {
-        inviteUrl = inviteResult.inviteUrl as string;
-        inviteError = null;
-
-        // Store invitation ID in client metadata for tracking
-        validated.privateNotes = validated.privateNotes
-          ? `${validated.privateNotes}\n\nClerk Invitation ID: ${inviteResult.invitationId}\nInvite URL: ${inviteResult.inviteUrl}`
-          : `Clerk Invitation ID: ${inviteResult.invitationId}\nInvite URL: ${inviteResult.inviteUrl}`;
-        await saveClient(validated);
-      } else {
-        inviteError = inviteResult.error || "Unknown error";
-      }
+      // Generate invitation URL
+      inviteUrl = generateInvitationUrl(token);
     } catch (inviteErr) {
-      console.error("Error creating Clerk invitation:", inviteErr);
-      // Continue anyway - client is created, just invitation failed
+      console.error("Error creating invitation:", inviteErr);
       inviteError =
         inviteErr instanceof Error
           ? inviteErr.message
@@ -105,25 +116,6 @@ export async function deleteClientAction(id: string) {
 
   if (!client) {
     throw new Error("Cliente non trovato");
-  }
-
-  // Try to delete user from Clerk if they exist
-  try {
-    const { clerkClient } = await import("@clerk/nextjs/server");
-    const clerk = await clerkClient();
-
-    // Find user by email
-    const users = await clerk.users.getUserList({
-      emailAddress: [client.email],
-    });
-
-    if (users.data.length > 0) {
-      // Delete the user from Clerk
-      await clerk.users.deleteUser(users.data[0].id);
-    }
-  } catch (error) {
-    console.error("Error deleting user from Clerk:", error);
-    // Continue with client deletion even if Clerk deletion fails
   }
 
   // Delete client from database
@@ -198,4 +190,59 @@ export async function assignPlanToClientAction(
   revalidatePath(`/admin/clienti/${clientId}`);
   revalidatePath(`/admin/schede/${planId}`);
   return updated;
+}
+
+export async function getClientInvitationAction(clientId: string) {
+  const { getInvitationByClientId } = await import("@/lib/client-invitations");
+  return await getInvitationByClientId(clientId);
+}
+
+export async function regenerateClientInvitationAction(clientId: string) {
+  const client = await getClientById(clientId);
+
+  if (!client) {
+    throw new Error("Cliente non trovato");
+  }
+
+  if (client.auth?.isActivated) {
+    throw new Error("Cliente già attivato, impossibile rigenerare l'invito");
+  }
+
+  try {
+    const {
+      invalidateClientInvitations,
+      generateInvitationToken,
+      generateInvitationUrl,
+    } = await import("@/lib/client-invitations");
+    const { getSession } = await import("@/lib/auth-admin");
+
+    // Invalidate existing invitations
+    await invalidateClientInvitations(clientId);
+
+    // Get current admin session
+    const session = await getSession();
+    const createdBy = session?.email || "admin";
+
+    // Generate new invitation token
+    const { token } = await generateInvitationToken(
+      client.email,
+      clientId,
+      createdBy
+    );
+
+    // Generate invitation URL
+    const inviteUrl = generateInvitationUrl(token);
+
+    revalidatePath(`/admin/clienti/${clientId}`);
+
+    return {
+      success: true,
+      inviteUrl,
+    };
+  } catch (error) {
+    console.error("Error regenerating invitation:", error);
+    throw new Error(
+      error instanceof Error ? error.message : "Failed to regenerate invitation"
+    );
+  }
 }

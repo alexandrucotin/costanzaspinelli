@@ -4,7 +4,7 @@ import {
   getMuscleGroups,
   getCategories,
   getClients,
-} from "@/lib/data-blobs";
+} from "@/lib/db-adapter";
 import { PlanBuilder } from "@/components/admin/plan-builder";
 
 export const dynamic = "force-dynamic";

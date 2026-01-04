@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getAuthenticatedClient } from "@/lib/auth-utils";
-import { getClients, getPlans } from "@/lib/data-blobs";
+import { getClients, getPlans } from "@/lib/db-adapter";
 import { ClientDashboard } from "@/components/client/client-dashboard";
 
 export const dynamic = "force-dynamic";

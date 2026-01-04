@@ -1,47 +1,113 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { verifyToken as verifyAdminToken } from "@/lib/auth-admin";
+import { verifySessionToken as verifyClientToken } from "@/lib/auth-client";
 
-// Define public routes that don't require authentication
-const isPublicRoute = createRouteMatcher([
+// Public routes that don't require authentication
+const publicPaths = [
   "/",
   "/chi-sono",
   "/servizi",
   "/contatti",
-  "/admin-login(.*)",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/api/webhook(.*)",
-]);
+  "/sign-in",
+  "/sign-up",
+  "/invito",
+  "/api/webhook",
+  "/api/client/register",
+  "/api/client/validate-invitation",
+  "/api/client/login",
+];
 
-// Define client routes that require organization membership
-const isClientRoute = createRouteMatcher(["/cliente(.*)"]);
+function isPublicPath(pathname: string): boolean {
+  return publicPaths.some((path) => pathname.startsWith(path));
+}
 
-// Define admin routes
-const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+async function handleAdminAuth(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-export default clerkMiddleware(async (auth, request) => {
-  // Allow public routes without checking auth
-  if (isPublicRoute(request)) {
+  // Allow admin login page and login API
+  if (pathname === "/admin/login" || pathname === "/api/admin/login") {
     return NextResponse.next();
   }
 
-  const { userId, orgId } = await auth();
+  // Check for admin session cookie
+  const token = request.cookies.get("admin-session")?.value;
 
-  // Protect client routes - redirect to sign-in if not authenticated
-  if (isClientRoute(request) && !userId) {
+  if (!token) {
+    // Redirect to login for admin pages
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+    // Return 401 for admin API routes
+    if (pathname.startsWith("/api/admin")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
+
+  // Verify token
+  const session = await verifyAdminToken(token!);
+
+  if (!session) {
+    // Redirect to login for admin pages
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+    // Return 401 for admin API routes
+    if (pathname.startsWith("/api/admin")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
+
+  return NextResponse.next();
+}
+
+async function handleClientAuth(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Check for client session cookie
+  const token = request.cookies.get("client-session")?.value;
+
+  if (!token) {
+    // Redirect to sign-in for client pages
     const signInUrl = new URL("/sign-in", request.url);
-    signInUrl.searchParams.set("redirect_url", request.nextUrl.pathname);
+    signInUrl.searchParams.set("redirect_url", pathname);
     return NextResponse.redirect(signInUrl);
   }
 
-  // Protect admin routes - redirect to admin login if not authenticated
-  if (isAdminRoute(request) && !userId) {
-    return NextResponse.redirect(new URL("/admin-login", request.url));
+  // Verify token
+  const session = await verifyClientToken(token);
+
+  if (!session) {
+    // Redirect to sign-in for client pages
+    const signInUrl = new URL("/sign-in", request.url);
+    signInUrl.searchParams.set("redirect_url", pathname);
+    return NextResponse.redirect(signInUrl);
+  }
+
+  return NextResponse.next();
+}
+
+export default async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Handle admin routes with custom auth
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
+    return handleAdminAuth(request);
+  }
+
+  // Handle client routes with custom auth
+  if (pathname.startsWith("/cliente")) {
+    return handleClientAuth(request);
+  }
+
+  // Allow public routes without checking auth
+  if (isPublicPath(pathname)) {
+    return NextResponse.next();
   }
 
   // Allow the request to continue
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: [

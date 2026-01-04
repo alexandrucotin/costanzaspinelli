@@ -29,9 +29,7 @@ export const ExerciseSchema = z.object({
   id: z.string(),
   name: z.string().min(1, "Nome esercizio richiesto"),
   muscleGroupId: z.string().min(1, "Gruppo muscolare richiesto"),
-  environment: z.enum(["gym", "home", "both"]),
-  categoryId: z.string().min(1, "Categoria richiesta"),
-  toolIds: z.array(z.string()).default([]), // Multi-select tools
+  categoryIds: z.array(z.string()).min(1, "Almeno una categoria richiesta"), // Multi-select categories
   defaultRestSeconds: z.number().min(0).optional(),
   defaultTempo: z.string().optional(),
   videoUrl: z.string().url().optional().or(z.literal("")),
@@ -41,11 +39,35 @@ export const ExerciseSchema = z.object({
 
 export type Exercise = z.infer<typeof ExerciseSchema>;
 
+// Weekly progression for an exercise
+export const WeeklyProgressionSchema = z.object({
+  week: z.number().min(1),
+  sets: z.number().min(1).optional(),
+  reps: z.number().optional(),
+  loadKg: z.number().optional(),
+  restSeconds: z.number().min(0).optional(),
+  tempo: z.string().optional(),
+  rpe: z.number().min(1).max(10).optional(),
+  notes: z.string().optional(),
+});
+
+export type WeeklyProgression = z.infer<typeof WeeklyProgressionSchema>;
+
+// Exercise grouping for supersets, circuits, etc.
+export const ExerciseGroupingSchema = z.object({
+  type: z.enum(["single", "superset", "triset", "circuit", "dropset"]),
+  groupId: z.string(), // e.g., "A", "B", "C"
+  order: z.number(), // e.g., 1, 2, 3 for A1, A2, A3
+});
+
+export type ExerciseGrouping = z.infer<typeof ExerciseGroupingSchema>;
+
 export const ExerciseRowSchema = z
   .object({
     id: z.string(),
     exerciseId: z.string().optional(),
     exerciseName: z.string().min(1, "Nome esercizio richiesto"),
+    toolId: z.string().optional(), // Selected tool for this exercise
     sets: z.number().min(1, "Almeno 1 serie"),
     reps: z.number().optional(),
     timeSeconds: z.number().optional(),
@@ -55,6 +77,11 @@ export const ExerciseRowSchema = z
     restSeconds: z.number().min(0, "Riposo deve essere >= 0"),
     tempo: z.string().optional(),
     notes: z.string().optional(),
+    // New fields for advanced features
+    grouping: ExerciseGroupingSchema.optional(),
+    weeklyProgression: z.array(WeeklyProgressionSchema).optional(),
+    videoUrl: z.string().optional(),
+    alternativeExerciseIds: z.array(z.string()).optional(),
   })
   .refine((data) => data.reps !== undefined || data.timeSeconds !== undefined, {
     message: "Specificare ripetizioni o tempo",
@@ -122,12 +149,6 @@ export const goalLabels: Record<WorkoutPlan["goal"], string> = {
   general: "Generale",
   weight_loss: "Dimagrimento",
   mobility: "Mobilità",
-};
-
-export const environmentLabels: Record<Exercise["environment"], string> = {
-  gym: "Palestra",
-  home: "Casa",
-  both: "Entrambi",
 };
 
 export const equipmentLabels: Record<WorkoutPlan["equipment"], string> = {

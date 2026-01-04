@@ -1,4 +1,4 @@
-import { getClientById, getPlans } from "@/lib/data-blobs";
+import { getClientById, getPlans } from "@/lib/db-adapter";
 import { ClientDetail } from "@/components/admin/client-detail";
 import { notFound } from "next/navigation";
 

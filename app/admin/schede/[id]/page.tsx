@@ -5,7 +5,7 @@ import {
   getMuscleGroups,
   getCategories,
   getClients,
-} from "@/lib/data-blobs";
+} from "@/lib/db-adapter";
 import { PlanBuilder } from "@/components/admin/plan-builder";
 import { notFound } from "next/navigation";
 

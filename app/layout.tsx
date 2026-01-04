@@ -3,7 +3,6 @@ import { Montaga, Jost } from "next/font/google";
 import "./globals.css";
 import { ConditionalLayout } from "@/components/conditional-layout";
 import { Toaster } from "@/components/ui/sonner";
-import { ClerkProvider } from "@clerk/nextjs";
 
 const montaga = Montaga({
   weight: "400",
@@ -31,15 +30,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="it">
-        <body
-          className={`${jost.variable} ${montaga.variable} font-sans antialiased`}
-        >
-          <ConditionalLayout>{children}</ConditionalLayout>
-          <Toaster />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="it">
+      <body
+        className={`${jost.variable} ${montaga.variable} font-sans antialiased`}
+      >
+        <ConditionalLayout>{children}</ConditionalLayout>
+        <Toaster />
+      </body>
+    </html>
   );
 }

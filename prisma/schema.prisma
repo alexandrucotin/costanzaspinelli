@@ -1,0 +1,394 @@
+// Prisma schema for Costanza Spinelli PT Platform
+// Migration from Netlify Blobs to PostgreSQL (Neon)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// METADATA MODELS (Tools, MuscleGroups, Categories)
+// ============================================
+
+model Tool {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  
+  // Relations
+  exerciseRows ExerciseRow[]
+}
+
+model MuscleGroup {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  
+  // Relations
+  exercises Exercise[]
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  
+  // Relations
+  exercises Exercise[]
+}
+
+// ============================================
+// EXERCISE MODEL
+// ============================================
+
+model Exercise {
+  id                 String      @id @default(cuid())
+  name               String
+  muscleGroupId      String
+  defaultRestSeconds Int?
+  defaultTempo       String?
+  videoUrl           String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  
+  // Relations
+  muscleGroup MuscleGroup @relation(fields: [muscleGroupId], references: [id], onDelete: Cascade)
+  categories  Category[]
+  
+  // Exercise rows that reference this exercise
+  exerciseRows ExerciseRow[]
+  
+  @@index([muscleGroupId])
+}
+
+enum Environment {
+  gym
+  home
+  both
+}
+
+// ============================================
+// WORKOUT PLAN MODELS
+// ============================================
+
+model WorkoutPlan {
+  id                    String        @id @default(cuid())
+  title                 String
+  clientName            String
+  goal                  WorkoutGoal
+  startDate             DateTime?
+  durationWeeks         Int
+  frequencyDaysPerWeek  Int
+  equipment             Equipment
+  notes                 String?       @db.Text
+  contraindications     String?       @db.Text
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  
+  // Relations
+  sessions Session[]
+  
+  @@index([clientName])
+}
+
+enum WorkoutGoal {
+  hypertrophy
+  strength
+  endurance
+  general
+  weight_loss
+  mobility
+}
+
+enum Equipment {
+  gym
+  home
+  both
+}
+
+model Session {
+  id           String      @id @default(cuid())
+  name         String
+  workoutPlanId String
+  order        Int         @default(0)
+  
+  // Relations
+  workoutPlan WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
+  sections    Section[]
+  
+  @@index([workoutPlanId])
+}
+
+model Section {
+  id        String      @id @default(cuid())
+  type      SectionType
+  sessionId String
+  order     Int         @default(0)
+  
+  // Relations
+  session   Session        @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercises ExerciseRow[]
+  
+  @@index([sessionId])
+}
+
+enum SectionType {
+  warmup
+  main
+  cooldown
+}
+
+model ExerciseRow {
+  id                      String  @id @default(cuid())
+  sectionId               String
+  exerciseId              String?
+  exerciseName            String
+  toolId                  String? // Selected tool for this exercise in the plan
+  sets                    Int
+  reps                    Int?
+  timeSeconds             Int?
+  loadKg                  Float?
+  rpe                     Int?
+  rir                     Int?
+  restSeconds             Int
+  tempo                   String?
+  notes                   String? @db.Text
+  order                   Int     @default(0)
+  
+  // Advanced features
+  weeklyProgression       String? @db.Text // JSON string
+  grouping                String? @db.Text // JSON string
+  videoUrl                String?
+  alternativeExerciseIds  String? @db.Text // JSON string
+  
+  // Relations
+  section  Section   @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  exercise Exercise? @relation(fields: [exerciseId], references: [id], onDelete: SetNull)
+  tool     Tool?     @relation(fields: [toolId], references: [id], onDelete: SetNull)
+  
+  @@index([sectionId])
+  @@index([exerciseId])
+  @@index([toolId])
+}
+
+// ============================================
+// CLIENT MODELS
+// ============================================
+
+model Client {
+  id                   String        @id @default(cuid())
+  
+  // Anagrafica
+  fullName             String
+  email                String        @unique
+  phone                String?
+  dateOfBirth          DateTime?
+  gender               Gender?
+  profilePhoto         String?
+  
+  // Dati antropometrici
+  currentWeight        Float?
+  height               Float?
+  bodyFatPercentage    Float?
+  leanMass             Float?
+  
+  // Obiettivi
+  primaryGoal          ClientGoal
+  targetWeight         Float?
+  targetDate           DateTime?
+  goalNotes            String?       @db.Text
+  
+  // Anamnesi (stored as JSON)
+  medicalHistory       Json?
+  
+  // Stile di vita (stored as JSON)
+  lifestyle            Json?
+  
+  // Esperienza fitness (stored as JSON)
+  fitnessExperience    Json?
+  
+  // Nutrizione (stored as JSON)
+  nutrition            Json?
+  
+  // Schede associate (array of plan IDs)
+  assignedPlanIds      String[]
+  
+  // Tracking
+  status               ClientStatus  @default(active)
+  firstAssessmentDate  DateTime
+  lastAssessmentDate   DateTime?
+  
+  // Note
+  generalNotes         String?       @db.Text
+  privateNotes         String?       @db.Text
+  
+  // Auth (for client portal access)
+  activationToken      String?
+  activationTokenExpiry DateTime?
+  passwordHash         String?
+  isActivated          Boolean       @default(false)
+  lastLogin            DateTime?
+  
+  // Metadata
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  
+  // Relations
+  measurements         MeasurementRecord[]
+  invitation           ClientInvitation?
+  workoutLogs          WorkoutLog[]
+  
+  @@index([email])
+  @@index([status])
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+enum ClientGoal {
+  hypertrophy
+  strength
+  weight_loss
+  recomposition
+  endurance
+  general_fitness
+  mobility
+}
+
+enum ClientStatus {
+  active
+  paused
+  completed
+}
+
+model MeasurementRecord {
+  id                 String   @id @default(cuid())
+  clientId           String
+  date               DateTime
+  weight             Float?
+  bodyFatPercentage  Float?
+  leanMass           Float?
+  
+  // Circonferenze
+  chest              Float?
+  waist              Float?
+  hips               Float?
+  arms               Float?
+  thighs             Float?
+  
+  // Note e foto
+  notes              String?  @db.Text
+  photos             String[] // Array of URLs
+  
+  // Relations
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  @@index([clientId])
+  @@index([date])
+}
+
+// ============================================
+// CONTACT SUBMISSIONS
+// ============================================
+
+model ContactSubmission {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  message     String   @db.Text
+  submittedAt DateTime @default(now())
+  
+  @@index([submittedAt])
+}
+
+// ============================================
+// ADMIN AUTHENTICATION
+// ============================================
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         AdminRole @default(admin)
+  isActive     Boolean  @default(true)
+  lastLogin    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([email])
+}
+
+enum AdminRole {
+  admin
+  super_admin
+}
+
+// ============================================
+// CLIENT INVITATIONS
+// ============================================
+
+model ClientInvitation {
+  id          String   @id @default(cuid())
+  email       String
+  token       String   @unique
+  clientId    String   @unique
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  createdBy   String
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+  usedAt      DateTime?
+  isValid     Boolean  @default(true)
+  
+  @@index([token])
+  @@index([email])
+  @@index([clientId])
+}
+
+// Workout logging for client progress tracking
+model WorkoutLog {
+  id              String   @id @default(cuid())
+  clientId        String
+  client          Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  planId          String
+  sessionId       String
+  sessionName     String
+  date            DateTime @default(now())
+  completed       Boolean  @default(false)
+  durationMinutes Int?
+  notes           String?
+  rating          Int?     // 1-5 stars
+  exerciseLogs    ExerciseLog[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([clientId])
+  @@index([planId])
+  @@index([date])
+}
+
+// Individual exercise performance log
+model ExerciseLog {
+  id              String      @id @default(cuid())
+  workoutLogId    String
+  workoutLog      WorkoutLog  @relation(fields: [workoutLogId], references: [id], onDelete: Cascade)
+  exerciseId      String
+  exerciseName    String
+  setsCompleted   Int
+  repsCompleted   Json        // Array of reps per set: [10, 10, 8]
+  loadUsed        Json        // Array of loads per set: [60, 60, 62.5]
+  rpe             Int?
+  notes           String?
+  completed       Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+
+  @@index([workoutLogId])
+  @@index([exerciseId])
+}

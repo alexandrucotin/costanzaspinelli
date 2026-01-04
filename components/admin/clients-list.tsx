@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, Plus, User, Calendar, Target } from "lucide-react";
+import { Search, Plus, User, Calendar, Target, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { deleteClientAction } from "@/app/actions/clients";
 import { toast } from "sonner";
@@ -216,12 +216,25 @@ export function ClientsList({ initialClients }: ClientsListProps) {
                         )}
                       </div>
                     </div>
-                    <Badge
-                      className={getStatusColor(client.status)}
-                      variant="outline"
-                    >
-                      {statusLabels[client.status]}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        className={getStatusColor(client.status)}
+                        variant="outline"
+                      >
+                        {statusLabels[client.status]}
+                      </Badge>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(client.id, client.fullName);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="space-y-2 text-sm">

@@ -1,4 +1,4 @@
-import { getClientById } from "@/lib/data-blobs";
+import { getClientById } from "@/lib/db-adapter";
 import { ClientEditForm } from "@/components/admin/client-edit-form";
 import { notFound } from "next/navigation";
 

@@ -24,6 +24,7 @@ interface SessionEditorProps {
   muscleGroups: MuscleGroup[];
   categories: Category[];
   disabled?: boolean;
+  totalWeeks?: number;
   onUpdate: (session: Session) => void;
   onDelete: () => void;
 }
@@ -35,6 +36,7 @@ export function SessionEditor({
   muscleGroups,
   categories,
   disabled,
+  totalWeeks = 4,
   onUpdate,
   onDelete,
 }: SessionEditorProps) {
@@ -58,6 +60,7 @@ export function SessionEditor({
       id: generateExerciseRowId(),
       exerciseId: exercise.id,
       exerciseName: exercise.name,
+      toolId: undefined, // Will be selected by user in the exercise table
       sets: 3,
       reps: 10,
       restSeconds: exercise.defaultRestSeconds || 90,
@@ -177,7 +180,9 @@ export function SessionEditor({
               <CardContent>
                 <ExerciseTable
                   exercises={section.exercises}
+                  tools={tools}
                   disabled={disabled}
+                  totalWeeks={totalWeeks}
                   onUpdate={(id, updates) =>
                     handleUpdateExerciseRow(section.type, id, updates)
                   }
@@ -199,7 +204,6 @@ export function SessionEditor({
           <div className="lg:sticky lg:top-4 lg:h-fit">
             <ExerciseLibraryPanel
               exercises={exercises}
-              tools={tools}
               muscleGroups={muscleGroups}
               categories={categories}
               onSelect={(exercise) =>
