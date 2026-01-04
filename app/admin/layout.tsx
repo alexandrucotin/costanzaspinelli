@@ -3,12 +3,25 @@ import { LayoutDashboard, Dumbbell, Settings, Users } from "lucide-react";
 import { AdminUserButton } from "@/components/admin/admin-user-button";
 import { getSession } from "@/lib/auth-admin";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Get the current pathname
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+
+  // Skip auth check for login page
+  const isLoginPage = pathname === "/admin/login";
+
+  // If it's the login page, just render children without layout
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
   // Check if user is authenticated
   const session = await getSession();
 

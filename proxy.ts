@@ -25,14 +25,28 @@ function isPublicPath(pathname: string): boolean {
 async function handleAdminAuth(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow admin login page and login API
-  if (pathname === "/admin/login" || pathname === "/api/admin/login") {
+  // Allow login API and logout API without auth check
+  if (pathname === "/api/admin/login" || pathname === "/api/admin/logout") {
     return NextResponse.next();
   }
 
   // Check for admin session cookie
   const token = request.cookies.get("admin-session")?.value;
 
+  // Handle login page specifically
+  if (pathname === "/admin/login") {
+    // If user has a valid token, redirect to dashboard
+    if (token) {
+      const session = await verifyAdminToken(token);
+      if (session) {
+        return NextResponse.redirect(new URL("/admin/clienti", request.url));
+      }
+    }
+    // Allow access to login page if no token or invalid token
+    return NextResponse.next();
+  }
+
+  // For all other admin routes, require authentication
   if (!token) {
     // Redirect to login for admin pages
     if (pathname.startsWith("/admin")) {
@@ -42,10 +56,11 @@ async function handleAdminAuth(request: NextRequest) {
     if (pathname.startsWith("/api/admin")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    return NextResponse.next();
   }
 
-  // Verify token
-  const session = await verifyAdminToken(token!);
+  // Verify token for authenticated routes
+  const session = await verifyAdminToken(token);
 
   if (!session) {
     // Redirect to login for admin pages
@@ -90,23 +105,37 @@ async function handleClientAuth(request: NextRequest) {
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Add pathname to headers for use in layouts
+  const response = NextResponse.next();
+  response.headers.set("x-pathname", pathname);
+
   // Handle admin routes with custom auth
   if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
-    return handleAdminAuth(request);
+    const authResponse = await handleAdminAuth(request);
+    if (authResponse.headers.get("location")) {
+      return authResponse;
+    }
+    authResponse.headers.set("x-pathname", pathname);
+    return authResponse;
   }
 
   // Handle client routes with custom auth
   if (pathname.startsWith("/cliente")) {
-    return handleClientAuth(request);
+    const authResponse = await handleClientAuth(request);
+    if (authResponse.headers.get("location")) {
+      return authResponse;
+    }
+    authResponse.headers.set("x-pathname", pathname);
+    return authResponse;
   }
 
   // Allow public routes without checking auth
   if (isPublicPath(pathname)) {
-    return NextResponse.next();
+    return response;
   }
 
   // Allow the request to continue
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
