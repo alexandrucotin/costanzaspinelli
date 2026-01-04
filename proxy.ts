@@ -105,37 +105,23 @@ async function handleClientAuth(request: NextRequest) {
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Add pathname to headers for use in layouts
-  const response = NextResponse.next();
-  response.headers.set("x-pathname", pathname);
-
   // Handle admin routes with custom auth
   if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
-    const authResponse = await handleAdminAuth(request);
-    if (authResponse.headers.get("location")) {
-      return authResponse;
-    }
-    authResponse.headers.set("x-pathname", pathname);
-    return authResponse;
+    return handleAdminAuth(request);
   }
 
   // Handle client routes with custom auth
   if (pathname.startsWith("/cliente")) {
-    const authResponse = await handleClientAuth(request);
-    if (authResponse.headers.get("location")) {
-      return authResponse;
-    }
-    authResponse.headers.set("x-pathname", pathname);
-    return authResponse;
+    return handleClientAuth(request);
   }
 
   // Allow public routes without checking auth
   if (isPublicPath(pathname)) {
-    return response;
+    return NextResponse.next();
   }
 
   // Allow the request to continue
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {
