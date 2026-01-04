@@ -28,7 +28,7 @@ export function ClientNavbar({ clientName }: ClientNavbarProps) {
       }
 
       toast.success("Logout effettuato con successo");
-      router.push("/sign-in");
+      router.push("/cliente/login");
       router.refresh();
     } catch (error) {
       console.error("Logout error:", error);

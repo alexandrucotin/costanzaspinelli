@@ -125,7 +125,7 @@ export async function requireClientAuth(): Promise<ClientSession> {
   const session = await getClientSession();
 
   if (!session) {
-    redirect("/sign-in");
+    redirect("/cliente/login");
   }
 
   return session;

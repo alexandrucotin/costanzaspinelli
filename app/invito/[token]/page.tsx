@@ -102,7 +102,7 @@ export default function ClientInvitationPage() {
 
         // Redirect to sign-in page with email pre-filled
         setTimeout(() => {
-          router.push(`/sign-in?email=${encodeURIComponent(email)}`);
+          router.push(`/cliente/login?email=${encodeURIComponent(email)}`);
         }, 1500);
       } else {
         toast.error(result.error || "Errore durante la registrazione");
@@ -231,7 +231,7 @@ export default function ClientInvitationPage() {
           <div className="mt-4 text-center text-sm text-muted-foreground">
             <p>
               Hai già un account?{" "}
-              <a href="/sign-in" className="text-primary hover:underline">
+              <a href="/cliente/login" className="text-primary hover:underline">
                 Accedi
               </a>
             </p>

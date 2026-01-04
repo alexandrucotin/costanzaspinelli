@@ -9,7 +9,7 @@ const publicPaths = [
   "/chi-sono",
   "/servizi",
   "/contatti",
-  "/sign-in",
+  "/cliente/login",
   "/sign-up",
   "/invito",
   "/api/webhook",
@@ -84,7 +84,7 @@ async function handleClientAuth(request: NextRequest) {
 
   if (!token) {
     // Redirect to sign-in for client pages
-    const signInUrl = new URL("/sign-in", request.url);
+    const signInUrl = new URL("/cliente/login", request.url);
     signInUrl.searchParams.set("redirect_url", pathname);
     return NextResponse.redirect(signInUrl);
   }
@@ -94,7 +94,7 @@ async function handleClientAuth(request: NextRequest) {
 
   if (!session) {
     // Redirect to sign-in for client pages
-    const signInUrl = new URL("/sign-in", request.url);
+    const signInUrl = new URL("/cliente/login", request.url);
     signInUrl.searchParams.set("redirect_url", pathname);
     return NextResponse.redirect(signInUrl);
   }
