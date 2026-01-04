@@ -674,6 +674,7 @@ export async function saveClient(client: Client): Promise<Client> {
         ? new Date(client.auth.lastLogin)
         : null,
       measurements: {
+        deleteMany: {},
         create: client.measurements?.map((m) => ({
           id: m.id,
           date: m.date,
