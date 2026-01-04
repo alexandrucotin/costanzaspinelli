@@ -237,6 +237,9 @@ model Client {
   measurements         MeasurementRecord[]
   invitation           ClientInvitation?
   workoutLogs          WorkoutLog[]
+  checkIns             CheckIn[]
+  progressEntries      ProgressEntry[]
+  habits               Habit[]
   
   @@index([email])
   @@index([status])
@@ -388,4 +391,150 @@ model ExerciseLog {
 
   @@index([workoutLogId])
   @@index([exerciseId])
+}
+
+// ============================================
+// CHECK-IN SYSTEM
+// ============================================
+
+model CheckIn {
+  id           String       @id @default(cuid())
+  clientId     String
+  client       Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  type         CheckInType  @default(weekly)
+  status       CheckInStatus @default(pending)
+  scheduledAt  DateTime
+  submittedAt  DateTime?
+  data         Json?        // Flexible JSON for check-in responses
+  coachNotes   String?      @db.Text
+  reviewed     Boolean      @default(false)
+  reviewedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([clientId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([type])
+}
+
+enum CheckInType {
+  weekly
+}
+
+enum CheckInStatus {
+  pending
+  submitted
+  overdue
+  reviewed
+}
+
+// ============================================
+// PROGRESS TRACKING
+// ============================================
+
+model ProgressEntry {
+  id        String          @id @default(cuid())
+  clientId  String
+  client    Client          @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  weight    Float?
+  notes     String?         @db.Text
+  photos    ProgressPhoto[]
+  createdAt DateTime        @default(now())
+
+  @@index([clientId])
+  @@index([createdAt])
+}
+
+model ProgressPhoto {
+  id              String        @id @default(cuid())
+  progressEntryId String
+  progressEntry   ProgressEntry @relation(fields: [progressEntryId], references: [id], onDelete: Cascade)
+  type            PhotoType
+  imageUrl        String
+  createdAt       DateTime      @default(now())
+
+  @@index([progressEntryId])
+}
+
+enum PhotoType {
+  front
+  side
+  back
+}
+
+// ============================================
+// HABITS TRACKING
+// ============================================
+
+model Habit {
+  id          String        @id @default(cuid())
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name        String
+  description String?       @db.Text
+  type        HabitType
+  category    HabitCategory
+  frequency   HabitFrequency @default(daily)
+  target      Json?         // { value: 2, unit: "liters" } or { days: 7 }
+  icon        String?       // emoji or icon name
+  color       String?       // hex color for UI
+  isActive    Boolean       @default(true)
+  startDate   DateTime      @default(now())
+  endDate     DateTime?
+  logs        HabitLog[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([clientId])
+  @@index([isActive])
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  date      DateTime // Date of the log (normalized to start of day)
+  value     Json     // { completed: true } or { value: 8 } or { rating: 7 }
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@unique([habitId, date])
+  @@index([habitId])
+  @@index([date])
+}
+
+model HabitTemplate {
+  id          String         @id @default(cuid())
+  name        String
+  description String?        @db.Text
+  type        HabitType
+  category    HabitCategory
+  frequency   HabitFrequency @default(daily)
+  target      Json?
+  icon        String?
+  color       String?
+  isDefault   Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+}
+
+enum HabitType {
+  checkbox // yes/no
+  number   // quantity
+  scale    // 1-10 rating
+}
+
+enum HabitCategory {
+  hydration
+  sleep
+  nutrition
+  recovery
+  movement
+  mindset
+  other
+}
+
+enum HabitFrequency {
+  daily
+  weekly
 }

@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Dumbbell, User, LogOut, Home } from "lucide-react";
+import {
+  Dumbbell,
+  User,
+  LogOut,
+  Home,
+  ClipboardCheck,
+  TrendingUp,
+  Target,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 
@@ -40,6 +48,9 @@ export function ClientNavbar({ clientName }: ClientNavbarProps) {
 
   const navItems = [
     { href: "/cliente/dashboard", label: "Dashboard", icon: Home },
+    { href: "/cliente/check-ins", label: "Check-in", icon: ClipboardCheck },
+    { href: "/cliente/abitudini", label: "Abitudini", icon: Target },
+    { href: "/cliente/progresso", label: "Progresso", icon: TrendingUp },
     { href: "/cliente/profilo", label: "Profilo", icon: User },
   ];
 

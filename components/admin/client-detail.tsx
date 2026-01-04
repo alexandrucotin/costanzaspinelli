@@ -9,6 +9,8 @@ import {
   activityLevelLabels,
 } from "@/lib/types-client";
 import { WorkoutPlan, goalLabels } from "@/lib/types";
+import { Habit, HabitTemplate } from "@/lib/types-habits";
+import { CheckIn } from "@/lib/types-checkin";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,21 +30,30 @@ import {
   Activity,
   Edit,
   Trash2,
+  ClipboardCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { updateClientAction, deleteClientAction } from "@/app/actions/clients";
 import { toast } from "sonner";
 import { ClientInvitationCard } from "./client-invitation-card";
+import { ClientHabitsManager } from "./client-habits-manager";
+import { ClientCheckInsList } from "./client-checkins-list";
 
 interface ClientDetailProps {
   client: Client;
   plans: WorkoutPlan[];
+  habits: Habit[];
+  templates: HabitTemplate[];
+  checkIns: CheckIn[];
 }
 
 export function ClientDetail({
   client: initialClient,
   plans,
+  habits,
+  templates,
+  checkIns,
 }: ClientDetailProps) {
   const router = useRouter();
   const [client, setClient] = useState(initialClient);
@@ -261,6 +272,14 @@ export function ClientDetail({
           <TabsTrigger value="plans">
             <Target className="h-4 w-4 mr-2" />
             Schede ({plans.length})
+          </TabsTrigger>
+          <TabsTrigger value="habits">
+            <Target className="h-4 w-4 mr-2" />
+            Abitudini ({habits.length})
+          </TabsTrigger>
+          <TabsTrigger value="checkins">
+            <ClipboardCheck className="h-4 w-4 mr-2" />
+            Check-in ({checkIns.length})
           </TabsTrigger>
         </TabsList>
 
@@ -701,6 +720,23 @@ export function ClientDetail({
               ))}
             </div>
           )}
+        </TabsContent>
+
+        {/* Habits Tab */}
+        <TabsContent value="habits">
+          <ClientHabitsManager
+            clientId={client.id}
+            habits={habits}
+            templates={templates}
+          />
+        </TabsContent>
+
+        {/* Check-ins Tab */}
+        <TabsContent value="checkins">
+          <ClientCheckInsList
+            checkIns={checkIns}
+            clientName={client.fullName}
+          />
         </TabsContent>
       </Tabs>
     </div>

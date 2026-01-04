@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { LayoutDashboard, Dumbbell, Settings, Users } from "lucide-react";
+import {
+  LayoutDashboard,
+  Dumbbell,
+  Settings,
+  Users,
+  ClipboardCheck,
+} from "lucide-react";
 import { AdminUserButton } from "@/components/admin/admin-user-button";
 import { getSession } from "@/lib/auth-admin";
 
@@ -45,6 +51,13 @@ export default async function AdminLayout({
                 >
                   <Users className="h-4 w-4" />
                   Clienti
+                </Link>
+                <Link
+                  href="/admin/check-ins"
+                  className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+                >
+                  <ClipboardCheck className="h-4 w-4" />
+                  Check-in
                 </Link>
                 <Link
                   href="/admin/esercizi"
