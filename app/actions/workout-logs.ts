@@ -195,8 +195,20 @@ export async function getWorkoutStats(clientId: string) {
     ]);
 
     const avgRating =
-      recentLogs.reduce((sum: number, log) => sum + (log.rating || 0), 0) /
-        recentLogs.filter((log) => log.rating).length || 0;
+      recentLogs.reduce(
+        (
+          sum: number,
+          log: { date: Date; completed: boolean | null; rating: number | null }
+        ) => sum + (log.rating || 0),
+        0
+      ) /
+        recentLogs.filter(
+          (log: {
+            date: Date;
+            completed: boolean | null;
+            rating: number | null;
+          }) => log.rating
+        ).length || 0;
 
     const completionRate =
       totalWorkouts > 0 ? (completedWorkouts / totalWorkouts) * 100 : 0;
